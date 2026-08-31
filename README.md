@@ -37,4 +37,4 @@ Algorithm Class using Python, with pygame based visualizer
 - VSCode (https://code.visualstudio.com/)
   - Extensions: `python`
 - Modules: `venv`, `pygame`
-  - `pip install pygame` 으로 설치(global)하지만, `venv` 설정 후에 하는 것(local)을 권장.
+  - `venv` 설정 후 `pip install -r requirements.txt`로 설치하는 것을 권장.
