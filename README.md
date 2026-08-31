@@ -31,3 +31,10 @@ Algorithm Class using Python, with pygame based visualizer
 27. Ch 8 Approx. Algo. #4 : 실습: Clustering
 28. 기말고사 대비 정리
 29. 기말고사
+
+# Tools
+- Python (https://www.python.org/)
+- VSCode (https://code.visualstudio.com/)
+  - Extensions: `python`
+- Modules: `venv`, `pygame`
+  - `pip install pygame` 으로 설치(global)하지만, `venv` 설정 후에 하는 것(local)을 권장.
