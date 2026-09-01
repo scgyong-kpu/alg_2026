@@ -63,3 +63,27 @@ for word in words:
     simple_counts[first_char] += 1
 
 print(dict(simple_counts))
+print()
+
+
+print("-- items --")
+
+# items()는 key와 value를 한 쌍으로 꺼냅니다.
+for first_char, count in counts.items():
+    print(first_char, "=>", count)
+print()
+
+
+print("-- nested dictionary as graph --")
+
+# 그래프의 인접 리스트는 dictionary 안에 dictionary가 들어 있는 형태로 표현할 수 있습니다.
+# graph[u][v]는 u에서 v로 가는 간선의 가중치라고 읽습니다.
+graph = {
+    "A": {"B": 3, "C": 5},
+    "B": {"C": 1},
+    "C": {"A": 2},
+}
+
+for u, adjs in graph.items():
+    for v, weight in adjs.items():
+        print(u, "->", v, "weight:", weight)
