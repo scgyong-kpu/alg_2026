@@ -86,3 +86,25 @@ class FilePrinter:
 printers = [ConsolePrinter(), FilePrinter()]
 for printer in printers:
     printer.print_report()
+print()
+
+
+print("-- inheritance --")
+
+
+class ReportPrinter:
+    def __init__(self, title):
+        self.title = title
+
+    def print_title(self):
+        print("[", self.title, "]")
+
+
+class ScorePrinter(ReportPrinter):
+    def print_score(self, student):
+        self.print_title()
+        student.print_report()
+
+
+score_printer = ScorePrinter("Score Report")
+score_printer.print_score(choi)
