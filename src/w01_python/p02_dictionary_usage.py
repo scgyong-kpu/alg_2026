@@ -87,3 +87,26 @@ graph = {
 for u, adjs in graph.items():
     for v, weight in adjs.items():
         print(u, "->", v, "weight:", weight)
+print()
+
+
+print("-- keys and values --")
+
+# dictionary를 직접 순회하면 key를 꺼냅니다.
+for name in graph:
+    print("vertex:", name)
+print()
+
+# keys()는 key만 필요하다는 의도를 더 분명히 보여줍니다.
+for name in graph.keys():
+    print("key:", name)
+print()
+
+# values()는 key 없이 value만 필요할 때 사용합니다.
+for adjs in graph.values():
+    print("adjacent dictionary:", adjs)
+print()
+
+# 순서를 정해서 출력하고 싶으면 sorted()를 사용합니다.
+for name in sorted(graph.keys()):
+    print("sorted key:", name)
