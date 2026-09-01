@@ -89,3 +89,15 @@ table[1][2] = 9
 
 for row in table:
     print(row)
+print()
+
+
+print("-- two dimensional list aliasing pitfall --")
+
+# 아래 방식은 같은 행 리스트를 rows번 반복해서 참조합니다.
+# 그래서 한 칸만 바꾼 것처럼 보여도 여러 행이 함께 바뀝니다.
+bad_table = [[0] * cols] * rows
+bad_table[1][2] = 9
+
+for row in bad_table:
+    print(row)
