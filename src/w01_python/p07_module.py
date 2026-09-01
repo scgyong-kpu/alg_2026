@@ -27,3 +27,21 @@ print("degree:", degree)
 print("radian:", radian)
 print("sin(90 degrees):", math.sin(radian))
 print("back to degree:", math.degrees(radian))
+print()
+
+
+print("-- rotate point --")
+
+
+def rotate_point(x, y, degree):
+    theta = math.radians(degree)
+    rotated_x = x * math.cos(theta) - y * math.sin(theta)
+    rotated_y = x * math.sin(theta) + y * math.cos(theta)
+    return rotated_x, rotated_y
+
+
+point = (1, 0)
+rotated = rotate_point(point[0], point[1], 90)
+
+print("before:", point)
+print("after 90 degree rotation:", rotated)
