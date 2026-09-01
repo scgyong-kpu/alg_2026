@@ -54,3 +54,24 @@ describe_student("Park", 77)
 # 호출부만 읽어도 어떤 의미의 값인지 더 잘 보입니다.
 describe_student(name="Choi", score=95, passed=True)
 describe_student(score=62, name="Jung", passed=False)
+print()
+
+
+print("-- return multiple values --")
+
+
+def find_min_max(values):
+    min_value = min(values)
+    max_value = max(values)
+
+    # Python에서 여러 값을 return하면 tuple로 묶여서 돌아갑니다.
+    return min_value, max_value
+
+
+numbers = [7, 2, 9, 4]
+result = find_min_max(numbers)
+smallest, largest = find_min_max(numbers)
+
+print("result tuple:", result)
+print("smallest:", smallest)
+print("largest:", largest)
