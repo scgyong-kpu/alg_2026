@@ -14,3 +14,16 @@ print("sqrt(16):", math.sqrt(16))
 
 # math.pi처럼 모듈 안에 준비된 상수도 사용할 수 있습니다.
 print("pi:", math.pi)
+print()
+
+
+print("-- degree and radian --")
+
+degree = 90
+radian = math.radians(degree)
+
+# Python의 삼각함수는 degree가 아니라 radian을 입력으로 받습니다.
+print("degree:", degree)
+print("radian:", radian)
+print("sin(90 degrees):", math.sin(radian))
+print("back to degree:", math.degrees(radian))
