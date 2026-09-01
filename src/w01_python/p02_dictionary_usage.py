@@ -28,3 +28,21 @@ for word in words:
 
 print("-- count words by first character --")
 print(counts)
+print()
+
+
+print("-- iteration order --")
+
+# Python의 dictionary는 값을 넣은 순서를 기억합니다.
+# 하지만 알고리즘 문제에서 출력 순서가 정해져 있다면, 그 요구에 맞게 정렬해야 합니다.
+for first_char in counts:
+    print(first_char, counts[first_char])
+print()
+
+
+print("-- sorted keys --")
+
+# sorted()는 정렬된 새 리스트를 만들어 줍니다.
+# dictionary 자체를 바꾸는 것이 아니라, 순회할 key 순서만 정렬해서 사용합니다.
+for first_char in sorted(counts.keys()):
+    print(first_char, counts[first_char])
