@@ -56,3 +56,17 @@ print()
 # range를 실제 리스트로 바꾸어 눈으로 확인하고 싶을 때는 list()를 사용합니다.
 print("-- range to list --")
 print(list(indices))
+print()
+
+
+print("-- value loop vs index loop --")
+
+# 값만 필요하다면 리스트에서 값을 바로 꺼내는 방식이 가장 읽기 쉽습니다.
+for score in [82, 91, 77]:
+    print("score:", score)
+
+# 값의 위치도 필요하다면 인덱스를 사용합니다.
+# 예를 들어 "몇 번째 값인지" 함께 출력하거나, 같은 위치의 다른 리스트와 비교할 때 필요합니다.
+scores = [82, 91, 77]
+for i in range(len(scores)):
+    print("index:", i, "score:", scores[i])
