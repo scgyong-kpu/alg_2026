@@ -40,3 +40,19 @@ try:
     print(scores["Choi"])
 except KeyError as error:
     print("KeyError:", error)
+print()
+
+
+print("-- check key before lookup --")
+
+name = "Choi"
+if name in scores:
+    print(name, scores[name])
+else:
+    print(name, "is not in scores")
+
+name = "Kim"
+if name in scores:
+    print(name, scores[name])
+else:
+    print(name, "is not in scores")
