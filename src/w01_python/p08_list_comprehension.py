@@ -75,3 +75,17 @@ print("sorted by weight:", sorted_edges)
 points = [(3, 4), (1, 7), (2, 1)]
 sorted_by_y = sorted(points, key=lambda point: point[1])
 print("sorted by y:", sorted_by_y)
+print()
+
+
+print("-- two dimensional list --")
+
+rows = 3
+cols = 4
+
+# 각 행이 독립된 리스트가 되도록 for _ in range(rows)를 사용합니다.
+table = [[0 for _ in range(cols)] for _ in range(rows)]
+table[1][2] = 9
+
+for row in table:
+    print(row)
