@@ -46,3 +46,20 @@ list_point[1] = 250
 
 print("tuple_point:", tuple_point)
 print("list_point:", list_point)
+print()
+
+
+print("-- convert tuple and list --")
+
+fixed_point = (3, 4)
+
+# tuple을 잠시 list로 바꾸면 값을 수정할 수 있습니다.
+editable_point = list(fixed_point)
+editable_point[0] = 30
+
+# 수정이 끝난 뒤 다시 tuple로 바꾸면 "고정된 값"이라는 의도를 표현할 수 있습니다.
+changed_point = tuple(editable_point)
+
+print("fixed_point:", fixed_point)
+print("editable_point:", editable_point)
+print("changed_point:", changed_point)
