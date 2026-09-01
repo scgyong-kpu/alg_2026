@@ -70,6 +70,16 @@ def run_pygame_window():
                 running = False
 
         screen.fill((250, 250, 250))
+
+        width, height = screen.get_size()
+        center_x = width // 2
+        center_y = height // 2
+
+        # 화면 좌표계는 왼쪽 위가 (0, 0)이고, y값은 아래로 갈수록 커집니다.
+        # 수학 좌표계처럼 생각하려면 이 차이를 항상 의식해야 합니다.
+        pg.draw.line(screen, (180, 180, 180), (0, center_y), (width, center_y), 1)
+        pg.draw.line(screen, (180, 180, 180), (center_x, 0), (center_x, height), 1)
+
         pg.display.flip()
 
     pg.quit()
