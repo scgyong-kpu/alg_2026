@@ -31,3 +31,23 @@ print("-- negative index --")
 # -1은 마지막 원소, -2는 마지막에서 두 번째 원소입니다.
 print("letters[-1] =", letters[-1])
 print("letters[-3:] =", letters[-3:])
+print()
+
+
+print("-- reference vs slicing copy --")
+
+original = [10, 20, 30]
+
+# copied_name은 original과 같은 리스트를 가리키는 이름입니다.
+copied_name = original
+copied_name[0] = 99
+print("after copied_name[0] = 99")
+print("original:", original)
+print("copied_name:", copied_name)
+
+# sliced_copy는 slicing으로 만든 새 리스트입니다.
+sliced_copy = original[:]
+sliced_copy[1] = 77
+print("after sliced_copy[1] = 77")
+print("original:", original)
+print("sliced_copy:", sliced_copy)
