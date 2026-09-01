@@ -70,3 +70,24 @@ for score in [82, 91, 77]:
 scores = [82, 91, 77]
 for i in range(len(scores)):
     print("index:", i, "score:", scores[i])
+print()
+
+
+print("-- list update / append / pop --")
+
+# 리스트는 mutable 객체입니다.
+# 즉, 같은 리스트를 유지한 채 안의 값을 바꿀 수 있습니다.
+scores = [82, 91, 77]
+print("before:", scores)
+
+scores[2] = 88
+print("after update:", scores)
+
+# append()는 리스트 맨 뒤에 새 값을 추가합니다.
+scores.append(95)
+print("after append:", scores)
+
+# pop()은 맨 뒤 값을 꺼내면서 리스트에서 제거합니다.
+last_score = scores.pop()
+print("popped:", last_score)
+print("after pop:", scores)
