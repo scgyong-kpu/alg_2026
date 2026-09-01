@@ -33,3 +33,22 @@ print(lee.name, lee.score)
 
 # 하지만 이런 방식은 모든 객체가 같은 속성을 갖는다는 보장이 약합니다.
 # 그래서 다음 단계에서는 생성자로 초기 상태를 보장합니다.
+print()
+
+
+print("-- constructor --")
+
+
+class CourseStudent:
+    def __init__(self, name, score):
+        # __init__은 객체가 만들어질 때 자동으로 호출됩니다.
+        # self.name과 self.score는 이 객체가 계속 가지고 있을 속성입니다.
+        self.name = name
+        self.score = score
+
+
+park = CourseStudent("Park", 77)
+choi = CourseStudent("Choi", 95)
+
+print(park.name, park.score)
+print(choi.name, choi.score)
