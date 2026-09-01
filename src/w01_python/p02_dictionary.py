@@ -50,6 +50,16 @@ if name in scores:
     print(name, scores[name])
 else:
     print(name, "is not in scores")
+print()
+
+
+print("-- get with default value --")
+
+# get(key, default)는 key가 없을 때 default 값을 돌려줍니다.
+# 단, default 값을 돌려줄 뿐 dictionary에 새 key를 저장하지는 않습니다.
+print("Kim:", scores.get("Kim", 0))
+print("Choi:", scores.get("Choi", 0))
+print("after get:", scores)
 
 name = "Kim"
 if name in scores:
