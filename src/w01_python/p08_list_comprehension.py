@@ -56,3 +56,22 @@ print("-- lambda --")
 # 아래 lambda number: number * number는 square 함수와 같은 일을 합니다.
 lambda_squares = list(map(lambda number: number * number, numbers))
 print("lambda_squares:", lambda_squares)
+print()
+
+
+print("-- sorted with key --")
+
+edges = [
+    ("A", "B", 7),
+    ("A", "C", 2),
+    ("B", "C", 5),
+]
+
+# sorted()에 key를 넘기면 정렬 기준을 바꿀 수 있습니다.
+# 아래 예제는 간선 tuple의 세 번째 값, 즉 weight를 기준으로 정렬합니다.
+sorted_edges = sorted(edges, key=lambda edge: edge[2])
+print("sorted by weight:", sorted_edges)
+
+points = [(3, 4), (1, 7), (2, 1)]
+sorted_by_y = sorted(points, key=lambda point: point[1])
+print("sorted by y:", sorted_by_y)
