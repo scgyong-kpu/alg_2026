@@ -45,3 +45,35 @@ rotated = rotate_point(point[0], point[1], 90)
 
 print("before:", point)
 print("after 90 degree rotation:", rotated)
+print()
+
+
+print("-- pygame window demo is prepared below --")
+
+
+RUN_PYGAME_DEMO = False
+
+
+def run_pygame_window():
+    # pygame은 표준 라이브러리가 아니라 requirements.txt로 설치하는 외부 패키지입니다.
+    # import를 함수 안에 두면, 이 함수를 실행할 때만 pygame이 필요합니다.
+    import pygame as pg
+
+    pg.init()
+    screen = pg.display.set_mode((640, 480))
+    pg.display.set_caption("Python Module Demo")
+
+    running = True
+    while running:
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                running = False
+
+        screen.fill((250, 250, 250))
+        pg.display.flip()
+
+    pg.quit()
+
+
+if RUN_PYGAME_DEMO:
+    run_pygame_window()
