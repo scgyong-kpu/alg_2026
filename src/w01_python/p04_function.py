@@ -20,3 +20,20 @@ def print_score(name, score):
 
 print_score("Kim", 91)
 print_score("Lee", 84)
+print()
+
+
+print("-- local and global variables --")
+
+message = "global message"
+
+
+def show_scope():
+    # 함수 안에서 만든 변수는 local variable입니다.
+    # 함수 밖에 같은 이름이 있어도 별개의 이름으로 동작합니다.
+    message = "local message"
+    print("inside function:", message)
+
+
+show_scope()
+print("outside function:", message)
