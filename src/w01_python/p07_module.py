@@ -63,6 +63,14 @@ def run_pygame_window():
     screen = pg.display.set_mode((640, 480))
     pg.display.set_caption("Python Module Demo")
 
+    demo_points = [(-120, -60), (0, 0), (120, 80)]
+
+    def to_screen(x, y):
+        width, height = screen.get_size()
+        center_x = width // 2
+        center_y = height // 2
+        return center_x + x, center_y - y
+
     running = True
     while running:
         for event in pg.event.get():
@@ -79,6 +87,11 @@ def run_pygame_window():
         # 수학 좌표계처럼 생각하려면 이 차이를 항상 의식해야 합니다.
         pg.draw.line(screen, (180, 180, 180), (0, center_y), (width, center_y), 1)
         pg.draw.line(screen, (180, 180, 180), (center_x, 0), (center_x, height), 1)
+
+        # 수학 좌표의 y는 위로 갈수록 커진다고 생각하지만, 화면 y는 아래로 커집니다.
+        # 그래서 to_screen()에서 y를 빼는 방식으로 변환합니다.
+        for x, y in demo_points:
+            pg.draw.circle(screen, (37, 99, 235), to_screen(x, y), 6)
 
         pg.display.flip()
 
