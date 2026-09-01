@@ -46,3 +46,20 @@ print("-- sorted keys --")
 # dictionary 자체를 바꾸는 것이 아니라, 순회할 key 순서만 정렬해서 사용합니다.
 for first_char in sorted(counts.keys()):
     print(first_char, counts[first_char])
+print()
+
+
+print("-- defaultdict --")
+
+from collections import defaultdict
+
+simple_counts = defaultdict(int)
+
+for word in words:
+    first_char = word[0]
+
+    # defaultdict(int)는 없는 key를 처음 만났을 때 int()의 결과인 0을 준비합니다.
+    # 그래서 if first_char not in counts 같은 초기화 코드를 줄일 수 있습니다.
+    simple_counts[first_char] += 1
+
+print(dict(simple_counts))
