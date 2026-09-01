@@ -65,3 +65,24 @@ print("-- instance methods --")
 
 park.print_report()
 choi.print_report()
+print()
+
+
+print("-- duck typing --")
+
+
+class ConsolePrinter:
+    def print_report(self):
+        print("ConsolePrinter prints to terminal")
+
+
+class FilePrinter:
+    def print_report(self):
+        print("FilePrinter writes to file")
+
+
+# 두 객체는 상속 관계가 아니지만 print_report()라는 같은 동작을 제공합니다.
+# 호출하는 쪽에서는 필요한 동작이 있는지만 보고 같은 방식으로 사용할 수 있습니다.
+printers = [ConsolePrinter(), FilePrinter()]
+for printer in printers:
+    printer.print_report()
