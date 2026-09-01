@@ -27,3 +27,16 @@ print()
 scores["Park"] = 88
 print("-- update value --")
 print(scores)
+print()
+
+
+print("-- missing key raises KeyError --")
+
+# 아래 줄처럼 없는 key를 바로 조회하면 KeyError가 발생합니다.
+# print(scores["Choi"])
+#
+# 수업 예제가 중간에 멈추지 않도록 여기서는 try/except로 에러를 관찰합니다.
+try:
+    print(scores["Choi"])
+except KeyError as error:
+    print("KeyError:", error)
