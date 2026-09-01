@@ -46,9 +46,22 @@ class CourseStudent:
         self.name = name
         self.score = score
 
+    def is_passed(self):
+        return self.score >= 70
+
+    def print_report(self):
+        print(self.name, self.score, "passed:", self.is_passed())
+
 
 park = CourseStudent("Park", 77)
 choi = CourseStudent("Choi", 95)
 
 print(park.name, park.score)
 print(choi.name, choi.score)
+print()
+
+
+print("-- instance methods --")
+
+park.print_report()
+choi.print_report()
