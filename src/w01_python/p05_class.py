@@ -16,3 +16,20 @@ lee = Student()
 print(kim)
 print(lee)
 print("same object?", kim is lee)
+print()
+
+
+print("-- add attributes at runtime --")
+
+# Python에서는 객체를 만든 뒤에도 속성을 붙일 수 있습니다.
+kim.name = "Kim"
+kim.score = 91
+
+lee.name = "Lee"
+lee.score = 84
+
+print(kim.name, kim.score)
+print(lee.name, lee.score)
+
+# 하지만 이런 방식은 모든 객체가 같은 속성을 갖는다는 보장이 약합니다.
+# 그래서 다음 단계에서는 생성자로 초기 상태를 보장합니다.
