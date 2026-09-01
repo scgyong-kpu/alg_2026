@@ -73,6 +73,15 @@ for i in range(len(scores)):
 print()
 
 
+print("-- enumerate --")
+
+# enumerate()는 인덱스와 값을 함께 꺼냅니다.
+# 위치와 값이 모두 필요할 때 range(len(...))보다 의도가 더 잘 보입니다.
+for i, score in enumerate(scores):
+    print("index:", i, "score:", score)
+print()
+
+
 print("-- list update / append / pop --")
 
 # 리스트는 mutable 객체입니다.
