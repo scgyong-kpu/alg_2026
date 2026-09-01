@@ -101,3 +101,26 @@ bad_table[1][2] = 9
 
 for row in bad_table:
     print(row)
+print()
+
+
+print("-- class constructor with map --")
+
+
+class Point:
+    def __init__(self, pair):
+        self.x = pair[0]
+        self.y = pair[1]
+
+    def length_from_origin(self):
+        return (self.x * self.x + self.y * self.y) ** 0.5
+
+
+pairs = [(3, 4), (5, 12), (8, 15)]
+
+# class 이름도 호출할 수 있습니다.
+# map(Point, pairs)는 각 pair에 Point(pair)를 적용하는 것처럼 읽을 수 있습니다.
+points = list(map(Point, pairs))
+
+for point in points:
+    print(point.x, point.y, point.length_from_origin())
