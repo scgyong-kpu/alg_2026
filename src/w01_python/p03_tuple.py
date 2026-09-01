@@ -26,3 +26,23 @@ print("x:", x)
 print("y:", y)
 print("name:", name)
 print("score:", score)
+print()
+
+
+print("-- tuple is immutable, list is mutable --")
+
+tuple_point = (100, 200)
+list_point = [100, 200]
+
+# tuple은 내부 값을 바꿀 수 없습니다.
+# tuple_point[1] = 250
+try:
+    tuple_point[1] = 250
+except TypeError as error:
+    print("tuple update error:", error)
+
+# list는 내부 값을 바꿀 수 있습니다.
+list_point[1] = 250
+
+print("tuple_point:", tuple_point)
+print("list_point:", list_point)
