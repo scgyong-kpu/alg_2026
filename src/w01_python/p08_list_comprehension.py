@@ -47,3 +47,12 @@ print("-- convert map to list --")
 # 전체 결과를 눈으로 보거나 여러 번 다루려면 list로 변환합니다.
 mapped_squares = map(square, numbers)
 print("list(mapped_squares):", list(mapped_squares))
+print()
+
+
+print("-- lambda --")
+
+# lambda는 짧은 함수를 그 자리에서 만드는 문법입니다.
+# 아래 lambda number: number * number는 square 함수와 같은 일을 합니다.
+lambda_squares = list(map(lambda number: number * number, numbers))
+print("lambda_squares:", lambda_squares)
