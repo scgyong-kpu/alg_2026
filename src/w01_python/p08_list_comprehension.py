@@ -25,3 +25,16 @@ print("-- list comprehension --")
 squares2 = [number * number for number in numbers]
 
 print("squares2:", squares2)
+print()
+
+
+print("-- map --")
+
+
+def square(number):
+    return number * number
+
+
+# map은 numbers의 각 원소에 square 함수를 적용합니다.
+mapped_squares = map(square, numbers)
+print("mapped_squares:", mapped_squares)
