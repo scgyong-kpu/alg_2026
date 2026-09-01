@@ -37,3 +37,20 @@ def show_scope():
 
 show_scope()
 print("outside function:", message)
+print()
+
+
+print("-- positional and keyword arguments --")
+
+
+def describe_student(name, score, passed=True):
+    print("name:", name, "score:", score, "passed:", passed)
+
+
+# positional argument는 순서대로 parameter에 들어갑니다.
+describe_student("Park", 77)
+
+# keyword argument는 이름으로 값을 전달합니다.
+# 호출부만 읽어도 어떤 의미의 값인지 더 잘 보입니다.
+describe_student(name="Choi", score=95, passed=True)
+describe_student(score=62, name="Jung", passed=False)
