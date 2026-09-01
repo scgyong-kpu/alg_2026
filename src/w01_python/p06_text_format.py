@@ -27,3 +27,15 @@ print("{1} points were scored by {0}".format(name, score))
 
 # 이름을 쓰면 출력 문장의 의미가 더 분명해집니다.
 print("{student}: {points}".format(student=name, points=score))
+print()
+
+
+print("-- f-string --")
+
+# 문자열 앞에 f를 붙이면 {} 안의 변수가 값으로 바뀝니다.
+print(f"{name} scored {score} points")
+print(f"average: {average:.2f}")
+
+# 간단한 표현식도 넣을 수 있지만, 복잡한 계산은 밖에서 이름을 붙이는 편이 읽기 좋습니다.
+bonus = 5
+print(f"after bonus: {score + bonus}")
