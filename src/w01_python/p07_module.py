@@ -93,6 +93,13 @@ def run_pygame_window():
         for x, y in demo_points:
             pg.draw.circle(screen, (37, 99, 235), to_screen(x, y), 6)
 
+        # 선은 두 점 사이의 관계를 보여줄 때 사용합니다.
+        # 그래프 알고리즘에서는 정점 사이의 간선을 그릴 때 같은 생각을 씁니다.
+        for i in range(len(demo_points) - 1):
+            start = to_screen(demo_points[i][0], demo_points[i][1])
+            end = to_screen(demo_points[i + 1][0], demo_points[i + 1][1])
+            pg.draw.line(screen, (217, 119, 6), start, end, 3)
+
         pg.display.flip()
 
     pg.quit()
