@@ -12,15 +12,42 @@ from .view import View
 
 
 FONT_CANDIDATES = [
+    os.path.join(os.environ.get("WINDIR", "C:\\Windows"), "Fonts", "malgun.ttf"),
+    os.path.join(os.environ.get("WINDIR", "C:\\Windows"), "Fonts", "malgunbd.ttf"),
+    os.path.join(os.environ.get("WINDIR", "C:\\Windows"), "Fonts", "gulim.ttc"),
     "/System/Library/Fonts/AppleSDGothicNeo.ttc",
     "/Library/Fonts/NanumGothic_Coding.ttf",
     "/System/Library/Fonts/Supplemental/Arial Unicode.ttf",
 ]
 
 MONO_FONT_CANDIDATES = [
+    os.path.join(os.environ.get("WINDIR", "C:\\Windows"), "Fonts", "malgun.ttf"),
+    os.path.join(os.environ.get("WINDIR", "C:\\Windows"), "Fonts", "consola.ttf"),
     "/System/Library/Fonts/Menlo.ttc",
     "/Library/Fonts/NanumGothic_Coding.ttf",
     "/System/Library/Fonts/SFNSMono.ttf",
+]
+
+FONT_NAMES = [
+    "malgungothic",
+    "malgun gothic",
+    "gulim",
+    "gungsuh",
+    "applesdgothicneo",
+    "nanumgothiccoding",
+    "nanumgothic",
+    "notosanscjkkr",
+    "notosanskr",
+    "arialunicode",
+]
+
+MONO_FONT_NAMES = [
+    "d2coding",
+    "nanumgothiccoding",
+    "malgungothic",
+    "malgun gothic",
+    "consolas",
+    "menlo",
 ]
 
 MAX_SPEED = 999999.0
@@ -409,11 +436,19 @@ class BaseVisualizer:
         for path in FONT_CANDIDATES:
             if os.path.exists(path):
                 return path
+        for name in FONT_NAMES:
+            path = pygame.font.match_font(name)
+            if path:
+                return path
         return None
 
     def _find_mono_font_path(self):
         for path in MONO_FONT_CANDIDATES:
             if os.path.exists(path):
+                return path
+        for name in MONO_FONT_NAMES:
+            path = pygame.font.match_font(name)
+            if path:
                 return path
         return None
 
