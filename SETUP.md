@@ -127,3 +127,14 @@ import 오류가 발생하면 다음을 확인하세요.
 - VSCode에서 `alg_2026` 루트 폴더를 열었는지 확인합니다.
 - 가상 환경이 활성화되어 있는지 확인합니다.
 - `python -m pip install -r requirements.txt` 명령이 정상적으로 끝났는지 확인합니다.
+
+## 9. Windows에서 한글이 깨질 때
+
+VSCode 터미널의 한글 출력이 깨지면 PowerShell에서 다음 명령을 한 번 실행한 뒤 다시 실행합니다.
+
+```powershell
+chcp 65001
+$env:PYTHONUTF8 = "1"
+```
+
+알고리즘 시각화 창의 한글은 Windows 기본 한글 폰트인 맑은 고딕을 사용합니다.
