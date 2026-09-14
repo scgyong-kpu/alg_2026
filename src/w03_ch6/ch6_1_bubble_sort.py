@@ -22,6 +22,12 @@ def bubble_sort(array):
             right = left + 1
             vis.compare(left, right)
 
+            # 왼쪽 값이 더 크면 두 값을 바꿉니다.
+            # 큰 값은 한 칸 오른쪽으로 이동하고, 작은 값은 한 칸 왼쪽으로 이동합니다.
+            if array[left] > array[right]:
+                vis.swap(left, right)
+                array[left], array[right] = array[right], array[left]
+
     return array
 
 
