@@ -33,4 +33,25 @@ def bubble_sort_improved(array):
 
 
 if __name__ == "__main__":
-    perf.test(bubble_sort_improved, 100)
+    perf.test(bubble_sort_improved, 50000)
+
+'''
+Performance test results:
+   Count    Elapsed
+     100      0.000
+    1000      0.016
+    2000      0.078
+    3000      0.134
+    4000      0.240
+    5000      0.376
+    6000      0.539
+    7000      0.738
+    8000      0.969
+    9000      1.233
+   10000      1.535
+   15000      3.434
+   20000      6.115
+   30000     13.708
+   40000     24.393
+   50000     38.328
+'''
