@@ -28,6 +28,10 @@ def bubble_sort(array):
                 vis.swap(left, right)
                 array[left], array[right] = array[right], array[left]
 
+        # 이번 pass에서 가장 큰 값이 sorted_index 위치까지 밀려났습니다.
+        # 다음 pass에서는 이 위치의 오른쪽을 다시 비교하지 않아도 됩니다.
+        vis.mark_sorted(sorted_index)
+
     return array
 
 
