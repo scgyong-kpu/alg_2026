@@ -28,6 +28,7 @@ def selection_sort(array):
         # 남은 구간에서 찾은 최솟값을 left 위치로 옮깁니다.
         vis.swap(left, min_at)
         array[left], array[min_at] = array[min_at], array[left]
+        vis.mark_sorted(left)
 
     return array
 
