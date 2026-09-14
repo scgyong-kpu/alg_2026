@@ -1,3 +1,4 @@
+import sys
 from random import Random
 
 
@@ -41,3 +42,8 @@ def nearly_sorted_values(count, seed="Hello", window=100):
 def copy_case(values):
     # 성능 측정에서 같은 입력을 여러 정렬 함수에 넣을 때 원본 훼손을 막습니다.
     return list(values)
+
+
+if __name__ == "__main__":
+    count = int(sys.argv[1]) if len(sys.argv) > 1 else 10
+    print(random_values(count))
