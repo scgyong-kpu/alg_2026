@@ -11,6 +11,11 @@ def insertion_sort(array):
     # 삽입 정렬은 왼쪽의 정렬된 구간에 새 값을 알맞은 위치로 끼워 넣습니다.
     n = len(array)
 
+    # 먼저 두 번째 값을 왼쪽의 정렬된 구간에 삽입하는 과정을 살펴봅니다.
+    right = 1
+    if right < n:
+        vis.mark_end(right)
+
     return array
 
 
