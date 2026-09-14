@@ -1,0 +1,25 @@
+import pyvisalgo as va
+
+
+DATA_FILE = "data/elementary_sort.json"
+
+vis = va.visualizer("insertion_sort")
+
+
+def insertion_sort(array):
+    # 정렬 함수는 전달받은 리스트를 직접 바꿉니다.
+    # 삽입 정렬은 왼쪽의 정렬된 구간에 새 값을 알맞은 위치로 끼워 넣습니다.
+    n = len(array)
+
+    return array
+
+
+while va.running():
+    data = va.next_data(__file__, data_file=DATA_FILE)
+    array = list(data.array)
+
+    vis.setup(data)
+    print("정렬 전:", array)
+    print("정렬 후:", insertion_sort(array))
+    vis.finish()
+    vis.wait()
