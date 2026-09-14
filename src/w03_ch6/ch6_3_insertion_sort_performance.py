@@ -1,3 +1,6 @@
+import perf
+
+
 def insertion_sort(array):
     # 정렬 함수는 전달받은 리스트를 직접 바꿉니다.
     # 삽입 정렬은 왼쪽의 정렬된 구간에 새 값을 알맞은 위치로 끼워 넣습니다.
@@ -22,3 +25,29 @@ def insertion_sort(array):
         right += 1
 
     return array
+
+
+if __name__ == "__main__":
+    perf.test(insertion_sort, 50000) # Ins
+
+
+'''
+Performance test results:
+   Count     Ins
+     100   0.000
+    1000   0.007
+    2000   0.028
+    3000   0.063
+    4000   0.114
+    5000   0.177
+    6000   0.257
+    7000   0.352
+    8000   0.464
+    9000   0.586
+   10000   0.725
+   15000   1.655
+   20000   2.934
+   30000   6.608
+   40000  11.698
+   50000  18.518
+'''
