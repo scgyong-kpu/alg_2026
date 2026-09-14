@@ -1,3 +1,6 @@
+import perf
+
+
 def selection_sort(array):
     # 정렬 함수는 전달받은 리스트를 직접 바꿉니다.
     # 선택 정렬은 아직 정렬되지 않은 구간에서 가장 작은 값을 찾아 앞쪽으로 옮깁니다.
@@ -18,3 +21,29 @@ def selection_sort(array):
         array[left], array[min_at] = array[min_at], array[left]
 
     return array
+
+
+if __name__ == "__main__":
+    perf.test(selection_sort, 50000)
+
+
+'''
+Performance test results:
+   Count     Sel
+     100   0.000
+    1000   0.007
+    2000   0.027
+    3000   0.061
+    4000   0.110
+    5000   0.174
+    6000   0.250
+    7000   0.345
+    8000   0.453
+    9000   0.569
+   10000   0.710
+   15000   1.585
+   20000   2.790
+   30000   6.338
+   40000  11.258
+   50000  17.528
+'''
