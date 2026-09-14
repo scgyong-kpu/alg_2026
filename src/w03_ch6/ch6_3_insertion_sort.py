@@ -16,7 +16,13 @@ def insertion_sort(array):
     if right < n:
         vis.mark_end(right)
         left = right - 1
-        vis.compare(left, right)
+        while left >= 0:
+            moving = left + 1
+            vis.compare(left, moving)
+            if array[left] > array[moving]:
+                vis.swap(left, moving)
+                array[left], array[moving] = array[moving], array[left]
+            left -= 1
 
     return array
 
