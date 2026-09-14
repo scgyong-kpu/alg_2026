@@ -380,14 +380,18 @@ class BubbleSortVisualizer(BaseVisualizer):
         self._update_stats()
         self.wait(700)
 
-    def start_pass(self, pass_index, sorted_from):
-        self.pass_index = pass_index + 1
+    def start_pass(self, pass_index, sorted_from=None):
+        if sorted_from is None:
+            sorted_from = pass_index
+            self.pass_index += 1
+        else:
+            self.pass_index = pass_index + 1
         self.pass_started = True
         self.sorted_from = sorted_from
         self.compare_pair = None
         self.swap_pair = None
         self.swap_progress = 0.0
-        self.msg_action(f"{pass_index + 1}번째 반복을 시작한다.")
+        self.msg_action(f"{self.pass_index}번째 반복을 시작한다.")
         self.msg_detail(f"#{sorted_from - 1} 위치까지 이웃한 두 값을 비교한다.")
         self._update_stats()
         self.wait(650)
@@ -423,13 +427,13 @@ class BubbleSortVisualizer(BaseVisualizer):
         self.draw()
         self.wait(250)
 
-    def mark_sorted(self, index):
+    def mark_sorted(self, index, detail=None):
         self.sorted_from = index
         self.compare_pair = None
         self.swap_pair = None
         self.swap_progress = 0.0
         self.msg_action(f"#{index}부터 오른쪽은 정렬이 끝났다.")
-        self.msg_detail("이번 반복에서 가장 큰 값이 정렬된 구간으로 이동했다.")
+        self.msg_detail(detail or "이번 반복에서 가장 큰 값이 정렬된 구간으로 이동했다.")
         self._update_stats()
         self.wait(750)
         self.pass_started = False
