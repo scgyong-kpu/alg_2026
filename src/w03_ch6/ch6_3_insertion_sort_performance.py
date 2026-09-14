@@ -1,4 +1,5 @@
 import perf
+from sort_data import nearly_sorted_values
 
 
 def insertion_sort(array):
@@ -28,26 +29,27 @@ def insertion_sort(array):
 
 
 if __name__ == "__main__":
-    perf.test(insertion_sort, 50000) # Ins
+    # perf.test(insertion_sort, 50000)                               # Ins
+    perf.test(insertion_sort, 50000, data_func=nearly_sorted_values) # InsNS
 
 
 '''
 Performance test results:
-   Count     Ins
-     100   0.000
-    1000   0.007
-    2000   0.028
-    3000   0.063
-    4000   0.114
-    5000   0.177
-    6000   0.257
-    7000   0.352
-    8000   0.464
-    9000   0.586
-   10000   0.725
-   15000   1.655
-   20000   2.934
-   30000   6.608
-   40000  11.698
-   50000  18.518
+   Count     Ins   InsNS
+     100   0.000   0.000
+    1000   0.007   0.002
+    2000   0.028   0.003
+    3000   0.063   0.005
+    4000   0.114   0.006
+    5000   0.177   0.008
+    6000   0.257   0.009
+    7000   0.352   0.010
+    8000   0.464   0.012
+    9000   0.586   0.013
+   10000   0.725   0.015
+   15000   1.655   0.022
+   20000   2.934   0.029
+   30000   6.608   0.044
+   40000  11.698   0.058
+   50000  18.518   0.073
 '''
