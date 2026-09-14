@@ -22,6 +22,8 @@ def insertion_sort(array):
             if array[left] > array[moving]:
                 vis.swap(left, moving)
                 array[left], array[moving] = array[moving], array[left]
+            else:
+                break
             left -= 1
         right += 1
 
