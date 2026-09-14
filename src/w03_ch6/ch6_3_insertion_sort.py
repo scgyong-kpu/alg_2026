@@ -14,17 +14,23 @@ def insertion_sort(array):
     # 두 번째 값부터 차례로 왼쪽의 정렬된 구간에 삽입합니다.
     right = 1
     while right < n:
-        vis.mark_end(right)
-        left = right - 1
-        while left >= 0:
-            moving = left + 1
-            vis.compare(left, moving)
-            if array[left] > array[moving]:
-                vis.swap(left, moving)
-                array[left], array[moving] = array[moving], array[left]
-            else:
+        insert_value = array[right]
+        insert_at = right
+        vis.mark_end(right, pick=True)
+
+        # 삽입할 값보다 큰 값들은 오른쪽으로 한 칸씩 밀어냅니다.
+        while insert_at > 0:
+            left = insert_at - 1
+            vis.compare(left, insert_at)
+            if array[left] <= insert_value:
                 break
-            left -= 1
+            vis.shift(left, insert_at)
+            array[insert_at] = array[left]
+            insert_at -= 1
+
+        # 밀어내기가 끝나면 비워진 위치에 후보 값을 넣습니다.
+        vis.shift(right, insert_at, pick=True)
+        array[insert_at] = insert_value
         right += 1
 
     return array
