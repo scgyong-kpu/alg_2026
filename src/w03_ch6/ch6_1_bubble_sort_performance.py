@@ -1,5 +1,4 @@
 import perf
-from sort_data import nearly_sorted_values
 
 
 def bubble_sort_improved(array):
@@ -34,8 +33,13 @@ def bubble_sort_improved(array):
 
 
 if __name__ == "__main__":
-    # perf.test(bubble_sort_improved, 50000)                               # Bub
-    perf.test(bubble_sort_improved, 50000, data_func=nearly_sorted_values) # BubNS
+    perf.test(bubble_sort_improved, 50000)
+
+    # 실행 예:
+    # python src/w03_ch6/ch6_1_bubble_sort_performance.py
+    # python src/w03_ch6/ch6_1_bubble_sort_performance.py nearly
+    # python src/w03_ch6/ch6_1_bubble_sort_performance.py sorted
+    # python src/w03_ch6/ch6_1_bubble_sort_performance.py reversed
 
 '''
 Performance test results:
