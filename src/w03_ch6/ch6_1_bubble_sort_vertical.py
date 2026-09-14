@@ -18,15 +18,15 @@ def bubble_sort(array):
         vis.start_pass(pass_index, sorted_index + 1)
 
         # 이웃한 두 칸을 위에서 아래로 차례대로 비교합니다.
-        for left in range(sorted_index):
-            right = left + 1
-            vis.compare(left, right)
+        for upper in range(sorted_index):
+            lower = upper + 1
+            vis.compare(upper, lower)
 
             # 위쪽 값이 더 크면 두 값을 바꿉니다.
             # 큰 값은 한 칸 아래로 이동하고, 작은 값은 한 칸 위로 이동합니다.
-            if array[left] > array[right]:
-                vis.swap(left, right)
-                array[left], array[right] = array[right], array[left]
+            if array[upper] > array[lower]:
+                vis.swap(upper, lower)
+                array[upper], array[lower] = array[lower], array[upper]
 
         # 이번 pass에서 가장 큰 값이 sorted_index 위치까지 밀려났습니다.
         # 다음 pass에서는 이 위치의 아래쪽을 다시 비교하지 않아도 됩니다.
