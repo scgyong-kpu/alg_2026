@@ -1,3 +1,6 @@
+import perf
+
+
 def bubble_sort_improved(array):
     # 기본 버블 정렬과 같은 방식으로 이웃한 두 값을 비교합니다.
     # 여기에 "마지막 교환이 일어난 위치"를 기록하여 다음 pass의 범위를 줄입니다.
@@ -27,3 +30,7 @@ def bubble_sort_improved(array):
         # 이 경우 while 조건이 false가 되어 정렬을 끝냅니다.
 
     return array
+
+
+if __name__ == "__main__":
+    perf.test(bubble_sort_improved, 100)

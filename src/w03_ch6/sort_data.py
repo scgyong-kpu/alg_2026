@@ -1,26 +1,6 @@
 from random import Random
 
 
-PERFORMANCE_COUNTS = [
-    100,
-    1000,
-    2000,
-    3000,
-    4000,
-    5000,
-    6000,
-    7000,
-    8000,
-    9000,
-    10000,
-    15000,
-    20000,
-    30000,
-    40000,
-    50000,
-]
-
-
 def random_values(count, seed="Hello", low=1, high=None):
     # seed를 고정하면 매번 같은 입력이 만들어집니다.
     # 성능 측정에서는 같은 입력을 여러 알고리즘에 넣어야 비교가 공정합니다.

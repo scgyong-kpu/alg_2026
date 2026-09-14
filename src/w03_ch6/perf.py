@@ -1,6 +1,26 @@
 from time import perf_counter
 
-from sort_data import PERFORMANCE_COUNTS, random_values
+from sort_data import random_values
+
+
+PERFORMANCE_COUNTS = [
+    100,
+    1000,
+    2000,
+    3000,
+    4000,
+    5000,
+    6000,
+    7000,
+    8000,
+    9000,
+    10000,
+    15000,
+    20000,
+    30000,
+    40000,
+    50000,
+]
 
 
 def test(sort_func, max_count, data_func=random_values):
