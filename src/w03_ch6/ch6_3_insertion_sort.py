@@ -15,6 +15,8 @@ def insertion_sort(array):
     right = 1
     if right < n:
         vis.mark_end(right)
+        left = right - 1
+        vis.compare(left, right)
 
     return array
 
