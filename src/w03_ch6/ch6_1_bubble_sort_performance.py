@@ -34,25 +34,26 @@ def bubble_sort_improved(array):
 
 
 if __name__ == "__main__":
-    perf.test(bubble_sort_improved, 50000, data_func=nearly_sorted_values)
+    # perf.test(bubble_sort_improved, 50000)                               # Bub
+    perf.test(bubble_sort_improved, 50000, data_func=nearly_sorted_values) # BubNS
 
 '''
 Performance test results:
-   Count    Elapsed
-     100      0.000
-    1000      0.008
-    2000      0.023
-    3000      0.039
-    4000      0.052
-    5000      0.062
-    6000      0.080
-    7000      0.091
-    8000      0.118
-    9000      0.129
-   10000      0.144
-   15000      0.243
-   20000      0.357
-   30000      0.505
-   40000      0.679
-   50000      0.846
+   Count     Bub   BubNS
+     100   0.000   0.000
+    1000   0.016   0.008
+    2000   0.078   0.023
+    3000   0.134   0.039
+    4000   0.240   0.052
+    5000   0.376   0.062
+    6000   0.539   0.080
+    7000   0.738   0.091
+    8000   0.969   0.118
+    9000   1.233   0.129
+   10000   1.535   0.144
+   15000   3.434   0.243
+   20000   6.115   0.357
+   30000  13.708   0.505
+   40000  24.393   0.679
+   50000  38.328   0.846
 '''
