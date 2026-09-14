@@ -1,4 +1,5 @@
 import perf
+from sort_data import nearly_sorted_values
 
 
 def selection_sort(array):
@@ -24,26 +25,27 @@ def selection_sort(array):
 
 
 if __name__ == "__main__":
-    perf.test(selection_sort, 50000)
+    # perf.test(selection_sort, 50000)                               # Sel
+    perf.test(selection_sort, 50000, data_func=nearly_sorted_values) # SelNS
 
 
 '''
 Performance test results:
-   Count     Sel
-     100   0.000
-    1000   0.007
-    2000   0.027
-    3000   0.061
-    4000   0.110
-    5000   0.174
-    6000   0.250
-    7000   0.345
-    8000   0.453
-    9000   0.569
-   10000   0.710
-   15000   1.585
-   20000   2.790
-   30000   6.338
-   40000  11.258
-   50000  17.528
+   Count     Sel   SelNS
+     100   0.000   0.000
+    1000   0.007   0.007
+    2000   0.027   0.028
+    3000   0.061   0.060
+    4000   0.110   0.107
+    5000   0.174   0.171
+    6000   0.250   0.246
+    7000   0.345   0.346
+    8000   0.453   0.444
+    9000   0.569   0.554
+   10000   0.710   0.681
+   15000   1.585   1.544
+   20000   2.790   2.721
+   30000   6.338   6.148
+   40000  11.258  10.900
+   50000  17.528  17.015
 '''
