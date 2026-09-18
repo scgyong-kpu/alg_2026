@@ -11,14 +11,14 @@ def shell_sort(array):
     # 셸 정렬은 gap 간격으로 나눈 부분 배열에 삽입 정렬을 적용합니다.
     count = len(array)
 
-    # 10개 데이터에서 0, 3, 6, 9 위치의 첫 부분 배열을 살펴봅니다.
+    # 10개 데이터를 gap 3 간격의 부분 배열로 나누어 살펴봅니다.
     if True:
       gap = 3
       vis.set_gap(gap)
 
-      if True:
-        vis.set_group(0)
-        start = gap
+      for offset in range(gap):
+        vis.set_group(offset)
+        start = offset + gap
         while start < count:
             insert_value = array[start]
             insert_at = start
