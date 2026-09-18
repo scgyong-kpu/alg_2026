@@ -1,3 +1,6 @@
+import perf
+
+
 # Hibbard 수열: 2^k - 1 형태입니다.
 HIBBARD_GAPS = [
     524287, 262143, 131071, 65535, 32767, 16383, 8191, 4095,
@@ -49,3 +52,42 @@ def shell_sort(array, gap_values=TOKUDA_GAPS):
             array[insert_at] = insert_value
 
     return array
+
+
+if __name__ == "__main__":
+    perf.test(shell_sort, 1000000)
+
+    # 실행 예:
+    # python src/w03_ch6/ch6_4_shell_sort_performance.py
+    # python src/w03_ch6/ch6_4_shell_sort_performance.py nearly
+    # python src/w03_ch6/ch6_4_shell_sort_performance.py sorted
+    # python src/w03_ch6/ch6_4_shell_sort_performance.py reversed
+
+
+'''
+Performance test results:
+   Count   Shell
+     100   0.000
+    1000   0.001
+    2000   0.001
+    3000   0.002
+    4000   0.003
+    5000   0.004
+    6000   0.004
+    7000   0.005
+    8000   0.006
+    9000   0.006
+   10000   0.008
+   15000   0.012
+   20000   0.016
+   30000   0.028
+   40000   0.037
+   50000   0.048
+  100000   0.102
+  200000   0.228
+  300000   0.388
+  400000   0.606
+  500000   0.747
+  750000   1.801
+ 1000000   2.618
+'''
