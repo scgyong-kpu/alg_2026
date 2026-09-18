@@ -1218,6 +1218,8 @@ class ShellSortVisualizer(InsertionSortVisualizer):
         self.picked_value = None
         self.hole_index = None
         self.pick_progress = 1.0
+        # 새 gap에서는 이전 부분 배열의 정렬 구간을 이어서 표시하지 않습니다.
+        self.sorted_until = 0
         self.msg_phase(f"gap = {self.current_gap}")
         self.msg_action(f"gap을 {self.current_gap}로 정한다.")
         self.msg_detail(f"인덱스 차이가 {self.current_gap}인 원소들을 같은 부분 배열로 본다.")
