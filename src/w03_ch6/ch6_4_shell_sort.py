@@ -11,6 +11,33 @@ def shell_sort(array):
     # 셸 정렬은 gap 간격으로 나눈 부분 배열에 삽입 정렬을 적용합니다.
     count = len(array)
 
+    # 10개 데이터에서 0, 3, 6, 9 위치의 첫 부분 배열을 살펴봅니다.
+    if True:
+      gap = 3
+      vis.set_gap(gap)
+
+      if True:
+        vis.set_group(0)
+        start = gap
+        while start < count:
+            insert_value = array[start]
+            insert_at = start
+            vis.mark_end(start, pick=True)
+
+            # gap만큼 왼쪽의 값과 비교하며 후보 값을 삽입할 위치를 찾습니다.
+            while insert_at >= gap:
+                left = insert_at - gap
+                vis.compare(left, insert_at)
+                if array[left] <= insert_value:
+                    break
+                vis.shift(left, insert_at)
+                array[insert_at] = array[left]
+                insert_at -= gap
+
+            vis.shift(start, insert_at, pick=True)
+            array[insert_at] = insert_value
+            start += gap
+
     return array
 
 
@@ -21,5 +48,5 @@ while va.running():
     vis.setup(data)
     print("정렬 전:", array)
     print("정렬 후:", shell_sort(array))
-    vis.finish()
+    # vis.finish()
     vis.wait()
