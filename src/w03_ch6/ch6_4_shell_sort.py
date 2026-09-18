@@ -33,12 +33,11 @@ def shell_sort(array):
 
     # 배열 길이에 맞는 gap을 큰 값부터 차례로 적용합니다.
     for gap in gaps(count):
-      vis.set_gap(gap)
+        vis.set_gap(gap)
 
-      for offset in range(gap):
-        vis.set_group(offset)
-        start = offset + gap
-        while start < count:
+        # gap 3에서 부분 배열을 0·3·6·9, 1·4·7, 2·5·8 순서로 처리해도,
+        # start를 3, 4, 5, 6, 7, 8, 9 순서로 처리해도 각 부분 배열의 결과는 같습니다.
+        for start in range(gap, count):
             insert_value = array[start]
             insert_at = start
             vis.mark_end(start, pick=True)
@@ -55,9 +54,8 @@ def shell_sort(array):
 
             vis.shift(start, insert_at, pick=True)
             array[insert_at] = insert_value
-            start += gap
 
-      vis.finish_gap()
+        vis.finish_gap()
 
     return array
 
