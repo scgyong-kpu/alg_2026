@@ -58,24 +58,28 @@ def heap_sort(array):
 
 
 def heapify_improved(array, root, count):
-    # 재귀 호출 대신 root를 더 큰 자식 위치로 옮기며 downheap을 반복합니다.
+    # root 값을 따로 보관하고, 더 큰 자식을 위로 밀어 빈 자리를 내려 보냅니다.
+    root_value = array[root]
     while True:
         left = root * 2 + 1
         if left >= count:
-            return
+            break
 
         right = root * 2 + 2
         largest = left
         if right < count and array[right] > array[largest]:
             largest = right
 
-        # 부모가 더 크거나 같으면 이 subtree는 이미 Max Heap입니다.
-        if array[root] >= array[largest]:
-            return
+        # 보관한 root 값이 더 크거나 같으면 찾던 위치에 도착했습니다.
+        if root_value >= array[largest]:
+            break
 
-        # 더 큰 자식과 교환한 뒤, 내려간 부모 위치에서 계속 확인합니다.
-        array[root], array[largest] = array[largest], array[root]
+        # 교환하지 않고 더 큰 자식을 한 칸 위의 빈 자리로 밀어 올립니다.
+        array[root] = array[largest]
         root = largest
+
+    # 처음에 보관한 root 값을 최종 빈 자리에 한 번만 넣습니다.
+    array[root] = root_value
 
 
 def heap_sort_improved(array):
