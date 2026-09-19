@@ -58,8 +58,9 @@ def heap_sort(array):
     if count > 1:
         # count // 2부터 마지막 index까지는 왼쪽 자식도 없는 leaf입니다.
         # 그 바로 앞 count // 2 - 1이 자식을 가진 마지막 부모입니다.
-        root = count // 2 - 1
-        heapify(array, root, count)
+        # 마지막 부모부터 root #0까지 모든 부모 subtree를 heapify합니다.
+        for root in range(count // 2 - 1, -1, -1):
+            heapify(array, root, count)
 
     return array
 
