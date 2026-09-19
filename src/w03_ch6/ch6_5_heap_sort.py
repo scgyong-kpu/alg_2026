@@ -74,6 +74,11 @@ def heap_sort(array):
         # 마지막 원소는 최대값으로 확정되었으므로 heap 크기를 하나 줄입니다.
         vis.set_tree_size(last)
 
+        # 마지막 원소가 root로 왔으므로 줄어든 heap에서 Max Heap 조건을 다시 회복합니다.
+        if last > 1:
+            heapify(array, 0, last)
+        vis.finish_downheap()
+
     return array
 
 
