@@ -11,6 +11,9 @@ def heap_sort(array):
     # 힙 정렬은 배열을 Max Heap으로 만든 뒤 최대값을 뒤로 보냅니다.
     count = len(array)
 
+    # 배열 index를 완전 이진 트리의 부모와 자식 관계로 보여 줍니다.
+    vis.build_tree()
+
     return array
 
 
