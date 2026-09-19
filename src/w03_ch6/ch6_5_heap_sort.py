@@ -71,6 +71,9 @@ def heap_sort(array):
         vis.swap(0, last)
         array[0], array[last] = array[last], array[0]
 
+        # 마지막 원소는 최대값으로 확정되었으므로 heap 크기를 하나 줄입니다.
+        vis.set_tree_size(last)
+
     return array
 
 
