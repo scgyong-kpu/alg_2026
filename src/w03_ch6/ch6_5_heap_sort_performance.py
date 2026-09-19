@@ -1,9 +1,4 @@
-import pyvisalgo as va
-
-
-DATA_FILE = "data/elementary_sort.json"
-
-vis = va.visualizer("heap_sort")
+import perf
 
 
 def heapify(array, root, count):
@@ -14,9 +9,6 @@ def heapify(array, root, count):
     if left >= count:
         return
 
-    # 지금 heapify하는 subtree의 root를 시각화에 표시합니다.
-    vis.set_root(root)
-
     # 오른쪽 자식의 index는 2 * root + 2입니다.
     right = root * 2 + 2
 
@@ -25,20 +17,14 @@ def heapify(array, root, count):
 
     # 오른쪽 자식이 있을 때만 두 자식의 값을 비교합니다.
     if right < count:
-        vis.compare(left, right)
-
         # 오른쪽 자식이 더 크면 부모와 비교할 후보를 오른쪽으로 바꿉니다.
         if array[right] > array[largest]:
             largest = right
 
     # largest에는 두 자식 중 더 큰 값의 index가 남습니다.
     # 이제 부모와 이 후보만 비교하면 heap 조건을 확인할 수 있습니다.
-    vis.compare(root, largest)
-
     # 더 큰 자식이 부모보다 크면 max heap 조건이 깨진 상태입니다.
     if array[largest] > array[root]:
-        # 시각화와 실제 배열에서 같은 두 값을 교환합니다.
-        vis.swap(root, largest)
         array[root], array[largest] = array[largest], array[root]
 
         # 부모 값이 largest 위치로 내려갔으므로 그 subtree를 다시 heapify합니다.
@@ -50,9 +36,6 @@ def heap_sort(array):
     # 힙 정렬은 배열을 Max Heap으로 만든 뒤 최대값을 뒤로 보냅니다.
     count = len(array)
 
-    # 배열 index를 완전 이진 트리의 부모와 자식 관계로 보여 줍니다.
-    vis.build_tree()
-
     # heapify는 두 자식 subtree가 이미 heap이라는 전제에서 root까지 heap으로 만듭니다.
     # 따라서 자식이 없는 leaf에 가까운 작은 subtree부터 부모 방향으로 처리해야 합니다.
     if count > 1:
@@ -62,35 +45,49 @@ def heap_sort(array):
         for root in range(count // 2 - 1, -1, -1):
             heapify(array, root, count)
 
-    # 모든 부모 subtree가 heap 상태가 되었으므로 배열 전체가 Max Heap입니다.
-    vis.finish_build_heap()
-
     # heap 마지막 index를 하나씩 앞당기며 최대값을 정렬 완료 구간으로 보냅니다.
     for last in range(count - 1, 0, -1):
         # root의 최대값을 heap 마지막 원소와 바꿔 배열의 맨 뒤로 보냅니다.
-        vis.swap(0, last)
         array[0], array[last] = array[last], array[0]
-
-        # 마지막 원소는 최대값으로 확정되었으므로 heap 크기를 하나 줄입니다.
-        vis.set_tree_size(last)
 
         # 마지막 원소가 root로 왔으므로 줄어든 heap에서 Max Heap 조건을 다시 회복합니다.
         if last > 1:
             heapify(array, 0, last)
-        vis.finish_downheap()
-
-    # 모든 원소를 heap에서 꺼내 오름차순 정렬을 완성했습니다.
-    vis.finish()
 
     return array
 
 
-while va.running():
-    data = va.next_data(__file__, data_file=DATA_FILE)
-    array = list(data.array)
+if __name__ == "__main__":
+    perf.test(heap_sort, 500000)
 
-    vis.setup(data)
-    print("정렬 전:", array)
-    print("정렬 후:", heap_sort(array))
-    # vis.finish()
-    vis.wait()
+    # 실행 예:
+    # python src/w03_ch6/ch6_5_heap_sort_performance.py
+    # python src/w03_ch6/ch6_5_heap_sort_performance.py nearly
+    # python src/w03_ch6/ch6_5_heap_sort_performance.py reversed
+
+
+'''
+Performance test results (seconds):
+   Count   Random   Nearly Reversed
+     100    0.000    0.000    0.000
+    1000    0.001    0.001    0.001
+    2000    0.002    0.002    0.001
+    3000    0.003    0.003    0.002
+    4000    0.004    0.004    0.004
+    5000    0.005    0.005    0.004
+    6000    0.006    0.006    0.005
+    7000    0.007    0.007    0.006
+    8000    0.009    0.008    0.007
+    9000    0.010    0.009    0.008
+   10000    0.011    0.011    0.010
+   15000    0.018    0.017    0.015
+   20000    0.024    0.023    0.021
+   30000    0.037    0.036    0.033
+   40000    0.051    0.049    0.045
+   50000    0.065    0.062    0.057
+  100000    0.144    0.133    0.122
+  200000    0.322    0.281    0.264
+  300000    0.519    0.436    0.411
+  400000    0.745    0.596    0.562
+  500000    0.983    0.754    0.719
+'''
