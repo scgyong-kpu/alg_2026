@@ -6,6 +6,16 @@ DATA_FILE = "data/elementary_sort.json"
 vis = va.visualizer("heap_sort")
 
 
+def heapify(array, root, count):
+    # 왼쪽 자식이 없으면 root는 leaf이므로 더 내려갈 곳이 없습니다.
+    left = root * 2 + 1
+    if left >= count:
+        return
+
+    vis.set_root(root)
+    vis.compare(root, left)
+
+
 def heap_sort(array):
     # 정렬 함수는 전달받은 리스트를 직접 바꿉니다.
     # 힙 정렬은 배열을 Max Heap으로 만든 뒤 최대값을 뒤로 보냅니다.
@@ -16,10 +26,7 @@ def heap_sort(array):
 
     # index 0을 root로 잡으면 왼쪽 자식의 index는 2 * root + 1입니다.
     root = 0
-    left = root * 2 + 1
-    vis.set_root(root)
-    if left < count:
-        vis.compare(root, left)
+    heapify(array, root, count)
 
     return array
 
