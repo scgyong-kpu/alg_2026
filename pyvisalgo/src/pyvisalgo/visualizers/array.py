@@ -2299,16 +2299,14 @@ class HeapSortVisualizer(BubbleSortVisualizer):
         self.centered_text("정렬 완료", (left + right) / 2, top - 26, 18, colors.GREEN, True)
 
     def _draw_legend(self):
-        y = self._array_layout()[2] - 70
-        self.text("표시", 200, y + 2, 18, colors.TEXT_MUTED, True)
-        self.rect(280, y, 28, 20, (31, 54, 75), (30, 96, 190), 4)
-        self.text("subtree heap", 320, y - 4, 18, colors.TEXT_MUTED)
-        self.rect(520, y, 28, 20, colors.PANEL, (190, 30, 45), 4)
-        self.text("heap 조건 위반", 560, y - 4, 18, colors.TEXT_MUTED)
-        self.rect(780, y, 28, 20, (82, 55, 30), colors.ORANGE, 4)
-        self.text("비교", 820, y - 4, 18, colors.TEXT_MUTED)
-        self.rect(920, y, 28, 20, (35, 72, 52), colors.GREEN, 4)
-        self.text("정렬 완료", 960, y - 4, 18, colors.TEXT_MUTED)
+        self.rect(1080, 38, 28, 20, (31, 54, 75), (30, 96, 190), 4)
+        self.text("subtree heap", 1120, 34, 18, colors.TEXT_MUTED)
+        self.rect(1320, 38, 28, 20, colors.PANEL, (190, 30, 45), 4)
+        self.text("heap 조건 위반", 1360, 34, 18, colors.TEXT_MUTED)
+        self.rect(1080, 78, 28, 20, (82, 55, 30), colors.ORANGE, 4)
+        self.text("비교", 1120, 74, 18, colors.TEXT_MUTED)
+        self.rect(1320, 78, 28, 20, (35, 72, 52), colors.GREEN, 4)
+        self.text("정렬 완료", 1360, 74, 18, colors.TEXT_MUTED)
 
     def _update_stats(self):
         self.msg_stats(f"heap 크기 {self.tree_size}\n비교 {self.compare_count}회\n교환 {self.swap_count}회")
