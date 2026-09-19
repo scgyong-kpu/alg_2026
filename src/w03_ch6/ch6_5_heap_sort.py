@@ -32,7 +32,8 @@ def heapify(array, root, count):
             largest = right
 
     # largest에는 두 자식 중 더 큰 값의 index가 남습니다.
-    # 다음 단계에서 array[root]와 array[largest]를 비교합니다.
+    # 이제 부모와 이 후보만 비교하면 heap 조건을 확인할 수 있습니다.
+    vis.compare(root, largest)
 
 
 def heap_sort(array):
