@@ -53,9 +53,13 @@ def heap_sort(array):
     # 배열 index를 완전 이진 트리의 부모와 자식 관계로 보여 줍니다.
     vis.build_tree()
 
-    # index 0을 root로 잡으면 왼쪽 자식의 index는 2 * root + 1입니다.
-    root = 0
-    heapify(array, root, count)
+    # heapify는 두 자식 subtree가 이미 heap이라는 전제에서 root까지 heap으로 만듭니다.
+    # 따라서 자식이 없는 leaf에 가까운 작은 subtree부터 부모 방향으로 처리해야 합니다.
+    if count > 1:
+        # count // 2부터 마지막 index까지는 왼쪽 자식도 없는 leaf입니다.
+        # 그 바로 앞 count // 2 - 1이 자식을 가진 마지막 부모입니다.
+        root = count // 2 - 1
+        heapify(array, root, count)
 
     return array
 
