@@ -35,6 +35,12 @@ def heapify(array, root, count):
     # 이제 부모와 이 후보만 비교하면 heap 조건을 확인할 수 있습니다.
     vis.compare(root, largest)
 
+    # 더 큰 자식이 부모보다 크면 max heap 조건이 깨진 상태입니다.
+    if array[largest] > array[root]:
+        # 시각화와 실제 배열에서 같은 두 값을 교환합니다.
+        vis.swap(root, largest)
+        array[root], array[largest] = array[largest], array[root]
+
 
 def heap_sort(array):
     # 정렬 함수는 전달받은 리스트를 직접 바꿉니다.
