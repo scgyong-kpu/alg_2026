@@ -64,6 +64,13 @@ def heap_sort(array):
 
     # 모든 부모 subtree가 heap 상태가 되었으므로 배열 전체가 Max Heap입니다.
     vis.finish_build_heap()
+
+    # root의 최대값을 heap 마지막 원소와 바꿔 배열의 맨 뒤로 보냅니다.
+    if count > 1:
+        last = count - 1
+        vis.swap(0, last)
+        array[0], array[last] = array[last], array[0]
+
     return array
 
 
