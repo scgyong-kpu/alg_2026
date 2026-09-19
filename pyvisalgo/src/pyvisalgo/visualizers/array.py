@@ -1982,6 +1982,21 @@ class HeapSortVisualizer(BubbleSortVisualizer):
         self._update_stats()
         self.wait(850)
 
+    def swap(self, parent, child):
+        parent_value = self.array[parent]
+        child_value = self.array[child]
+        self.swap_pair = (parent, child)
+        self.compare_pair = None
+        self.swap_count += 1
+        self.msg_action(f"#{parent} 과 #{child} 의 값을 교환한다.")
+        self.msg_detail(f"{parent_value} 이 자식 노드로 내려가고, {child_value} 이 부모 노드로 올라간다.")
+        self._update_stats()
+        self._animate_swap(900)
+        self.array[parent], self.array[child] = self.array[child], self.array[parent]
+        self.swap_progress = 0.0
+        self.draw()
+        self.wait(250)
+
     def set_tree_size(self, size):
         self.tree_size = max(0, int(size))
         self.sorted_from = self.tree_size
