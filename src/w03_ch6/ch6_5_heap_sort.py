@@ -41,6 +41,9 @@ def heapify(array, root, count):
         vis.swap(root, largest)
         array[root], array[largest] = array[largest], array[root]
 
+        # 부모 값이 largest 위치로 내려갔으므로 그 subtree를 다시 heapify합니다.
+        heapify(array, largest, count)
+
 
 def heap_sort(array):
     # 정렬 함수는 전달받은 리스트를 직접 바꿉니다.
