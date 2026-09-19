@@ -62,6 +62,8 @@ def heap_sort(array):
         for root in range(count // 2 - 1, -1, -1):
             heapify(array, root, count)
 
+    # 모든 부모 subtree가 heap 상태가 되었으므로 배열 전체가 Max Heap입니다.
+    vis.finish_build_heap()
     return array
 
 
