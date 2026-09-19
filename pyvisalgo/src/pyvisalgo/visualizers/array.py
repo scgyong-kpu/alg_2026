@@ -2556,7 +2556,7 @@ class CountSortVisualizer(BaseVisualizer):
         self._draw_fly()
 
     def _draw_array_row(self):
-        self._draw_row_title("array", 74, 148, "원본 배열")
+        self._draw_row_title("array", 74, 115, "원본 배열")
         for index, value in enumerate(self.array):
             x, y, w, h = self._array_rect(index)
             fill = colors.PANEL
@@ -2571,7 +2571,7 @@ class CountSortVisualizer(BaseVisualizer):
 
     def _draw_counts_row(self):
         title = "counts: 개수" if self.count_mode == "count" else "counts: 끝 위치 + 1"
-        self._draw_row_title("counts", 74, 326, title)
+        self._draw_row_title("counts", 74, 342, title)
         for index, value in enumerate(self.counts):
             x, y, w, h = self._count_rect(index)
             fill = (28, 48, 56) if self.count_mode == "count" else (30, 51, 42)
@@ -2589,7 +2589,7 @@ class CountSortVisualizer(BaseVisualizer):
     def _draw_result_row(self):
         if not self.result:
             return
-        self._draw_row_title("result", 74, 504, "결과 배열")
+        self._draw_row_title("result", 74, 425, "결과 배열")
         for index, value in enumerate(self.result):
             x, y, w, h = self._result_rect(index)
             fill = colors.PANEL
@@ -2618,8 +2618,8 @@ class CountSortVisualizer(BaseVisualizer):
             self.mono_text(line, x + 118, y + 18 + row * 27, 18, colors.TEXT_MUTED)
 
     def _draw_row_title(self, name, x, y, detail):
-        self.text(name, x, y, 24, colors.TEXT, True)
-        self.text(detail, x + 110, y + 3, 18, colors.TEXT_MUTED)
+        self.text(name, x, y, 20, colors.TEXT, True)
+        self.text(detail, x + 92, y + 2, 16, colors.TEXT_MUTED)
 
     def _draw_count_value(self, index, value, x, y, w, h):
         if self.count_anim is None or self.count_anim["index"] != index:
