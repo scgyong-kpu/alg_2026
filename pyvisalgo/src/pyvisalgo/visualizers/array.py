@@ -2111,7 +2111,6 @@ class HeapSortVisualizer(BubbleSortVisualizer):
         rect = self.view.rect(left, top, right - left, bottom - top)
         pygame.draw.rect(self.screen, fill, rect, border_radius=self.view.length(12))
         pygame.draw.rect(self.screen, border, rect, width=self.view.length(2), border_radius=self.view.length(12))
-        pygame.draw.rect(self.screen, colors.YELLOW, rect, width=self.view.length(3), border_radius=self.view.length(12))
 
     def _draw_tree_edge(self, parent, child):
         if child >= self.tree_size:
