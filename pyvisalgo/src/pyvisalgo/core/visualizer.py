@@ -288,7 +288,7 @@ class BaseVisualizer:
         if self.messages["phase"]:
             self.text(self.messages["phase"], 90, y, 26, colors.BLUE, True)
         if self.messages["dataset"]:
-            self.text(self.messages["dataset"], 300, y + 2, 20, colors.TEXT_MUTED)
+            self.text(self.messages["dataset"], 560, y + 2, 20, colors.TEXT_MUTED)
         if self.messages["stats"]:
             self.text(self.messages["stats"], 1180, y, 22, colors.TEXT_MUTED)
         y += 44
