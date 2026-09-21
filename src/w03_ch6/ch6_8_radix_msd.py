@@ -62,6 +62,14 @@ def radix_sort_msd(words):
     words[:] = result
     vis.copy_back(result)
 
+    # 배치 후 counts[bucket]은 그 bucket의 시작 인덱스가 됩니다.
+    # e bucket은 e의 시작부터 f bucket 직전까지의 구간입니다.
+    bucket = bucket_at("e", 0)
+    left = counts[bucket]
+    right = counts[bucket + 1] - 1
+    if left < right:
+        vis.push(left, right, 1)
+
     return words
 
 
