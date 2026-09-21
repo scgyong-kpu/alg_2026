@@ -90,6 +90,10 @@ def radix_sort_msd(words):
             vis.accumulate_bucket(previous, bucket, counts)
         vis.finish_accumulate(counts)
 
+        # result는 전체 길이로 만들고, e 구간 위치만 채웁니다.
+        result = [None] * len(words)
+        vis.init_result(result)
+
     return words
 
 
