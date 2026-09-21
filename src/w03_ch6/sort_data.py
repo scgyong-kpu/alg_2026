@@ -10,6 +10,17 @@ def random_values(count, seed="Hello", low=1, high=None):
     return [rng.randint(low, high) for _ in range(count)]
 
 
+def limited_random_values(count, value_count, seed="Hello"):
+    # 0부터 value_count - 1까지만 사용해 계수 정렬의 값 범위를 제한합니다.
+    # 값 객체를 미리 만들어 재사용하면 수천만 개의 작은 정수를 새로 만들지 않습니다.
+    if value_count < 1:
+        raise ValueError("value_count must be at least 1")
+
+    rng = Random(seed)
+    values = list(range(value_count))
+    return [values[rng.randrange(value_count)] for _ in range(count)]
+
+
 def reversed_values(count):
     # 단순 교환 기반 정렬에서 가장 많은 이동이 필요한 입력입니다.
     return list(range(count, 0, -1))
