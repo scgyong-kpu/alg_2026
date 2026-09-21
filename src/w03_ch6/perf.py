@@ -50,7 +50,7 @@ def selected_data_func():
     return DATA_FUNCS[data_name]
 
 
-def test(sort_func, max_count, data_func=None):
+def test(sort_func, max_count, data_func=None, measure_creation=False):
     # sort_func는 리스트를 받아 정렬하는 함수입니다.
     # 버블 정렬처럼 리스트를 직접 바꾸어도 되고, sorted()처럼 새 리스트를 반환해도 됩니다.
     if data_func is None:
@@ -58,9 +58,15 @@ def test(sort_func, max_count, data_func=None):
 
     counts = [count for count in PERFORMANCE_COUNTS if count <= max_count]
 
-    print(f"{'Count':>8} {'Elapsed':>10}")
+    if measure_creation:
+        print(f"{'Count':>8} {'Create':>10} {'Elapsed':>10}")
+    else:
+        print(f"{'Count':>8} {'Elapsed':>10}")
+
     for count in counts:
+        create_started_at = perf_counter()
         original = data_func(count)
+        create_elapsed = perf_counter() - create_started_at
         array = list(original)
 
         started_at = perf_counter()
@@ -71,4 +77,7 @@ def test(sort_func, max_count, data_func=None):
         if sorted_array != sorted(original):
             raise ValueError(f"{sort_func.__name__} failed to sort {count} values")
 
-        print(f"{count:8d} {elapsed:10.3f}")
+        if measure_creation:
+            print(f"{count:8d} {create_elapsed:10.3f} {elapsed:10.3f}")
+        else:
+            print(f"{count:8d} {elapsed:10.3f}")

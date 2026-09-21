@@ -23,4 +23,5 @@ def count_sort(array):
 
 
 if __name__ == "__main__":
-    perf.test(count_sort, 1_000_000)
+    # Create 열은 random 입력 배열을 준비하는 데 걸린 시간입니다.
+    perf.test(count_sort, 1_000_000, measure_creation=True)
