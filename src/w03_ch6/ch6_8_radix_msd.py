@@ -104,6 +104,10 @@ def radix_sort_msd(words):
             vis.place(index, bucket, at, counts, result)
         vis.finish_result(result)
 
+        # 둘째 글자 기준으로 정렬한 e 구간만 원래 배열에 복사합니다.
+        words[left:right + 1] = result[left:right + 1]
+        vis.copy_back(result)
+
     return words
 
 
