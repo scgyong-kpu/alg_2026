@@ -81,3 +81,39 @@ def test(sort_func, max_count, data_func=None, measure_creation=False):
             print(f"{count:8d} {create_elapsed:10.3f} {elapsed:10.3f}")
         else:
             print(f"{count:8d} {elapsed:10.3f}")
+
+
+def test_generated(sort_func, counts, data_func, value_count_func):
+    # 큰 입력은 원본 배열을 별도로 복사하지 않고, 생성한 배열 자체를 정렬합니다.
+    # 이렇게 하면 측정용 원본과 복사본이 동시에 차지하는 메모리를 줄일 수 있습니다.
+    print(f"{'Count':>10} {'Values':>8} {'Create':>10} {'Elapsed':>10}")
+    for count in counts:
+        create_started_at = perf_counter()
+        array = data_func(count)
+        create_elapsed = perf_counter() - create_started_at
+
+        started_at = perf_counter()
+        result = sort_func(array)
+        elapsed = perf_counter() - started_at
+
+        sorted_array = array if result is None else result
+        if not _is_sorted(sorted_array):
+            raise ValueError(f"{sort_func.__name__} failed to sort {count} values")
+
+        value_count = value_count_func(count)
+        print(f"{count:10d} {value_count:8d} {create_elapsed:10.3f} {elapsed:10.3f}")
+
+
+def _is_sorted(values):
+    # values[1:]처럼 큰 임시 배열을 만들지 않고 오름차순 여부를 확인합니다.
+    iterator = iter(values)
+    try:
+        previous = next(iterator)
+    except StopIteration:
+        return True
+
+    for value in iterator:
+        if previous > value:
+            return False
+        previous = value
+    return True
