@@ -94,6 +94,16 @@ def radix_sort_msd(words):
         result = [None] * len(words)
         vis.init_result(result)
 
+        # e 구간을 뒤에서부터 읽어 둘째 글자 bucket 위치에 안정적으로 배치합니다.
+        for index in range(right, left - 1, -1):
+            word = words[index]
+            bucket = bucket_at(word, 1)
+            counts[bucket] -= 1
+            at = left + counts[bucket]
+            result[at] = word
+            vis.place(index, bucket, at, counts, result)
+        vis.finish_result(result)
+
     return words
 
 
