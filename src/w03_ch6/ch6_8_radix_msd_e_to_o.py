@@ -80,6 +80,17 @@ def load_words():
     return dataset["name"], list(dataset["data"]["array"])
 
 
+def validate_words(words):
+    # bucket_at()은 FIRST_CHAR~LAST_CHAR 범위의 문자만 인덱스로 바꿀 수 있습니다.
+    for word in words:
+        for char in word:
+            if not FIRST_CHAR <= char <= LAST_CHAR:
+                raise ValueError(
+                    f"{word!r}에 범위 밖 문자 {char!r}가 있습니다: "
+                    f"{FIRST_CHAR!r}~{LAST_CHAR!r}만 사용할 수 있습니다."
+                )
+
+
 def print_words(label, words):
     if len(words) <= 20:
         print(f"{label}: {', '.join(words)}")
@@ -91,6 +102,9 @@ def print_words(label, words):
 
 if __name__ == "__main__":
     name, words = load_words()
+    validate_words(words)
+    expected = sorted(words)
+
     print(f"데이터: {name}")
     print(f"문자 범위: {FIRST_CHAR} ~ {LAST_CHAR}")
     print(f"단어 수: {len(words)}")
@@ -101,3 +115,8 @@ if __name__ == "__main__":
 
     print()
     print_words("정렬 후", words)
+
+    if words != expected:
+        raise AssertionError("MSD 정렬 결과가 sorted(words)와 다릅니다.")
+    print()
+    print("검증: 입력 범위와 사전순 정렬 결과가 올바릅니다.")
