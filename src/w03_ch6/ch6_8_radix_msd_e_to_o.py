@@ -3,6 +3,9 @@ from pathlib import Path
 
 
 DATA_FILE = Path(__file__).parent / "data" / "radix_msd_e_to_o_words.json"
+FIRST_CHAR = "e"
+LAST_CHAR = "o"
+BUCKET_COUNT = ord(LAST_CHAR) - ord(FIRST_CHAR) + 2
 
 
 def bucket_at(word, depth):
@@ -10,16 +13,16 @@ def bucket_at(word, depth):
     if depth >= len(word):
         return 0
 
-    # a~z는 bucket #1~#26에 대응합니다.
-    return ord(word[depth]) - ord("a") + 1
+    # FIRST_CHAR~LAST_CHAR는 bucket #1부터 차례로 대응합니다.
+    return ord(word[depth]) - ord(FIRST_CHAR) + 1
 
 
 def radix_sort_msd_range(words, left, right, depth, result):
     # result는 최상위 호출에서 한 번만 만들고 모든 재귀 구간이 공유합니다.
     # 현재 구간을 복사한 뒤 다시 비우므로, 자식 구간이 같은 배열을 안전하게 씁니다.
 
-    # end와 a~z를 담을 27개의 bucket 개수를 모두 0으로 초기화합니다.
-    counts = [0] * 27
+    # end와 FIRST_CHAR~LAST_CHAR를 담을 bucket 개수를 모두 0으로 초기화합니다.
+    counts = [0] * BUCKET_COUNT
 
     # 현재 구간의 단어만 읽어 depth 위치 글자 bucket의 개수를 셉니다.
     for index in range(left, right + 1):
@@ -89,6 +92,7 @@ def print_words(label, words):
 if __name__ == "__main__":
     name, words = load_words()
     print(f"데이터: {name}")
+    print(f"문자 범위: {FIRST_CHAR} ~ {LAST_CHAR}")
     print(f"단어 수: {len(words)}")
     print()
     print_words("정렬 전", words)
