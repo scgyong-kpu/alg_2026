@@ -20,7 +20,13 @@ def count_sort(array):
     # 이제 counts[v]에는 값 v가 입력 배열에 등장한 횟수가 기록되어 있습니다.
     vis.finish_counting()
 
-    # 이후 커밋에서 등장 횟수를 누적합으로 바꿉니다.
+    # counts[1]에 그보다 작은 값 0의 등장 횟수를 더합니다.
+    # 이렇게 누적하면 counts[v]는 값 v 이하 원소의 개수가 됩니다.
+    vis.start_accumulate()
+    counts[1] += counts[0]
+    vis.accumulate(0, 1, counts)
+
+    # 이후 커밋에서 나머지 counts 칸도 왼쪽 값과 차례로 더합니다.
     return array
 
 
