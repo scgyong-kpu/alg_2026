@@ -70,6 +70,10 @@ def radix_sort_msd(words):
     if left < right:
         vis.push(left, right, 1)
 
+        # e로 시작하는 단어의 둘째 글자를 세기 위한 새 counts 배열입니다.
+        counts = [0] * 27
+        vis.init_counts(counts)
+
     return words
 
 
