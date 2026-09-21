@@ -43,6 +43,11 @@ def radix_sort_msd(words):
         vis.accumulate_bucket(previous, bucket, counts)
     vis.finish_accumulate(counts)
 
+    # bucket 순서대로 단어를 다시 놓을 임시 배열을 준비합니다.
+    # 다음 커밋부터 counts의 누적합을 줄여가며 각 단어의 위치를 채웁니다.
+    result = [None] * len(words)
+    vis.init_result(result)
+
     return words
 
 
