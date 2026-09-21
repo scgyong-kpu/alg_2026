@@ -12,12 +12,15 @@ def count_sort(array):
     counts = [0] * (max(array) + 1)
     vis.init_counts(counts)
 
-    # 첫 번째 원소의 값이 곧 counts 배열에서 증가시킬 칸의 번호입니다.
-    value = array[0]
-    counts[value] += 1
-    vis.count_value(0, value, counts)
+    # 배열을 왼쪽부터 한 번 훑으며, 값마다 대응하는 counts 칸을 증가시킵니다.
+    for index, value in enumerate(array):
+        counts[value] += 1
+        vis.count_value(index, value, counts)
 
-    # 이후 커밋에서 모든 원소를 차례로 읽어 counts 배열의 값을 증가시킵니다.
+    # 이제 counts[v]에는 값 v가 입력 배열에 등장한 횟수가 기록되어 있습니다.
+    vis.finish_counting()
+
+    # 이후 커밋에서 등장 횟수를 누적합으로 바꿉니다.
     return array
 
 
