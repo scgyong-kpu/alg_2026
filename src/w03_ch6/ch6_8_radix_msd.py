@@ -27,13 +27,14 @@ def radix_sort_msd(words):
     counts = [0] * 27
     vis.init_counts(counts)
 
-    # 첫 단어의 depth 0 글자를 확인해 대응하는 bucket의 개수를 1 증가시킵니다.
-    word = words[0]
-    bucket = bucket_at(word, 0)
-    counts[bucket] += 1
-    vis.scan(0, bucket, counts)
+    # 현재 구간의 모든 단어를 읽어 depth 0 글자 bucket의 개수를 셉니다.
+    for index, word in enumerate(words):
+        bucket = bucket_at(word, 0)
+        counts[bucket] += 1
+        vis.scan(index, bucket, counts)
+    vis.finish_counting()
 
-    # 이후 커밋에서 현재 구간의 모든 단어를 같은 방식으로 셉니다.
+    # 이후 커밋에서 bucket 개수를 누적합으로 바꿉니다.
     return words
 
 
