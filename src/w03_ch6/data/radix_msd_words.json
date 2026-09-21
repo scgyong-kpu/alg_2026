@@ -18,6 +18,45 @@
       "data": {
         "array": ["motion", "alpha", "berry", "moon", "path", "zero", "mine", "alter", "between", "meter", "paper", "zebra", "moose", "asset", "better", "method", "peace", "zip", "mop", "atom", "binary", "middle", "party", "zone", "more", "angle", "belt", "mirror", "peach", "zoo", "morning", "ask", "bend", "mission", "pencil", "zinc", "map", "axis", "best", "mist", "park", "zest", "many", "altar", "beyond", "mobile", "past", "zoom", "man", "also", "bingo", "metal", "pass", "zodiac", "mint", "alpine", "beta", "modern", "pattern", "zombie", "mini", "mild", "milk", "mile", "mind", "mix", "model", "moment", "money", "motor"]
       }
+    },
+    {
+      "name": "깊은 공통 prefix가 섞인 단어 320개",
+      "data": {
+        "array": [
+          "mog", "jim", "km", "lining", "mingle", "ell", "folk", "melon", "ln", "link",
+          "knife", "fennel", "loon", "john", "ff", "felloe", "liking", "lino", "om", "keg",
+          "joke", "no", "hog", "jell", "fino", "elfin", "gin", "lone", "oh", "gong",
+          "ogee", "oi", "jig", "filling", "g", "ge", "mn", "femme", "fen", "kj",
+          "gene", "online", "mg", "goggle", "emf", "loll", "meek", "l", "gem", "filing",
+          "infill", "hello", "ink", "monk", "kg", "ghillie", "elf", "gm", "leo", "genie",
+          "hoe", "he", "eke", "moll", "gnomon", "fm", "lei", "million", "going", "feminine",
+          "infilling", "liege", "mo", "o", "goon", "hg", "legging", "holm", "enjoin", "e",
+          "mini", "logging", "kin", "hen", "logo", "flee", "inf", "fog", "knee", "limn",
+          "jingo", "lf", "log", "non", "lj", "goo", "hmg", "joe", "knell", "minim",
+          "menfolk", "feel", "mlle", "ken", "home", "if", "linen", "ne", "lo", "knoll",
+          "mime", "ooh", "nomen", "hill", "kohl", "efl", "offline", "lee", "king", "legion",
+          "one", "hike", "genome", "neigh", "lifelong", "him", "gigolo", "fo", "fe", "ego",
+          "mom", "hi", "fine", "ni", "ongoing", "ho", "noh", "jog", "lion", "loin",
+          "fill", "m", "nee", "join", "noggin", "neon", "none", "hm", "gi", "hook",
+          "ion", "in", "gen", "mono", "feign", "look", "hinge", "moonie", "nil", "ginkgo",
+          "kilo", "fief", "ikon", "moon", "long", "hf", "lifeline", "lingo", "mink", "nigh",
+          "k", "killing", "hoi", "mongol", "nikkei", "ime", "hoof", "me", "floe", "omen",
+          "jiff", "mike", "foe", "ingoing", "leg", "kiln", "fin", "noel", "niff", "minion",
+          "gnome", "ill", "ogle", "info", "igloo", "fife", "milk", "loo", "en", "high",
+          "f", "kook", "miff", "hele", "hmi", "longing", "kink", "n", "fee", "mm",
+          "hole", "hellene", "mien", "moo", "homing", "jiggle", "inkling", "ll", "off", "goof",
+          "lifelike", "feline", "lie", "jingle", "eel", "filo", "nook", "eeg", "gillie", "leonine",
+          "ko", "elk", "honk", "lien", "mme", "feeling", "kneel", "fleming", "em", "glee",
+          "mil", "homo", "offing", "engine", "limekiln", "film", "giggle", "folio", "ming", "men",
+          "gone", "oho", "hone", "lemming", "iom", "line", "elm", "liken", "mile", "henge",
+          "leek", "golf", "gloom", "eon", "kill", "kimono", "ok", "inglenook", "ilk", "limo",
+          "lilo", "ohm", "melee", "imf", "hh", "milfoil", "kl", "megohm", "molehill", "gel",
+          "kennel", "ml", "noon", "mf", "inn", "felon", "ghee", "helm", "keel", "memo",
+          "nne", "jinnee", "on", "hemline", "nine", "joie", "glen", "of", "niggle", "oil",
+          "nom", "mill", "nominee", "fling", "hell", "lego", "gemini", "finn", "eh", "fie",
+          "onion", "lemon", "li", "life", "flog", "jink", "joggle", "ofghijklmno", "ofghijklmni", "ofghijklmok"
+        ]
+      }
     }
   ]
 }
