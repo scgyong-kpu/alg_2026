@@ -48,14 +48,15 @@ def radix_sort_msd(words):
     result = [None] * len(words)
     vis.init_result(result)
 
-    # 뒤에서 첫 단어를 꺼내 해당 bucket의 마지막 빈 위치에 놓습니다.
-    index = len(words) - 1
-    word = words[index]
-    bucket = bucket_at(word, 0)
-    counts[bucket] -= 1
-    at = counts[bucket]
-    result[at] = word
-    vis.place(index, bucket, at, counts, result)
+    # 뒤에서부터 읽으면 같은 bucket 안의 원래 순서가 유지됩니다.
+    for index in range(len(words) - 1, -1, -1):
+        word = words[index]
+        bucket = bucket_at(word, 0)
+        counts[bucket] -= 1
+        at = counts[bucket]
+        result[at] = word
+        vis.place(index, bucket, at, counts, result)
+    vis.finish_result(result)
 
     return words
 
