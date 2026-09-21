@@ -34,7 +34,15 @@ def radix_sort_msd(words):
         vis.scan(index, bucket, counts)
     vis.finish_counting()
 
-    # 이후 커밋에서 bucket 개수를 누적합으로 바꿉니다.
+    # 각 bucket의 개수를 앞 bucket까지의 누적합으로 바꿉니다.
+    # counts[bucket]은 그 bucket의 단어가 result에서 끝나는 다음 위치가 됩니다.
+    vis.start_accumulate()
+    for bucket in range(1, len(counts)):
+        previous = bucket - 1
+        counts[bucket] += counts[previous]
+        vis.accumulate_bucket(previous, bucket, counts)
+    vis.finish_accumulate(counts)
+
     return words
 
 
