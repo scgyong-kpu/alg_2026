@@ -1,4 +1,8 @@
 import perf
+from sort_data import limited_random_values
+
+
+LARGE_COUNTS = [10_000_000, 20_000_000, 50_000_000]
 
 
 def digit_at(number, div):
@@ -37,5 +41,20 @@ def radix_sort_lsd(array):
     return array
 
 
+def large_radix_lsd_values(count):
+    # n / 100000 종류의 값만 사용해 대용량 배열의 값 범위를 제한합니다.
+    # 예: 1천만 개는 0~99, 5천만 개는 0~499의 값으로 구성합니다.
+    value_count = count // 100_000
+    return limited_random_values(count, value_count)
+
+
 if __name__ == "__main__":
     perf.test(radix_sort_lsd, 1_000_000, measure_creation=True)
+
+    # 대용량 구간은 원본 배열 복사 없이 생성한 배열을 바로 정렬합니다.
+    perf.test_generated(
+        radix_sort_lsd,
+        LARGE_COUNTS,
+        large_radix_lsd_values,
+        value_count_func=lambda count: count // 100_000,
+    )
