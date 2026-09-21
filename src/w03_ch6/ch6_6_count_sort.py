@@ -36,14 +36,18 @@ def count_sort(array):
     vis.init_result(result)
 
     # 같은 값을 가진 원소의 원래 순서를 보존하기 위해 뒤에서부터 읽습니다.
-    index = len(array) - 1
-    value = array[index]
-    counts[value] -= 1
-    at = counts[value]
-    result[at] = value
-    vis.place_value(index, value, at, counts, result)
+    for index in range(len(array) - 1, -1, -1):
+        value = array[index]
 
-    # 이후 커밋에서 남은 원소도 같은 방식으로 result 배열에 배치합니다.
+        # counts[value]는 value 이하 원소의 개수이므로, 1을 줄이면 삽입 위치가 됩니다.
+        counts[value] -= 1
+        at = counts[value]
+        result[at] = value
+        vis.place_value(index, value, at, counts, result)
+
+    # result에 완성된 오름차순 결과를 원본 배열에 반영합니다.
+    array[:] = result
+    vis.finish()
     return array
 
 
