@@ -31,7 +31,11 @@ def count_sort(array):
     # 모든 누적합이 완성되면 counts는 결과 배열의 위치 정보가 됩니다.
     vis.finish_accumulate(counts)
 
-    # 이후 커밋에서 정렬된 값을 담을 result 배열을 준비합니다.
+    # 원본 배열과 같은 길이의 결과 배열을 비어 있는 칸으로 준비합니다.
+    result = [None] * len(array)
+    vis.init_result(result)
+
+    # 이후 커밋에서 원본의 마지막 원소부터 result 배열에 배치합니다.
     return array
 
 
