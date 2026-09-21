@@ -39,6 +39,7 @@ def radix_sort_msd_range(words, left, right, depth):
         counts[bucket] += counts[previous]
         vis.accumulate_bucket(previous, bucket, counts)
     vis.finish_accumulate(counts)
+    bucket_ends = list(counts)
 
     # bucket 순서대로 단어를 다시 놓을 임시 배열을 준비합니다.
     result = [None] * len(words)
@@ -58,7 +59,13 @@ def radix_sort_msd_range(words, left, right, depth):
     words[left:right + 1] = result[left:right + 1]
     vis.copy_back(result)
 
-    return counts
+    # end bucket은 단어가 끝난 경우이므로 더 내려가지 않습니다.
+    # 같은 글자가 둘 이상인 bucket만 다음 depth에서 다시 정렬합니다.
+    for bucket in range(1, len(bucket_ends)):
+        child_left = left + bucket_ends[bucket - 1]
+        child_right = left + bucket_ends[bucket] - 1
+        if child_left < child_right:
+            radix_sort_msd_range(words, child_left, child_right, depth + 1)
 
 
 def radix_sort_msd(words):
