@@ -35,7 +35,15 @@ def count_sort(array):
     result = [None] * len(array)
     vis.init_result(result)
 
-    # 이후 커밋에서 원본의 마지막 원소부터 result 배열에 배치합니다.
+    # 같은 값을 가진 원소의 원래 순서를 보존하기 위해 뒤에서부터 읽습니다.
+    index = len(array) - 1
+    value = array[index]
+    counts[value] -= 1
+    at = counts[value]
+    result[at] = value
+    vis.place_value(index, value, at, counts, result)
+
+    # 이후 커밋에서 남은 원소도 같은 방식으로 result 배열에 배치합니다.
     return array
 
 
