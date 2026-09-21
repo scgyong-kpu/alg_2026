@@ -82,6 +82,14 @@ def radix_sort_msd(words):
             vis.scan(index, bucket, counts)
         vis.finish_counting()
 
+        # e 구간의 둘째 글자 bucket 개수를 누적합 인덱스로 바꿉니다.
+        vis.start_accumulate()
+        for bucket in range(1, len(counts)):
+            previous = bucket - 1
+            counts[bucket] += counts[previous]
+            vis.accumulate_bucket(previous, bucket, counts)
+        vis.finish_accumulate(counts)
+
     return words
 
 
