@@ -74,6 +74,14 @@ def radix_sort_msd(words):
         counts = [0] * 27
         vis.init_counts(counts)
 
+        # 현재 e 구간만 순회하며 모든 단어의 둘째 글자 bucket을 셉니다.
+        for index in range(left, right + 1):
+            word = words[index]
+            bucket = bucket_at(word, 1)
+            counts[bucket] += 1
+            vis.scan(index, bucket, counts)
+        vis.finish_counting()
+
     return words
 
 
