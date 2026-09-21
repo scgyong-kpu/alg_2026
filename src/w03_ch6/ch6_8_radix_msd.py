@@ -27,7 +27,13 @@ def radix_sort_msd(words):
     counts = [0] * 27
     vis.init_counts(counts)
 
-    # 이후 커밋에서 이 구간의 첫 글자를 읽어 counts를 증가시킵니다.
+    # 첫 단어의 depth 0 글자를 확인해 대응하는 bucket의 개수를 1 증가시킵니다.
+    word = words[0]
+    bucket = bucket_at(word, 0)
+    counts[bucket] += 1
+    vis.scan(0, bucket, counts)
+
+    # 이후 커밋에서 현재 구간의 모든 단어를 같은 방식으로 셉니다.
     return words
 
 
