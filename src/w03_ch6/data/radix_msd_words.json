@@ -1,0 +1,23 @@
+{
+  "mode": "prepared",
+  "datasets": [
+    {
+      "name": "여러 prefix가 골고루 겹치는 단어 50개",
+      "data": {
+        "array": ["cart", "angle", "dove", "bison", "mint", "zoo", "cable", "anchor", "golf", "brave", "fan", "atom", "zone", "candle", "beacon", "earth", "drum", "artist", "flame", "carbon", "delta", "arc", "brook", "easy", "zebra", "coral", "daisy", "forest", "binary", "east", "zoom", "bark", "doll", "castle", "mirror", "echo", "basis", "frost", "melon", "ember", "giant", "amber", "cycle", "dragon", "field", "zest", "goose", "edit", "father", "zodiac"]
+      }
+    },
+    {
+      "name": "짧은 단어와 긴 단어 60개",
+      "data": {
+        "array": ["tone", "a", "goose", "batch", "inner", "top", "ant", "dove", "cap", "gold", "toy", "ante", "beer", "candy", "dry", "ice", "tree", "bat", "good", "an", "track", "been", "done", "cane", "ivy", "tool", "anti", "belt", "door", "green", "trace", "be", "cart", "ink", "doll", "any", "bath", "cape", "gone", "into", "try", "bee", "can", "duck", "item", "to", "ask", "bend", "captain", "grid", "true", "as", "carry", "dot", "iron", "baton", "down", "idea", "got", "ash"]
+      }
+    },
+    {
+      "name": "같은 앞글자가 많은 단어 70개",
+      "data": {
+        "array": ["motion", "alpha", "berry", "moon", "path", "zero", "mine", "alter", "between", "meter", "paper", "zebra", "moose", "asset", "better", "method", "peace", "zip", "mop", "atom", "binary", "middle", "party", "zone", "more", "angle", "belt", "mirror", "peach", "zoo", "morning", "ask", "bend", "mission", "pencil", "zinc", "map", "axis", "best", "mist", "park", "zest", "many", "altar", "beyond", "mobile", "past", "zoom", "man", "also", "bingo", "metal", "pass", "zodiac", "mint", "alpine", "beta", "modern", "pattern", "zombie", "mini", "mild", "milk", "mile", "mind", "mix", "model", "moment", "money", "motor"]
+      }
+    }
+  ]
+}
