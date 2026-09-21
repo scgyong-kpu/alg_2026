@@ -1,4 +1,8 @@
 import perf
+from sort_data import limited_random_values
+
+
+LARGE_COUNTS = [10_000_000, 20_000_000, 50_000_000, 100_000_000]
 
 
 def count_sort(array):
@@ -22,6 +26,23 @@ def count_sort(array):
     return array
 
 
+def large_count_sort_values(count):
+    # 1천만 개 이상은 n / 100000 종류의 값만 사용합니다.
+    # 예: 1천만 개는 0~99, 1억 개는 0~999의 값으로 구성합니다.
+    value_count = count // 100_000
+    return limited_random_values(count, value_count)
+
+
 if __name__ == "__main__":
+    # 100만 개까지는 다른 정렬과 같은 random 데이터와 perf.test() 방식을 사용합니다.
     # Create 열은 random 입력 배열을 준비하는 데 걸린 시간입니다.
     perf.test(count_sort, 1_000_000, measure_creation=True)
+
+    # 대용량 구간은 원본 배열 복사 없이 생성한 배열을 바로 정렬해 메모리 사용을 줄입니다.
+    # Values 열은 사용할 서로 다른 값의 개수입니다.
+    perf.test_generated(
+        count_sort,
+        LARGE_COUNTS,
+        large_count_sort_values,
+        value_count_func=lambda count: count // 100_000,
+    )
