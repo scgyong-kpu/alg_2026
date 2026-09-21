@@ -58,6 +58,10 @@ def radix_sort_msd(words):
         vis.place(index, bucket, at, counts, result)
     vis.finish_result(result)
 
+    # 임시 배열의 첫 글자 기준 순서를 원래 배열에 반영합니다.
+    words[:] = result
+    vis.copy_back(result)
+
     return words
 
 
