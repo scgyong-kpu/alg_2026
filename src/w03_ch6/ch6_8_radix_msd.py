@@ -66,6 +66,7 @@ def radix_sort_msd_range(words, left, right, depth):
         child_right = left + bucket_ends[bucket] - 1
         if child_left < child_right:
             radix_sort_msd_range(words, child_left, child_right, depth + 1)
+    vis.pop()
 
 
 def radix_sort_msd(words):
@@ -75,6 +76,7 @@ def radix_sort_msd(words):
 
     # 첫 호출은 모든 단어를 포함하는 depth 0 구간을 처리합니다.
     radix_sort_msd_range(words, 0, len(words) - 1, 0)
+    vis.finish()
 
     return words
 
