@@ -76,10 +76,22 @@ def closest_pair(cities, left, right):
 
         vis.show_results(left_result, right_result)
         # 같은 거리라면 왼쪽 결과를 유지합니다.
-        # 아직 경계를 가로지르는 쌍을 검사하지 않았으므로 잠정 결과입니다.
         if left_result[2] <= right_result[2]:
-            return left_result
-        return right_result
+            best = left_result
+        else:
+            best = right_result
+
+        # 경계는 왼쪽 마지막 도시와 오른쪽 첫 도시의 x좌표 중간입니다.
+        # 양쪽 내부에서 찾은 거리 d보다 가까운 경계 쌍이 있다면,
+        # 두 도시 모두 이 경계에서 가로 거리 d 미만에 있어야 합니다.
+        split_x = (cities[mid].x + cities[mid + 1].x) / 2
+        d = best[2]
+        strip = [i for i in range(left, right + 1)
+                 if abs(cities[i].x - split_x) < d]
+        vis.set_strip(strip, split_x, d)
+        # 이번 단계는 후보를 모으기만 합니다. 후보 쌍을 비교하기 전이므로
+        # 반환값은 여전히 부분 구간에서 찾은 잠정 결과입니다.
+        return best
     finally:
         # 반환하거나 실행을 중단해도 부모 구간의 시각화 상태로 돌아갑니다.
         vis.pop()
@@ -98,6 +110,9 @@ if __name__ == "__main__":
         # - 그래프 우상단의 화면 맞춤 버튼을 누르면 전체 도시를 다시 보여줍니다.
         # - H 키는 제목과 설명 패널을 숨기거나 표시합니다. 숨기면 그래프 영역이
         #   넓어지며, 다시 표시해도 확대 배율과 보고 있던 중심은 유지합니다.
+        # - T 키는 최상위(depth 1) strip을 표시하는 지점까지 빠르게 진행합니다.
+        #   계산은 생략하지 않고 중간 대기와 연출만 건너뛰며, 도착하면
+        #   일반 속도로 돌아옵니다. 이번 단계에서는 strip 후보 수집까지 보여줍니다.
         # 입력 순서로 화면을 준비한 뒤 x좌표 순으로 정렬합니다.
         # 좌표는 그대로이며, 배열에서의 순서와 index만 바뀝니다.
         # 정렬된 index 범위로 좌우 부분을 나눌 수 있습니다. 같은 x좌표의 도시도
