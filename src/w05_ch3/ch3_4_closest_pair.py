@@ -49,6 +49,14 @@ def brute_force(cities, left, right):
 
 def closest_pair(cities, left, right):
     """x순 cities[left..right]에서 최근접 쌍을 찾는다. 양 끝을 포함한다."""
+    # 도시 배열은 x순으로 두고, index 배열만 처음에 한 번 y순으로 만듭니다.
+    # 별도 배열이므로 도시의 위치나 좌우 그룹 소속은 바뀌지 않습니다.
+    y_order = sorted(range(left, right + 1), key=lambda i: cities[i].y)
+    return closest_pair_range(cities, left, right, y_order)
+
+
+def closest_pair_range(cities, left, right, y_order):
+    """양 끝을 포함하는 [left, right]와 그 구간의 y순 index를 받는다."""
     count = right - left + 1
     # 도시가 하나 이하이면 두 도시로 이루어진 쌍이 없습니다.
     if count < 2:
@@ -66,11 +74,15 @@ def closest_pair(cities, left, right):
         # 왼쪽은 [left, mid], 오른쪽은 [mid + 1, right]로 나눕니다.
         mid = (left + right) // 2
         vis.split(mid)
-        left_result = closest_pair(cities, left, mid)
+        # 부모의 y순 index를 앞에서부터 나누면 두 자식도 y순을 유지합니다.
+        # x값이 아니라 index로 나눠 같은 x좌표의 도시도 정확히 배정합니다.
+        left_y = [i for i in y_order if i <= mid]
+        right_y = [i for i in y_order if i > mid]
+        left_result = closest_pair_range(cities, left, mid, left_y)
         if vis.stopped():
             return None
         vis.show_left_result(left_result)
-        right_result = closest_pair(cities, mid + 1, right)
+        right_result = closest_pair_range(cities, mid + 1, right, right_y)
         if vis.stopped():
             return None
 
@@ -86,20 +98,20 @@ def closest_pair(cities, left, right):
         # 두 도시 모두 이 경계에서 가로 거리 d 미만에 있어야 합니다.
         split_x = (cities[mid].x + cities[mid + 1].x) / 2
         d = best[2]
-        strip = [i for i in range(left, right + 1)
+        strip = [i for i in y_order
                  if abs(cities[i].x - split_x) < d]
-        # 후보 index만 y좌표 순으로 정렬합니다. 도시 배열은 x순을
-        # 유지해야 left, mid, right로 구분한 좌우 구간이 바뀌지 않습니다.
+        # y순 배열에서 후보만 골랐으므로 strip도 이미 y순입니다.
+        # 각 구간에서 다시 정렬할 필요 없이 선형 시간에 후보를 모읍니다.
         # y정렬 전에도 모든 반대편 후보 쌍을 검사했으므로 정답은 같았습니다.
         # y정렬과 아래 조기 종료는 불필요한 거리 계산을 줄이는 개선입니다.
         # 예: "경계 근처에 좌우 8개씩 모인 도시 20개"의 최상위 strip에서
         # 거리 계산은 8 * 8 = 64회에서 7회로 감소합니다(약 89% 감소).
         # 이는 해당 구간의 거리 계산 횟수이며, 전체 실행시간의 배율은 아닙니다.
         # 모든 후보를 검사하는 이전 버전은 최악 O(n^2)입니다.
-        # 이 버전은 매 재귀 구간에서 strip을 다시 정렬하므로 O(n log^2 n)입니다.
-        # 처음에 y순으로도 정렬하고 그 순서를 나눠 전달하면 O(n log n)으로
-        # 개선할 수 있습니다. 이 부분은 이후 단계에서 구현합니다.
-        strip.sort(key=lambda i: cities[i].y)
+        # 직전 버전은 매 재귀 구간의 strip 정렬 때문에 O(n log^2 n)이었습니다.
+        # 이 버전은 최초 y정렬 O(n log n) 이후, 각 구간에서 index 분배와
+        # strip 수집 및 탐색을 O(n)에 수행합니다. T(n)=2T(n/2)+O(n)이므로
+        # 전체 최악 시간복잡도는 O(n log n)입니다(시각화 연출 제외).
         vis.set_strip(strip, split_x, d)
         for p in range(len(strip)):
             i = strip[p]
