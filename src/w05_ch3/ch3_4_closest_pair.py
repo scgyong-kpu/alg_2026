@@ -47,6 +47,24 @@ def brute_force(cities, left, right):
     return best
 
 
+def closest_pair(cities, left, right):
+    """x순 cities[left..right]에서 최근접 쌍을 찾는다. 양 끝을 포함한다."""
+    count = right - left + 1
+    # 도시가 하나 이하이면 두 도시로 이루어진 쌍이 없습니다.
+    if count < 2:
+        return None
+
+    vis.push(left, right)
+    vis.show_base_case(count)
+    # 재귀 종료 조건: 2개는 1쌍, 3개는 3쌍만 검사하면 됩니다.
+    # 더 나누지 않고 이미 만든 완전 탐색 함수를 그대로 사용합니다.
+    if count <= 3:
+        return brute_force(cities, left, right)
+
+    # 4개 이상 구간을 좌우로 나누는 재귀 처리는 다음 단계에서 구현합니다.
+    return None
+
+
 if __name__ == "__main__":
     while va.running():
         data = va.next_data(__file__, data_file=DATA_FILE)
@@ -71,5 +89,9 @@ if __name__ == "__main__":
         print(f"x좌표 순으로 정렬한 도시 {len(cities)}개:")
         for city in cities:
             print(f"#{city.index} {city.name}: ({city.x}, {city.y})")
-        # 이번 단계는 x순 정렬까지입니다. 이후 작은 재귀 구간에서 brute_force를 씁니다.
+        result = closest_pair(cities, 0, len(cities) - 1)
+        if result is not None and not vis.stopped():
+            first, second, d = result
+            print(f"최근접 쌍: {cities[first].name} - {cities[second].name}, 거리: {d:.3f}")
+            vis.finish()
         vis.wait()
