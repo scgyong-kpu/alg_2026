@@ -1,3 +1,5 @@
+from math import sqrt
+
 import pyvisalgo as va
 
 from city_data import load_cities
@@ -5,6 +7,14 @@ from city_data import load_cities
 
 DATA_FILE = "data/closest_pair.json"
 vis = va.visualizer("closest_pair")
+
+
+def distance(first, second):
+    """두 도시의 좌표로 유클리드 거리를 계산한다."""
+    # 가로 차이와 세로 차이를 두 변으로 하는 직각삼각형의 빗변 길이입니다.
+    dx = first.x - second.x
+    dy = first.y - second.y
+    return sqrt(dx * dx + dy * dy)
 
 
 if __name__ == "__main__":
@@ -24,5 +34,8 @@ if __name__ == "__main__":
         # - 그래프 우상단의 화면 맞춤 버튼을 누르면 전체 도시를 다시 보여줍니다.
         # - H 키는 제목과 설명 패널을 숨기거나 표시합니다. 숨기면 그래프 영역이
         #   넓어지며, 다시 표시해도 확대 배율과 보고 있던 중심은 유지합니다.
-        # 다음 단계부터 거리 계산과 최근접 쌍 탐색을 이 위치에 추가합니다.
+        # 먼저 입력의 첫 두 도시만 비교합니다. 전체 쌍 탐색은 다음 단계입니다.
+        d = distance(cities[0], cities[1])
+        print(f"{cities[0].name} - {cities[1].name} 거리: {d:.3f}")
+        vis.show_distance(0, 1, d)
         vis.wait()
