@@ -89,8 +89,25 @@ def closest_pair(cities, left, right):
         strip = [i for i in range(left, right + 1)
                  if abs(cities[i].x - split_x) < d]
         vis.set_strip(strip, split_x, d)
-        # 이번 단계는 후보를 모으기만 합니다. 후보 쌍을 비교하기 전이므로
-        # 반환값은 여전히 부분 구간에서 찾은 잠정 결과입니다.
+        # 이번 단계는 수집한 순서대로 모든 후보 쌍을 확인합니다.
+        # 같은 편의 쌍은 제외하고 경계를 가로지르는 쌍의 거리를 계산합니다.
+        for p in range(len(strip)):
+            i = strip[p]
+            vis.scan(i)
+            for q in range(p + 1, len(strip)):
+                if vis.stopped():
+                    return None
+                j = strip[q]
+                # 같은 편의 쌍은 재귀 호출에서 이미 검사했습니다.
+                # x좌표가 같아도 양쪽으로 나뉠 수 있으므로 index로 판별합니다.
+                if (i <= mid) == (j <= mid):
+                    continue
+                vis.scan(i, j)
+                candidate = (i, j, distance(cities[i], cities[j]))
+                vis.compare_distances(best, candidate, prefer="smaller")
+                if candidate[2] < best[2]:
+                    best = candidate
+            vis.section_end()
         return best
     finally:
         # 반환하거나 실행을 중단해도 부모 구간의 시각화 상태로 돌아갑니다.
@@ -112,7 +129,7 @@ if __name__ == "__main__":
         #   넓어지며, 다시 표시해도 확대 배율과 보고 있던 중심은 유지합니다.
         # - T 키는 최상위(depth 1) strip을 표시하는 지점까지 빠르게 진행합니다.
         #   계산은 생략하지 않고 중간 대기와 연출만 건너뛰며, 도착하면
-        #   일반 속도로 돌아옵니다. 이번 단계에서는 strip 후보 수집까지 보여줍니다.
+        #   일반 속도로 돌아와 strip의 후보 쌍을 비교하는 과정을 보여줍니다.
         # 입력 순서로 화면을 준비한 뒤 x좌표 순으로 정렬합니다.
         # 좌표는 그대로이며, 배열에서의 순서와 index만 바뀝니다.
         # 정렬된 index 범위로 좌우 부분을 나눌 수 있습니다. 같은 x좌표의 도시도
@@ -128,12 +145,6 @@ if __name__ == "__main__":
         if result is not None and not vis.stopped():
             first, second, d = result
             vis.closest(first, second, d)
-            if len(cities) <= 3:
-                print(f"최근접 쌍: {cities[first].name} - {cities[second].name}, 거리: {d:.3f}")
-                vis.finish()
-            else:
-                print(f"부분 구간의 잠정 최근접 쌍: {cities[first].name} - {cities[second].name}, 거리: {d:.3f}")
-                vis.msg_action("좌우 부분 구간의 결과 중 더 가까운 쌍을 선택했다.")
-                vis.msg_detail("경계를 가로지르는 쌍은 아직 검사하지 않았다. 전체 최근접 쌍은 다음 단계에서 찾는다.")
-                vis.draw()
+            print(f"최근접 쌍: {cities[first].name} - {cities[second].name}, 거리: {d:.3f}")
+            vis.finish()
         vis.wait()
