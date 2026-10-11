@@ -88,26 +88,45 @@ def closest_pair(cities, left, right):
         d = best[2]
         strip = [i for i in range(left, right + 1)
                  if abs(cities[i].x - split_x) < d]
+        # 후보 index만 y좌표 순으로 정렬합니다. 도시 배열은 x순을
+        # 유지해야 left, mid, right로 구분한 좌우 구간이 바뀌지 않습니다.
+        # y정렬 전에도 모든 반대편 후보 쌍을 검사했으므로 정답은 같았습니다.
+        # y정렬과 아래 조기 종료는 불필요한 거리 계산을 줄이는 개선입니다.
+        # 예: "경계 근처에 좌우 8개씩 모인 도시 20개"의 최상위 strip에서
+        # 거리 계산은 8 * 8 = 64회에서 7회로 감소합니다(약 89% 감소).
+        # 이는 해당 구간의 거리 계산 횟수이며, 전체 실행시간의 배율은 아닙니다.
+        # 모든 후보를 검사하는 이전 버전은 최악 O(n^2)입니다.
+        # 이 버전은 매 재귀 구간에서 strip을 다시 정렬하므로 O(n log^2 n)입니다.
+        # 처음에 y순으로도 정렬하고 그 순서를 나눠 전달하면 O(n log n)으로
+        # 개선할 수 있습니다. 이 부분은 이후 단계에서 구현합니다.
+        strip.sort(key=lambda i: cities[i].y)
         vis.set_strip(strip, split_x, d)
-        # 이번 단계는 수집한 순서대로 모든 후보 쌍을 확인합니다.
-        # 같은 편의 쌍은 제외하고 경계를 가로지르는 쌍의 거리를 계산합니다.
         for p in range(len(strip)):
             i = strip[p]
             vis.scan(i)
+            vis.show_grid(i)
             for q in range(p + 1, len(strip)):
                 if vis.stopped():
                     return None
                 j = strip[q]
+                # 유클리드 거리는 y좌표 차이보다 작을 수 없습니다.
+                # y순이므로 이후 후보의 y좌표 차이도 이보다 작지 않습니다.
+                # 같은 편인지 확인하기 전에 검사해야 어느 편의 후보든
+                # 더 가까운 쌍이 될 수 없는 순간 탐색을 멈출 수 있습니다.
+                if cities[j].y - cities[i].y >= best[2]:
+                    vis.stop_scan(i, j, best[2])
+                    break
                 # 같은 편의 쌍은 재귀 호출에서 이미 검사했습니다.
                 # x좌표가 같아도 양쪽으로 나뉠 수 있으므로 index로 판별합니다.
                 if (i <= mid) == (j <= mid):
                     continue
-                vis.scan(i, j)
+                vis.scan(i, j, best[2])
                 candidate = (i, j, distance(cities[i], cities[j]))
                 vis.compare_distances(best, candidate, prefer="smaller")
                 if candidate[2] < best[2]:
                     best = candidate
             vis.section_end()
+        vis.hide_grid()
         return best
     finally:
         # 반환하거나 실행을 중단해도 부모 구간의 시각화 상태로 돌아갑니다.
