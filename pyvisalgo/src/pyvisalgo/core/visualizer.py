@@ -356,6 +356,11 @@ class BaseVisualizer:
                 self.view.resize(event.w, event.h)
             elif event.type == pygame.KEYDOWN:
                 self._handle_key(event.key, event.mod)
+            else:
+                self.handle_event(event)
+
+    def handle_event(self, event):
+        pass
 
     def _handle_key(self, key, mod=0):
         if key == pygame.K_ESCAPE:
