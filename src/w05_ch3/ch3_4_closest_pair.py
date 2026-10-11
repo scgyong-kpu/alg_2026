@@ -55,14 +55,34 @@ def closest_pair(cities, left, right):
         return None
 
     vis.push(left, right)
-    vis.show_base_case(count)
-    # 재귀 종료 조건: 2개는 1쌍, 3개는 3쌍만 검사하면 됩니다.
-    # 더 나누지 않고 이미 만든 완전 탐색 함수를 그대로 사용합니다.
-    if count <= 3:
-        return brute_force(cities, left, right)
+    try:
+        vis.show_base_case(count)
+        # 재귀 종료 조건: 2개는 1쌍, 3개는 3쌍만 검사하면 됩니다.
+        # 더 나누지 않고 이미 만든 완전 탐색 함수를 그대로 사용합니다.
+        if count <= 3:
+            return brute_force(cities, left, right)
 
-    # 4개 이상 구간을 좌우로 나누는 재귀 처리는 다음 단계에서 구현합니다.
-    return None
+        # mid는 왼쪽 구간의 마지막 index입니다. 양 끝을 모두 포함하므로
+        # 왼쪽은 [left, mid], 오른쪽은 [mid + 1, right]로 나눕니다.
+        mid = (left + right) // 2
+        vis.split(mid)
+        left_result = closest_pair(cities, left, mid)
+        if vis.stopped():
+            return None
+        vis.show_left_result(left_result)
+        right_result = closest_pair(cities, mid + 1, right)
+        if vis.stopped():
+            return None
+
+        vis.show_results(left_result, right_result)
+        # 같은 거리라면 왼쪽 결과를 유지합니다.
+        # 아직 경계를 가로지르는 쌍을 검사하지 않았으므로 잠정 결과입니다.
+        if left_result[2] <= right_result[2]:
+            return left_result
+        return right_result
+    finally:
+        # 반환하거나 실행을 중단해도 부모 구간의 시각화 상태로 돌아갑니다.
+        vis.pop()
 
 
 if __name__ == "__main__":
@@ -92,6 +112,13 @@ if __name__ == "__main__":
         result = closest_pair(cities, 0, len(cities) - 1)
         if result is not None and not vis.stopped():
             first, second, d = result
-            print(f"최근접 쌍: {cities[first].name} - {cities[second].name}, 거리: {d:.3f}")
-            vis.finish()
+            vis.closest(first, second, d)
+            if len(cities) <= 3:
+                print(f"최근접 쌍: {cities[first].name} - {cities[second].name}, 거리: {d:.3f}")
+                vis.finish()
+            else:
+                print(f"부분 구간의 잠정 최근접 쌍: {cities[first].name} - {cities[second].name}, 거리: {d:.3f}")
+                vis.msg_action("좌우 부분 구간의 결과 중 더 가까운 쌍을 선택했다.")
+                vis.msg_detail("경계를 가로지르는 쌍은 아직 검사하지 않았다. 전체 최근접 쌍은 다음 단계에서 찾는다.")
+                vis.draw()
         vis.wait()
