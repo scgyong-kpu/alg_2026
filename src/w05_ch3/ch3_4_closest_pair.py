@@ -51,12 +51,8 @@ if __name__ == "__main__":
     while va.running():
         data = va.next_data(__file__, data_file=DATA_FILE)
         # 공통 도시 자료에서 이번 예제의 도시만 독립 객체로 가져옵니다.
-        # 지금은 입력 순서 그대로 표시하며, x순 정렬은 이후 단계에서 구현합니다.
         cities = load_cities(data.city_ids)
         data.cities = cities
-        print(f"도시 {len(cities)}개:")
-        for city in cities:
-            print(f"#{city.index} {city.name}: ({city.x}, {city.y})")
         vis.setup(data)
         # 시각화 화면 조작:
         # - 그래프 위에서 마우스 휠을 돌리면 포인터 위치를 중심으로 확대/축소합니다.
@@ -64,10 +60,16 @@ if __name__ == "__main__":
         # - 그래프 우상단의 화면 맞춤 버튼을 누르면 전체 도시를 다시 보여줍니다.
         # - H 키는 제목과 설명 패널을 숨기거나 표시합니다. 숨기면 그래프 영역이
         #   넓어지며, 다시 표시해도 확대 배율과 보고 있던 중심은 유지합니다.
-        # 모든 쌍을 검사하여 전체 입력의 최근접 쌍을 찾습니다.
-        result = brute_force(cities, 0, len(cities) - 1)
-        if result is not None and not vis.stopped():
-            first, second, d = result
-            print(f"최근접 쌍: {cities[first].name} - {cities[second].name}, 거리: {d:.3f}")
-            vis.finish()
+        # 입력 순서로 화면을 준비한 뒤 x좌표 순으로 정렬합니다.
+        # 좌표는 그대로이며, 배열에서의 순서와 index만 바뀝니다.
+        # 정렬된 index 범위로 좌우 부분을 나눌 수 있습니다. 같은 x좌표의 도시도
+        # 서로 다른 부분에 속할 수 있으므로, 편을 구분할 때에는 index를 씁니다.
+        cities.sort(key=lambda city: city.x)
+        for index, city in enumerate(cities):
+            city.index = index
+        vis.show_x_sort(cities)
+        print(f"x좌표 순으로 정렬한 도시 {len(cities)}개:")
+        for city in cities:
+            print(f"#{city.index} {city.name}: ({city.x}, {city.y})")
+        # 이번 단계는 x순 정렬까지입니다. 이후 작은 재귀 구간에서 brute_force를 씁니다.
         vis.wait()
