@@ -36,8 +36,13 @@ def knapsack(items, capacity):
             total_value += value
             vis.take(index, weight)
         else:
-            # 아직 분할은 구현하지 않았습니다. 들어가지 않는 물건에서 멈춥니다.
-            # 이 중간 단계의 결과가 분할 배낭의 최적해라는 뜻은 아닙니다.
+            # 물건을 나누어도 단가가 유지되므로 남은 용량만큼만 담을 수 있습니다.
+            # 원래 가치에 (담은 무게 / 원래 무게)를 곱한 만큼의 가치를 얻습니다.
+            selected[index] = remaining
+            total_value += value * (remaining / weight)
+            vis.take(index, remaining)
+            remaining = 0
+            # 배낭이 가득 찼으므로 더 낮은 단가의 물건까지 볼 필요가 없습니다.
             break
 
 
