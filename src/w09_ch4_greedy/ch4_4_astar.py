@@ -1,9 +1,28 @@
-"""목적지까지의 최단 경로: 먼저 Dijkstra의 누적 비용 기준으로 탐색한다."""
+"""A*: 목적지까지의 최단 경로를 휴리스틱으로 안내하며 찾는다.
+
+Dijkstra는 g(시작점부터의 실제 비용)가 최소인 후보를 고릅니다.
+A*는 f = g + h가 최소인 후보를 고릅니다. h는 목적지까지 남은 비용의 추정입니다.
+이 파일은 일관적인 휴리스틱을 사용하여 꺼낸 정점을 다시 열지 않는 버전입니다.
+목적지를 처음 발견했을 때가 아니라 최소 f 후보로 꺼냈을 때 종료해야 합니다.
+
+화면에 그리는 위치 positions와 거리 계산용 좌표 coordinates는 구별합니다.
+배치를 바꾸거나 정점을 드래그해도 입력 가중치와 휴리스틱은 변하지 않습니다.
+실습 데이터의 간선 비용은 좌표 사이의 직선거리 이상인 정수로 준비했습니다.
+따라서 목적지까지 직선거리를 내림한 정수 h는 실제 남은 비용을 넘지 않습니다.
+직선거리의 삼각부등식과 정수 가중치에 의해 h(u) <= w(u,v) + h(v)도 만족합니다.
+임의의 가중 그래프에서 화면상의 직선거리를 그대로 h로 쓰면 안 됩니다.
+"""
+
 import math
 
 from heapdict import heapdict
 
 import pyvisalgo as va
+
+
+def straight_line_heuristics(coordinates, goal):
+    """고정된 계산용 좌표에서 목적지까지의 직선거리를 내린 정수 배열을 만든다."""
+    return [math.floor(math.dist(point, coordinates[goal])) for point in coordinates]
 
 
 def build_graph(count, edges):
@@ -24,13 +43,26 @@ def build_graph(count, edges):
     return graph
 
 
-def astar(count, edges, start, goal):
+def validate_heuristics(graph, heuristics, goal):
+    """닫힌 정점을 다시 열지 않는 구현의 전제인 일관성을 검사한다."""
+    if len(heuristics) != len(graph):
+        raise ValueError("휴리스틱은 정점마다 하나씩 필요합니다.")
+    if any(not math.isfinite(h) or h < 0 for h in heuristics) or heuristics[goal] != 0:
+        raise ValueError("h는 유한한 음수가 아닌 수이며 h(goal)은 0이어야 합니다.")
+    for u, neighbors in graph.items():
+        for v, weight in neighbors.items():
+            if heuristics[u] > weight + heuristics[v]:
+                raise ValueError("일관성 조건 h(u) <= w(u,v) + h(v)를 만족해야 합니다.")
+
+
+def astar(count, edges, start, goal, heuristics):
     """목적지까지의 (경로, 실제 비용)을 반환한다. 경로가 없으면 ([], inf)이다."""
     if not (0 <= start < count and 0 <= goal < count):
         raise ValueError("시작점과 목적지가 정점 범위 안에 있어야 합니다.")
     # 정점 하나의 최단 거리를 확정할 때마다 그 정점에 연결된 이웃들을 검사합니다.
     # 전체 간선 목록 대신 graph[vertex].items()로 이웃과 가중치를 얻도록 준비합니다.
     graph = build_graph(count, edges)
+    validate_heuristics(graph, heuristics, goal)
     # completed는 시작점부터의 최단 거리를 확정한 정점들의 집합입니다.
     # 같은 정점을 다시 확정하거나 후보로 추가하지 않도록 소속 여부를 검사합니다.
     completed = set()
@@ -105,8 +137,10 @@ if __name__ == "__main__":
     while va.running():
         data = va.next_data(__file__)
         start, goal = data.start, data.goal
+        heuristics = straight_line_heuristics(data.coordinates, goal)
+        # 이 단계에서는 h를 준비·검사하지만 후보 선택은 여전히 g 기준입니다.
         vis.setup(data, start)
-        path, cost = astar(len(data.vertices), data.edges, start, goal)
+        path, cost = astar(len(data.vertices), data.edges, start, goal, heuristics)
         if not vis.stopped():
             print("시작점:", start, "목적지:", goal)
             print("최단 경로:", " -> ".join(map(str, path)) if path else "경로 없음")
