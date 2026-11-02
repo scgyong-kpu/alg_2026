@@ -28,6 +28,7 @@ from .visualizers.graph_representation import GraphRepresentationVisualizer
 from .visualizers.kruskal import KruskalVisualizer
 from .visualizers.prim import PrimVisualizer
 from .visualizers.dijkstra import DijkstraVisualizer
+from .visualizers.astar import AStarVisualizer
 from .visualizers.heap_queue import HeapQueueVisualizer
 from .visualizers.knight import KnightsTourVisualizer
 
@@ -74,6 +75,8 @@ def visualizer(name, enabled=True):
         return PrimVisualizer("Prim")
     if name == "dijkstra":
         return DijkstraVisualizer("Dijkstra")
+    if name == "astar":
+        return AStarVisualizer("A*")
     if name == "heap_queue":
         return HeapQueueVisualizer("heapq")
     if name == "binary_tree_array":
@@ -115,6 +118,7 @@ __all__ = [
     "KruskalVisualizer",
     "PrimVisualizer",
     "DijkstraVisualizer",
+    "AStarVisualizer",
     "MergeSortVisualizer",
     "MergeBattleVisualizer",
     "MergeSortHeroWarsVisualizer",
