@@ -16,6 +16,11 @@ def knapsack(items, capacity):
         ranked.append((unit_value, index, weight, value))
         vis.measure(index, unit_value)
 
+    # 단가만 key로 비교합니다. 단가가 같으면 Python의 안정 정렬로 입력 순서를 유지합니다.
+    # 튜플 전체를 역순 정렬하면 번호까지 역순으로 비교하게 되므로 key를 지정합니다.
+    ranked.sort(key=lambda item: item[0], reverse=True)
+    vis.sort_items([index for _, index, _, _ in ranked])
+
 
 if __name__ == "__main__":
     vis = va.visualizer("knapsack_greedy")
