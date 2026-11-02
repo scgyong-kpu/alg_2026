@@ -29,6 +29,7 @@ from .visualizers.kruskal import KruskalVisualizer
 from .visualizers.prim import PrimVisualizer
 from .visualizers.dijkstra import DijkstraVisualizer
 from .visualizers.astar import AStarVisualizer
+from .visualizers.knapsack import FractionalKnapsackVisualizer
 from .visualizers.heap_queue import HeapQueueVisualizer
 from .visualizers.knight import KnightsTourVisualizer
 
@@ -77,6 +78,8 @@ def visualizer(name, enabled=True):
         return DijkstraVisualizer("Dijkstra")
     if name == "astar":
         return AStarVisualizer("A*")
+    if name == "knapsack_greedy":
+        return FractionalKnapsackVisualizer("Fractional Knapsack")
     if name == "heap_queue":
         return HeapQueueVisualizer("heapq")
     if name == "binary_tree_array":
@@ -119,6 +122,7 @@ __all__ = [
     "PrimVisualizer",
     "DijkstraVisualizer",
     "AStarVisualizer",
+    "FractionalKnapsackVisualizer",
     "MergeSortVisualizer",
     "MergeBattleVisualizer",
     "MergeSortHeroWarsVisualizer",
