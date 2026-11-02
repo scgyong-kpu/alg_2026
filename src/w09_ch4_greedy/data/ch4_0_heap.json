@@ -1,0 +1,7 @@
+{
+  "datasets": [
+    {"name": "정수 배열 준비", "data": {"element_type": "int", "array": [42, 17, 8, 99, 23, 4, 75, 61, 30, 12], "pushes": [6, 1, 50], "pop_count": 4}},
+    {"name": "배열 원소: 같은 비용이면 이름 비교", "data": {"element_type": "list", "array": [[5, "C"], [2, "B"], [7, "D"], [5, "A"], [9, "F"], [3, "E"], [8, "G"]], "pushes": [[2, "A"], [1, "H"], [5, "B"]], "pop_count": 5}},
+    {"name": "부호 반전: 원래 값의 최댓값 꺼내기", "data": {"element_type": "negated", "array": [42, 17, 8, 99, 23, 4, 75, 61, 30, 12], "pushes": [100, 50, 120], "pop_count": 4}}
+  ]
+}

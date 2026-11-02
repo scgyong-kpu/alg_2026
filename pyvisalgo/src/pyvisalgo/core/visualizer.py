@@ -413,7 +413,6 @@ class BaseVisualizer:
         self.running_to_section = True
         self.paused = False
         self.step_requested = False
-        self.msg_log("다음 구간까지 진행")
 
     def _data_label(self, data):
         name = getattr(data, "_dataset_name", "")
