@@ -142,14 +142,18 @@ if __name__ == "__main__":
         data = va.next_data(__file__)
         start, goal = data.start, data.goal
         heuristics = straight_line_heuristics(data.coordinates, goal)
+        if not vis.use_heuristic:
+            heuristics = [0] * len(data.vertices)  # 같은 목적지에서 끝나는 Dijkstra와 비교합니다.
         vis.setup(data, start, goal, heuristics)
         path, cost = astar(len(data.vertices), data.edges, start, goal, heuristics)
         if not vis.stopped():
-            print(f"A*: #{start} -> #{goal}")
+            mode = "A*" if vis.use_heuristic else "h=0 (Dijkstra)"
+            print(f"{mode}: #{start} -> #{goal}")
             print("최단 경로:", " -> ".join(map(str, path)) if path else "경로 없음")
             print("실제 비용 g:", cost)
             print("탐색한 정점 수:", len(vis.inland))
             vis.finish_search()
+        # A: A*/h=0 비교 전환 후 재실행. 같은 그래프·시작점·목적지를 유지합니다.
         # Space: 일시정지, .: 한 단계, Enter: 다음 동작까지 빠르게, 1-9: 속도.
         # H: 설명 숨김, L: 배치, 정점 드래그: 배치, 빈 곳 드래그: 이동, 휠: 확대/목록 스크롤.
         # 하단 탐색 정점에 마우스를 올리면 시작점부터 그 정점까지의 경로를 표시합니다.
