@@ -21,6 +21,25 @@ def knapsack(items, capacity):
     ranked.sort(key=lambda item: item[0], reverse=True)
     vis.sort_items([index for _, index, _, _ in ranked])
 
+    remaining = capacity
+    total_value = 0
+    # selected[index]는 원래 물건 index에서 담은 무게입니다. 아직 안 담았으면 0입니다.
+    selected = [0] * len(items)
+    for unit_value, index, weight, value in ranked:
+        if vis.stopped():
+            return
+        if remaining <= 0:
+            break
+        if weight <= remaining:
+            selected[index] = weight
+            remaining -= weight
+            total_value += value
+            vis.take(index, weight)
+        else:
+            # 아직 분할은 구현하지 않았습니다. 들어가지 않는 물건에서 멈춥니다.
+            # 이 중간 단계의 결과가 분할 배낭의 최적해라는 뜻은 아닙니다.
+            break
+
 
 if __name__ == "__main__":
     vis = va.visualizer("knapsack_greedy")
