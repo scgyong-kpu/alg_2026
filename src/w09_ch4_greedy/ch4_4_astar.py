@@ -137,25 +137,40 @@ def astar(count, edges, start, goal, heuristics):
 
 
 if __name__ == "__main__":
+    from data_map import map_to_graph, map_heuristics
+
     vis = va.visualizer("astar")
     while va.running():
         data = va.next_data(__file__)
+        if hasattr(data, "map"):
+            # 숫자 맵에서 이동할 수 있는 정점과 간선을 만듭니다.
+            data = map_to_graph(data)
+            heuristics = map_heuristics(data)
+        else:
+            heuristics = straight_line_heuristics(data.coordinates, data.goal)
         start, goal = data.start, data.goal
-        heuristics = straight_line_heuristics(data.coordinates, goal)
         if not vis.use_heuristic:
             heuristics = [0] * len(data.vertices)  # 같은 목적지에서 끝나는 Dijkstra와 비교합니다.
         vis.setup(data, start, goal, heuristics)
         path, cost = astar(len(data.vertices), data.edges, start, goal, heuristics)
         if not vis.stopped():
             mode = "A*" if vis.use_heuristic else "h=0 (Dijkstra)"
-            print(f"{mode}: #{start} -> #{goal}")
-            print("최단 경로:", " -> ".join(map(str, path)) if path else "경로 없음")
-            print("실제 비용 g:", cost)
+            print(f"{mode}: #{start} {data.vertices[start]} -> #{goal} {data.vertices[goal]}")
+            if path:
+                print("최단 경로:", " -> ".join(f"#{v} {data.vertices[v]}" for v in path))
+                print("실제 비용 g:", cost)
+            else:
+                print("도달 가능한 경로 없음")
             print("탐색한 정점 수:", len(vis.inland))
             vis.finish_search()
         # A: A*/h=0 비교 전환 후 재실행. 같은 그래프·시작점·목적지를 유지합니다.
+        # M: 이미지 전용 / 정점 번호와 g(실제 비용)·h(추정)·f(우선순위) 표시 전환.
         # Space: 일시정지, .: 한 단계, Enter: 다음 동작까지 빠르게, 1-9: 속도.
         # H: 설명 숨김, L: 배치, 정점 드래그: 배치, 빈 곳 드래그: 이동, 휠: 확대/목록 스크롤.
+        # 숫자 맵의 movement.diagonal로 대각선 허용 여부를 지정합니다.
+        # 기본 비용은 직선 10, 대각선 14이며 corner_cutting=false는 모서리 통과를 막습니다.
+        # heuristic은 직선 전용 manhattan, 대각선 허용 octile을 사용합니다.
+        # 격자에서는 L과 정점 이동을 사용하지 않고 드래그로 지도 전체를 이동합니다.
         # 하단 탐색 정점에 마우스를 올리면 시작점부터 그 정점까지의 경로를 표시합니다.
         # R: 재실행, D: 다음 데이터, +/-: 글씨 크기, Esc: 종료.
         vis.wait()
