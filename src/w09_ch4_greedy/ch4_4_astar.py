@@ -70,12 +70,14 @@ def astar(count, edges, start, goal, heuristics):
     # 거리만 저장하면 경로를 알 수 없으므로, 어떤 정점을 거쳐 왔는지도 함께 남깁니다.
     # 시작점과 도달할 수 없는 정점에는 이전 정점이 없어 None으로 둡니다.
     previous = [None] * count
-    # heapdict: weights[vertex_to] = [시작점부터의 누적 거리, vertex_from]
+    # key는 도착 정점, value는 [f, g, 이전 정점]입니다.
+    # heapdict는 value의 첫 항목 f로 우선 비교합니다. 동률이면 g, 이전 정점 순서입니다.
+    # f가 같을 때 어느 정점을 먼저 선택하는지에 따라 탐색 수와 경로가 달라질 수 있습니다.
     # 현재 후보 수 k에 대해 key 조회는 평균 O(1), 등록·갱신·최소 추출은 O(log k)입니다.
     # 같은 key에 새 value를 대입하면 해당 후보를 교체하고 힙의 위치도 조정합니다.
     # weights[vertex][0]을 직접 수정하면 이 조정이 일어나지 않으므로 피해야 합니다.
     weights = heapdict()
-    weights[start] = [0, start]
+    weights[start] = [heuristics[start], 0, start]
     vis.add_candidate(start, 0, start, weights, starting=True)
 
     while weights:
@@ -83,14 +85,14 @@ def astar(count, edges, start, goal, heuristics):
             return [], float("inf")  # 중단한 결과를 도달 불가로 출력하지 않도록 실행부에서 구분합니다.
         # popitem()은 최소 value를 가진 (key, value)를 반환하면서 후보를 제거합니다.
         # 일반 dict.popitem()의 마지막 등록 항목 추출과는 의미가 다릅니다.
-        vertex, (cost, origin) = weights.popitem()
+        vertex, (priority, cost, origin) = weights.popitem()
         completed.add(vertex)
         if vertex != origin:
             previous[vertex] = origin
         vis.take_candidate(vertex, cost, origin, weights)
 
         # 목적지가 후보에 처음 등록되는 순간에는 더 저렴한 다른 경로가 남아 있을 수 있습니다.
-        # 음수가 아닌 가중치에서 최소 누적 비용으로 꺼낸 이 시점에만 종료합니다.
+        # 일관적인 h를 사용하여 최소 f로 꺼낸 이 시점에만 종료합니다.
         if vertex == goal:
             path = []
             current = goal
@@ -98,7 +100,7 @@ def astar(count, edges, start, goal, heuristics):
                 path.append(current)
                 current = previous[current]
             path.reverse()
-            return path, cost
+            return path, cost  # f가 아니라 실제 누적 비용 g를 반환합니다. 목적지에서는 h=0입니다.
 
         vis.show_neighbors(vertex, graph[vertex])
         # graph[vertex]의 key는 이웃 정점, value는 두 정점을 잇는 간선의 가중치입니다.
@@ -111,44 +113,45 @@ def astar(count, edges, start, goal, heuristics):
             if neighbor in completed:
                 vis.ignore_inland(vertex, neighbor)
                 continue
-            # 현재 정점까지의 최단 거리에 다음 간선의 가중치를 더합니다.
+            # g에는 실제 간선 비용만 더합니다. h를 경로 비용에 누적하면 안 됩니다.
             candidate_cost = cost + edge_cost
             # 결과로 보면 후보를 바꾸지 않거나, 새 비용과 출발점을 대입하거나 둘뿐입니다.
             # 새 후보 등록과 기존 후보 갱신은 같은 대입으로 처리할 수 있습니다.
             old_candidate = weights.get(neighbor)
-            if old_candidate is None or candidate_cost < old_candidate[0]:
-                # 새 리스트를 대입해야 heapdict가 새 비용에 맞춰 힙 위치도 갱신합니다.
-                weights[neighbor] = [candidate_cost, vertex]
+            # 같은 정점의 h는 고정이지만, 갱신의 의미는 실제 비용 g의 개선입니다.
+            if old_candidate is None or candidate_cost < old_candidate[1]:
+                priority = candidate_cost + heuristics[neighbor]
+                # 새 리스트를 대입해야 heapdict가 새 f에 맞춰 힙 위치도 갱신합니다.
+                weights[neighbor] = [priority, candidate_cost, vertex]
                 # 아래 분기는 추가와 갱신을 서로 다른 애니메이션으로 표시하기 위한 것입니다.
                 if old_candidate is None:
                     vis.add_candidate(neighbor, candidate_cost, vertex, weights)
                 else:
-                    vis.update_candidate(neighbor, *old_candidate,
+                    vis.update_candidate(neighbor, old_candidate[1], old_candidate[2],
                                          candidate_cost, vertex, weights)
             else:
                 # 같거나 더 비싼 연결이면 아무것도 대입하지 않고 기존 후보를 유지합니다.
-                vis.keep_candidate(neighbor, *old_candidate, candidate_cost, vertex)
+                vis.keep_candidate(neighbor, old_candidate[1], old_candidate[2], candidate_cost, vertex)
     # 목적지 종료와 달리 후보 소진은 시작점에서 목적지까지의 경로가 없다는 뜻입니다.
     return [], float("inf")
 
 
 if __name__ == "__main__":
-    vis = va.visualizer("dijkstra")
+    vis = va.visualizer("astar")
     while va.running():
         data = va.next_data(__file__)
         start, goal = data.start, data.goal
         heuristics = straight_line_heuristics(data.coordinates, goal)
-        # 이 단계에서는 h를 준비·검사하지만 후보 선택은 여전히 g 기준입니다.
-        vis.setup(data, start)
+        vis.setup(data, start, goal, heuristics)
         path, cost = astar(len(data.vertices), data.edges, start, goal, heuristics)
         if not vis.stopped():
-            print("시작점:", start, "목적지:", goal)
+            print(f"A*: #{start} -> #{goal}")
             print("최단 경로:", " -> ".join(map(str, path)) if path else "경로 없음")
-            print("실제 비용:", cost)
-            # 목적지에서 종료했으므로 아직 꺼내지 않은 정점을 도달 불가로 표시하지 않습니다.
-            vis.msg_phase("목적지 탐색: 결과")
-            vis.msg_action(f"목적지 #{goal}까지의 최단 비용: {cost}")
-            vis.msg_detail("목적지를 발견한 때가 아니라 후보에서 꺼낸 때 종료한다.")
-        # H: 설명 숨김, L: 배치 전환, 빈 곳 드래그: 이동, 휠: 확대/축소.
-        # R: 재실행, D: 다음 데이터, Esc: 종료.
+            print("실제 비용 g:", cost)
+            print("탐색한 정점 수:", len(vis.inland))
+            vis.finish_search()
+        # Space: 일시정지, .: 한 단계, Enter: 다음 동작까지 빠르게, 1-9: 속도.
+        # H: 설명 숨김, L: 배치, 정점 드래그: 배치, 빈 곳 드래그: 이동, 휠: 확대/목록 스크롤.
+        # 하단 탐색 정점에 마우스를 올리면 시작점부터 그 정점까지의 경로를 표시합니다.
+        # R: 재실행, D: 다음 데이터, +/-: 글씨 크기, Esc: 종료.
         vis.wait()
