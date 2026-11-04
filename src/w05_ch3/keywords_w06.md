@@ -1,6 +1,12 @@
 # Week 6: Quick Sort and Selection (6주차: 퀵 정렬과 선택)
 
 ## Quick Sort (퀵 정렬)
+partition, quick, quick
+피벗을 어떤걸로 쓸건가?
+겁나 중요하다. 피벗을 뭘 고를건지를 오래 고민하는게 더 이득되는 경우가 있음.
+
+피벗 잘못선택하면 O(n^2)에 가까운 알고리즘이 될 수 있다.
+
 
 - quick sort (퀵 정렬): pivot을 기준으로 배열을 분할한 뒤 양쪽 부분 배열을 재귀적으로 정렬하는 비교 정렬
 - pivot (피벗): 원소들을 작은 쪽과 큰 쪽으로 나누는 기준값
@@ -41,6 +47,9 @@
 - tuning (조정): threshold와 pivot 전략을 입력 특성 및 실행 환경에 맞춰 정하는 작업. 더 복잡한 전략이 항상 빠른 것은 아님
 
 ## Selection and Quickselect (선택과 퀵셀렉트)
+다음은 어디서 찾아야되냐? 를 묻는다.
+피벗을 랜덤하게 설정하면 반은 좋은 분할, 반은 나쁜 분할로 나뉠 것이기 때문에
+시간은 O(nlog(n))
 
 - selection problem (선택 문제): 전체를 정렬하지 않고 특정 순위의 값을 찾는 문제. Selection Sort와는 다른 문제
 - order statistic (순서 통계량): 정렬했을 때 특정 위치에 오는 값

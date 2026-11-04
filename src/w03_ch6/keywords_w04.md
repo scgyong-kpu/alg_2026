@@ -12,11 +12,15 @@
 - right child (오른쪽 자식): 부모 index `i`의 `2 * i + 2` 위치 노드
 - leaf (리프 노드): 자식이 없는 노드
 - last parent (마지막 부모): `count // 2 - 1`에 있는, 자식을 가진 마지막 노드
+절반은 자식이 있고, 절반은 자식이 없다.
+
 - max heap (최대 힙): 모든 부모 값이 자식 값보다 크거나 같은 힙
 - min heap (최소 힙): 모든 부모 값이 자식 값보다 작거나 같은 힙
 - heap property (힙 조건): 부모와 자식 사이에 유지해야 하는 대소 관계
 - subtree (부분 트리): 어떤 노드를 root로 하는 트리의 일부
 - heapify (힙 만들기): 한 subtree가 힙 조건을 만족하도록 만드는 작업
+두 자식이 모두 힙 상태일 때. 자식이 없으면 자동으로 조건 만족.
+
 - downheap (아래로 내리기): 부모를 더 큰 자식과 비교하며 아래로 보내는 heapify 방식
 - sift-down (아래로 훑어 내리기): downheap의 다른 이름
 - build heap (힙 만들기 단계): 마지막 부모부터 root까지 heapify해 전체 배열을 힙으로 만드는 과정
@@ -26,10 +30,18 @@
 - unstable sort (불안정 정렬): 같은 값을 가진 원소의 원래 순서가 유지되지 않을 수 있는 정렬
 - time complexity (시간 복잡도): build heap은 `O(n)`, 전체 Heap Sort는 `O(n log n)`
 
+
+좀 느림. 
+
+
 ## Counting Sort (계수 정렬)
 
 - counting sort (계수 정렬): 각 값이 나온 횟수를 세어 정렬하는 알고리즘
+
 - non-comparison sort (비교하지 않는 정렬): 두 원소의 대소 비교만으로 순서를 정하지 않는 정렬
+중요. 비교안한다. 개빠르다.
+다만, 아무데이터에나 못쓰고, 메모리 처먹는다. 못 쓰는 데이터 확인해보기.
+
 - key range (키 범위): 입력값이 가질 수 있는 최솟값부터 최댓값까지의 범위
 - count array (계수 배열): 각 값의 등장 횟수를 저장하는 배열
 - frequency (빈도): 어떤 값이 등장한 횟수
@@ -43,6 +55,10 @@
 - small range (작은 값 범위): `k`가 `n`에 비해 충분히 작을 때 Counting Sort가 적합한 조건
 
 ## Radix Sort (기수 정렬)
+
+
+r이 n보다 큰 경우. 종류를 여러번 나누어서 countsort 하는 것
+결국 O(n)으로 귀결하는 알고리즘
 
 - radix sort (기수 정렬): 수를 자릿수별로 나누어 여러 번 정렬하는 알고리즘
 - radix (기수): 한 자릿수에 사용할 수 있는 값의 개수, 예를 들어 10진수의 radix는 10
@@ -70,7 +86,13 @@
 - partition (분할): 자릿수 값에 따라 원소를 여러 그룹으로 나누는 작업
 - variable length key (길이가 다른 키): 문자열처럼 자릿수 또는 문자 수가 서로 다른 입력
 
+
+
 ## Comparison Sorting Lower Bound (비교 정렬의 하한)
+
+
+nlog(n)보다 빨라지는 것은 불가능하다.(결국 비교를 해야되서)
+근데 countsort는 더 빨라질 수 있다. 
 
 - comparison sort (비교 정렬): 두 원소의 대소 비교 결과를 이용해 정렬하는 알고리즘
 - comparison model (비교 모델): 알고리즘이 원소 비교만으로 정보를 얻는다고 가정하는 분석 모델
