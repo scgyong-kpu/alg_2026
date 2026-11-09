@@ -7,7 +7,7 @@ import pyvisalgo as va
 
 
 def huffman(text, vis):
-    """최소 빈도 노드 두 개를 꺼내 빈도 합을 가진 부모에 연결한다."""
+    """두 최소 트리를 합치는 과정을 반복하여 힙에 트리 하나만 남긴다."""
     # counts는 문자를 key로, 등장 횟수를 value로 갖는 Counter 객체입니다.
     # 공백·줄바꿈도 하나의 문자이며, 대문자와 소문자는 서로 다른 문자입니다.
     counts = Counter(text)
@@ -22,29 +22,34 @@ def huffman(text, vis):
     # heapify는 목록을 직접 최소 힙으로 바꿉니다. 목록 전체를 정렬하는 것은 아닙니다.
     heapify(heap)
     vis.make_heap(heap, nodes)
-    # 첫 번째로 꺼낸 노드의 빈도와 고유 번호를 각각 받습니다.
-    # heappop은 루트의 최소 항목을 제거하고, 남은 항목의 힙 조건도 유지합니다.
-    if heap and not vis.stopped():
+    # 후보가 두 개 이상일 때만 두 번 꺼낼 수 있습니다.
+    # 두 트리를 빼고 하나를 넣으므로, 매번 힙의 항목 수가 하나씩 줄어듭니다.
+    while len(heap) > 1 and not vis.stopped():
+        # 첫 번째로 꺼낸 노드의 빈도와 고유 번호를 각각 받습니다.
+        # heappop은 루트의 최소 항목을 제거하고, 남은 항목의 힙 조건도 유지합니다.
         first_count, first = heappop(heap)
         vis.pop(heap, first, 1)
-    # 첫 노드를 제거한 뒤의 힙에서 다시 최솟값을 꺼냅니다.
-    # 두 번째로 꺼낸 노드는 first와 다른 노드이며, 이후 새 부모의 다른 자식이 됩니다.
-    if heap and not vis.stopped():
+        if vis.stopped():
+            return
+        # 첫 노드를 제거한 뒤의 힙에서 다시 최솟값을 꺼냅니다.
+        # 두 번째로 꺼낸 노드는 first와 다른 노드이며, 이후 새 부모의 다른 자식이 됩니다.
         second_count, second = heappop(heap)
         vis.pop(heap, second, 2)
-        if not vis.stopped():
-            # nodes의 번호는 0부터 연속이므로 현재 노드 수가 새 부모의 고유 번호입니다.
-            parent = len(nodes)
-            count = first_count + second_count
-            # 내부 노드는 특정 문자를 뜻하지 않아 문자 자리에 None을 둡니다.
-            # 자식 정보는 왼쪽·오른쪽 자식의 고유 번호를 담은 튜플입니다.
-            nodes[parent] = (count, None, (first, second))
-            vis.join(parent)
-            if not vis.stopped():
-                # 새 트리도 잎 노드와 같은 (빈도, 고유 번호) 형식으로 후보에 넣습니다.
-                # 자식 정보는 nodes에 그대로 남아 있으므로 트리 전체가 유지됩니다.
-                heappush(heap, (count, parent))
-                vis.push(heap, parent)
+        if vis.stopped():
+            return
+        # nodes의 번호는 0부터 연속이므로 현재 노드 수가 새 부모의 고유 번호입니다.
+        parent = len(nodes)
+        count = first_count + second_count
+        # 내부 노드는 특정 문자를 뜻하지 않아 문자 자리에 None을 둡니다.
+        # 자식 정보는 왼쪽·오른쪽 자식의 고유 번호를 담은 튜플입니다.
+        nodes[parent] = (count, None, (first, second))
+        vis.join(parent)
+        if vis.stopped():
+            return
+        # 새 트리도 잎 노드와 같은 (빈도, 고유 번호) 형식으로 후보에 넣습니다.
+        # 자식 정보는 nodes에 그대로 남아 있으므로 트리 전체가 유지됩니다.
+        heappush(heap, (count, parent))
+        vis.push(heap, parent)
 
 
 if __name__ == "__main__":
