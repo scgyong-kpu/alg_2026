@@ -9,6 +9,16 @@ def schedule(jobs, vis=None):
     ordered = sorted(jobs, key=lambda job: job[1])
     if vis:
         vis.order_jobs(ordered)
+    # machines[i]는 기계 i에 배정한 작업 목록입니다.
+    machines = []
+    for job in ordered:
+        if vis and vis.stopped():
+            break
+        # 아직 기계 재사용은 구현하지 않았으므로 작업마다 새 기계를 만듭니다.
+        machine = len(machines)
+        machines.append([job])
+        if vis:
+            vis.place(job, machine, False)
 
 
 if __name__ == "__main__":
