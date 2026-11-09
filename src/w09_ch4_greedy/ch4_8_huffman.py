@@ -54,9 +54,66 @@ def huffman(text, vis):
         # 힙의 마지막 항목은 (전체 빈도, 루트 번호)입니다.
         # 루트 번호로 nodes를 조회하고 자식 번호를 따라가면 전체 트리를 얻습니다.
         root = heap[0][1]
-        # 완성된 트리의 코드표 생성과 인코딩·디코딩 연출을 이어서 보여줍니다.
-        vis.finish(root)
         return nodes, root
+    if not vis.stopped():
+        return nodes, None  # 빈 원문에는 노드와 루트가 없습니다.
+
+
+def make_codes(nodes, root):
+    """트리를 순회하여 {문자: 비트 문자열} 코드표를 반환한다."""
+    codes = {}
+
+    def visit(node, prefix):
+        # node는 현재 노드 번호, prefix는 루트부터 이 노드까지 읽은 비트입니다.
+        _, char, children = nodes[node]
+        if children is None:
+            # 문자 종류가 하나뿐이면 루트 자체가 잎이어서 prefix가 빈 문자열입니다.
+            # 이 경우에도 문자 수를 복원할 수 있도록 코드 0을 부여합니다.
+            codes[char] = prefix or "0"
+            return
+        left, right = children
+        visit(left, prefix + "0")
+        visit(right, prefix + "1")
+
+    if root is not None:
+        visit(root, "")
+    return codes
+
+
+def encode(text, codes):
+    """원문의 각 문자를 코드로 바꾸어 하나의 비트 문자열로 이어 붙인다."""
+    # 여기서 0과 1은 설명용 문자열입니다. 실제 바이트로 압축하는 단계와 구별합니다.
+    return "".join(codes[char] for char in text)
+
+
+def decode(bits, nodes, root):
+    """비트 문자열을 트리로 읽어 원문을 복원한다. 패딩을 제외한 비트만 받는다."""
+    if root is None:
+        if bits:
+            raise ValueError("트리 없이 비트를 디코딩할 수 없습니다.")
+        return ""
+    # 루트 자체가 잎인 예외: 코드 0 하나가 문자 하나를 나타냅니다.
+    if nodes[root][2] is None:
+        if any(bit != "0" for bit in bits):
+            raise ValueError("문자가 한 종류인 트리의 코드는 0입니다.")
+        return nodes[root][1] * len(bits)
+
+    letters = []  # 잎에 도착할 때마다 확정한 문자를 모읍니다.
+    node = root  # 아직 읽고 있는 코드에 따라 현재 위치가 바뀝니다.
+    for bit in bits:
+        if bit not in "01":
+            raise ValueError("비트 문자열에는 0과 1만 사용할 수 있습니다.")
+        # 내부 노드의 자식 튜플은 (왼쪽 번호, 오른쪽 번호) 순서입니다.
+        left, right = nodes[node][2]
+        node = left if bit == "0" else right
+        _, char, children = nodes[node]
+        if children is None:
+            letters.append(char)
+            # 문자 하나를 읽었으므로 다음 비트는 다시 루트에서부터 해석합니다.
+            node = root
+    if node != root:
+        raise ValueError("마지막 비트가 잎에 도착하기 전에 끝났습니다.")
+    return "".join(letters)
 
 
 if __name__ == "__main__":
@@ -66,7 +123,20 @@ if __name__ == "__main__":
         # text는 공백과 줄바꿈을 포함한 원문입니다.
         vis.setup(data)
         if not vis.stopped():
-            huffman(data.text, vis)
+            result = huffman(data.text, vis)
+            if not vis.stopped():
+                nodes, root = result
+                codes = make_codes(nodes, root)
+                bits = encode(data.text, codes)
+                restored = decode(bits, nodes, root)
+                print("코드표:", codes)
+                print("인코딩:", bits)
+                print("디코딩:", restored)
+                print("원문과 일치:", restored == data.text)
+                assert restored == data.text
+                # 계산과 검증은 학생 코드에서 수행하고, 연출은 시각화에 맡깁니다.
+                if root is not None:
+                    vis.finish(root)
         # R: 재실행, D: 다음 데이터, Space: 일시정지, .: 한 단계.
         # Enter: 다음 구간, 1~9: 속도, +/-: 글씨 크기, Esc: 종료.
         # 트리 생성 중 Enter는 다음 부모 push까지 진행합니다.
