@@ -27,6 +27,11 @@ def huffman(text, vis):
     if heap and not vis.stopped():
         first_count, first = heappop(heap)
         vis.pop(heap, first, 1)
+    # 첫 노드를 제거한 뒤의 힙에서 다시 최솟값을 꺼냅니다.
+    # 두 번째로 꺼낸 노드는 first와 다른 노드이며, 이후 새 부모의 다른 자식이 됩니다.
+    if heap and not vis.stopped():
+        second_count, second = heappop(heap)
+        vis.pop(heap, second, 2)
 
 
 if __name__ == "__main__":
