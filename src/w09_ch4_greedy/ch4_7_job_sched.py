@@ -1,5 +1,7 @@
 """시간이 정해진 모든 작업을 가장 적은 기계에 배정한다."""
 
+from heapq import heappop, heappush
+
 import pyvisalgo as va
 
 
@@ -11,14 +13,24 @@ def schedule(jobs, vis=None):
         vis.order_jobs(ordered)
     # machines[i]는 기계 i에 배정한 작업 목록입니다.
     machines = []
+    # ends: 각 기계의 (마지막 종료 시각, 기계 번호)를 저장하는 최소 힙입니다.
+    ends = []
     for job in ordered:
         if vis and vis.stopped():
             break
-        # 아직 기계 재사용은 구현하지 않았으므로 작업마다 새 기계를 만듭니다.
-        machine = len(machines)
-        machines.append([job])
+        _, start, end = job
+        # 가장 빨리 비는 기계도 아직 사용 중이라면 새 기계가 꼭 필요합니다.
+        # 종료 시각과 시작 시각이 같으면 작업이 겹치지 않으므로 재사용합니다.
+        reuse = bool(ends and ends[0][0] <= start)
+        if reuse:
+            _, machine = heappop(ends)
+        else:
+            machine = len(machines)
+            machines.append([])
+        machines[machine].append(job)
+        heappush(ends, (end, machine))
         if vis:
-            vis.place(job, machine, False)
+            vis.place(job, machine, reuse)
 
 
 if __name__ == "__main__":
