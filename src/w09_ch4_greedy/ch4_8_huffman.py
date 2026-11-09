@@ -7,7 +7,7 @@ import pyvisalgo as va
 
 
 def huffman(text, vis):
-    """두 최소 트리를 합치는 과정을 반복하여 힙에 트리 하나만 남긴다."""
+    """허프만 트리를 만들고 (노드 사전, 루트 번호)를 반환한다."""
     # counts는 문자를 key로, 등장 횟수를 value로 갖는 Counter 객체입니다.
     # 공백·줄바꿈도 하나의 문자이며, 대문자와 소문자는 서로 다른 문자입니다.
     counts = Counter(text)
@@ -50,6 +50,13 @@ def huffman(text, vis):
         # 자식 정보는 nodes에 그대로 남아 있으므로 트리 전체가 유지됩니다.
         heappush(heap, (count, parent))
         vis.push(heap, parent)
+    if heap and not vis.stopped():
+        # 힙의 마지막 항목은 (전체 빈도, 루트 번호)입니다.
+        # 루트 번호로 nodes를 조회하고 자식 번호를 따라가면 전체 트리를 얻습니다.
+        root = heap[0][1]
+        # 완성된 트리의 코드표 생성과 인코딩·디코딩 연출을 이어서 보여줍니다.
+        vis.finish(root)
+        return nodes, root
 
 
 if __name__ == "__main__":
@@ -62,4 +69,7 @@ if __name__ == "__main__":
             huffman(data.text, vis)
         # R: 재실행, D: 다음 데이터, Space: 일시정지, .: 한 단계.
         # Enter: 다음 구간, 1~9: 속도, +/-: 글씨 크기, Esc: 종료.
+        # 트리 생성 중 Enter는 다음 부모 push까지 진행합니다.
+        # 인코딩 중 첫 Enter는 가속, 두 번째는 남은 애니메이션 생략입니다.
+        # Shift+Enter: 디코딩 시작으로 이동. 디코딩 중에는 일반 Enter처럼 동작합니다.
         vis.wait()
