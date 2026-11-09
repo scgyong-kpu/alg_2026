@@ -31,6 +31,7 @@ def schedule(jobs, vis=None):
         heappush(ends, (end, machine))
         if vis:
             vis.place(job, machine, reuse)
+    return machines
 
 
 if __name__ == "__main__":
@@ -38,5 +39,9 @@ if __name__ == "__main__":
     while va.running():
         data = va.next_data(__file__)
         vis.setup(data)
-        schedule(data.jobs, vis)
+        machines = schedule(data.jobs, vis)
+        if not vis.stopped():
+            for i, jobs in enumerate(machines, 1):
+                print(f"기계 {i}:", jobs)
+            vis.finish(len(machines))
         vis.wait()
