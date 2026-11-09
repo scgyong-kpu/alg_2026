@@ -12,9 +12,10 @@ def set_cover(universe, subsets, vis=None):
     chosen = []
     # 후보를 제거해도 나머지 후보의 원래 번호는 바뀌지 않도록 인덱스만 관리합니다.
     available = list(range(len(candidates)))
-    if True:  # 다음 단계에서 while uncovered:로 바꿉니다.
+    # 후보별로 원소를 직접 세는 두 루프를, 아직 덮지 못한 원소가 있는 동안 반복합니다.
+    while uncovered:
         if vis and vis.stopped():
-            return chosen, uncovered
+            break
         # gains[index]: 후보 하나가 이번에 새로 덮을 원소들의 집합입니다.
         # 개수만 저장하지 않으므로 len()으로 셀 수도 있고, 어떤 원소를 셌는지도 표시할 수 있습니다.
         gains = {}
@@ -40,7 +41,7 @@ def set_cover(universe, subsets, vis=None):
             vis.compare(gains, best)
         # best가 None이면 새로 덮을 원소가 있는 후보가 없습니다.
         if best is None or (vis and vis.stopped()):
-            return chosen, uncovered
+            break
 
         chosen.append(best)
         available.remove(best)
@@ -56,5 +57,9 @@ if __name__ == "__main__":
     while va.running():
         data = va.next_data(__file__)
         vis.setup(data)
-        set_cover(data.universe, data.subsets, vis)
+        chosen, uncovered = set_cover(data.universe, data.subsets, vis)
+        if not vis.stopped():
+            print("선택:", [f"S{i + 1}" for i in chosen])
+            print("아직 덮지 못한 원소:", sorted(uncovered))
+            vis.finish(uncovered)
         vis.wait()
