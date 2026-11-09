@@ -5,7 +5,10 @@ import pyvisalgo as va
 
 def schedule(jobs, vis=None):
     """작업은 [이름, 시작 시각, 종료 시각], 구간은 시작 포함·종료 미포함이다."""
-    pass
+    # ordered는 시작 시각으로 정렬한 새 목록입니다. 입력 jobs의 순서는 바꾸지 않습니다.
+    ordered = sorted(jobs, key=lambda job: job[1])
+    if vis:
+        vis.order_jobs(ordered)
 
 
 if __name__ == "__main__":
