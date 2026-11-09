@@ -24,19 +24,13 @@ def set_cover(universe, subsets, vis=None):
             subset = candidates[index]
             # 양쪽 집합에 모두 속한 원소만 남기면, 이 후보가 새로 덮는 원소를 얻습니다.
             gains[index] = subset & uncovered
-        # best는 지금까지 본 후보 중 새로 덮는 원소가 가장 많은 후보의 인덱스입니다.
-        # best_count는 그 원소 수입니다. 동률이면 먼저 나온 후보를 그대로 유지합니다.
-        best = None
-        best_count = 0
-        for index, new_elements in gains.items():
-            count = len(new_elements)
-            if count > best_count:
-                best = index
-                best_count = count
+        # max는 교집합 크기를 비교하되 크기가 아니라 후보 인덱스를 반환합니다.
+        # 동률이면 먼저 나온 후보, 후보가 없으면 default인 None을 반환합니다.
+        best = max(gains, key=lambda index: len(gains[index]), default=None)
         if vis and not vis.stopped():
             vis.compare(gains, best)
-        # best가 None이면 새로 덮을 원소가 있는 후보가 없습니다.
-        if best is None or (vis and vis.stopped()):
+        # 후보가 없거나 최선의 후보도 새로 덮는 원소가 없으면 종료합니다.
+        if best is None or not gains[best] or (vis and vis.stopped()):
             break
 
         chosen.append(best)
