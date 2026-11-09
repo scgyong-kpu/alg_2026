@@ -1,7 +1,7 @@
 """문자 빈도가 가장 낮은 두 트리를 반복해서 합쳐 허프만 트리를 만든다."""
 
 from collections import Counter
-from heapq import heapify
+from heapq import heapify, heappop
 
 import pyvisalgo as va
 
@@ -22,6 +22,11 @@ def huffman(text, vis):
     # heapify는 목록을 직접 최소 힙으로 바꿉니다. 목록 전체를 정렬하는 것은 아닙니다.
     heapify(heap)
     vis.make_heap(heap, nodes)
+    # 첫 번째로 꺼낸 노드의 빈도와 고유 번호를 각각 받습니다.
+    # heappop은 루트의 최소 항목을 제거하고, 남은 항목의 힙 조건도 유지합니다.
+    if heap and not vis.stopped():
+        first_count, first = heappop(heap)
+        vis.pop(heap, first, 1)
 
 
 if __name__ == "__main__":
