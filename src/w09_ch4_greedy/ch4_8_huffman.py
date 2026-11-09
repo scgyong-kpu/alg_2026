@@ -1,7 +1,7 @@
 """문자 빈도가 가장 낮은 두 트리를 반복해서 합쳐 허프만 트리를 만든다."""
 
 from collections import Counter
-from heapq import heapify, heappop
+from heapq import heapify, heappop, heappush
 
 import pyvisalgo as va
 
@@ -40,6 +40,11 @@ def huffman(text, vis):
             # 자식 정보는 왼쪽·오른쪽 자식의 고유 번호를 담은 튜플입니다.
             nodes[parent] = (count, None, (first, second))
             vis.join(parent)
+            if not vis.stopped():
+                # 새 트리도 잎 노드와 같은 (빈도, 고유 번호) 형식으로 후보에 넣습니다.
+                # 자식 정보는 nodes에 그대로 남아 있으므로 트리 전체가 유지됩니다.
+                heappush(heap, (count, parent))
+                vis.push(heap, parent)
 
 
 if __name__ == "__main__":
