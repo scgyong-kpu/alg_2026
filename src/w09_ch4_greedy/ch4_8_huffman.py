@@ -7,7 +7,7 @@ import pyvisalgo as va
 
 
 def huffman(text, vis):
-    """문자별 빈도를 집계하고 각 문자를 잎 노드로 만들어 최소 힙을 구성한다."""
+    """최소 빈도 노드 두 개를 꺼내 빈도 합을 가진 부모에 연결한다."""
     # counts는 문자를 key로, 등장 횟수를 value로 갖는 Counter 객체입니다.
     # 공백·줄바꿈도 하나의 문자이며, 대문자와 소문자는 서로 다른 문자입니다.
     counts = Counter(text)
@@ -32,6 +32,14 @@ def huffman(text, vis):
     if heap and not vis.stopped():
         second_count, second = heappop(heap)
         vis.pop(heap, second, 2)
+        if not vis.stopped():
+            # nodes의 번호는 0부터 연속이므로 현재 노드 수가 새 부모의 고유 번호입니다.
+            parent = len(nodes)
+            count = first_count + second_count
+            # 내부 노드는 특정 문자를 뜻하지 않아 문자 자리에 None을 둡니다.
+            # 자식 정보는 왼쪽·오른쪽 자식의 고유 번호를 담은 튜플입니다.
+            nodes[parent] = (count, None, (first, second))
+            vis.join(parent)
 
 
 if __name__ == "__main__":
