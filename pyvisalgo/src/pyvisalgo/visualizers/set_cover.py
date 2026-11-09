@@ -24,7 +24,7 @@ class SetCoverVisualizer(BaseVisualizer):
         self.msg_action("전체 집합을 덮을 부분집합을 고른다.")
         self.wait(900)
 
-    def compare(self, gains, best):
+    def compare(self, gains, best=None):
         self.gains = gains
         self.best = None
         self.tallies = {}
@@ -53,6 +53,11 @@ class SetCoverVisualizer(BaseVisualizer):
             return
         self.counting = None
         self.tallies = {index: len(elements) for index, elements in gains.items()}
+        if best is None:
+            self.msg_action("후보마다 새로 덮는 원소를 모두 셌다.")
+            self.wait(850)
+            self.section_end()
+            return
         self.best = best if gains[best] else None
         self.msg_phase("후보 비교")
         self.msg_action(f"현재 미포함 원소를 S{best + 1}이 가장 많이 덮는다: {len(gains[best])}개."
