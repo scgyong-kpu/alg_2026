@@ -30,6 +30,7 @@ from .visualizers.prim import PrimVisualizer
 from .visualizers.dijkstra import DijkstraVisualizer
 from .visualizers.astar import AStarVisualizer
 from .visualizers.knapsack import FractionalKnapsackVisualizer
+from .visualizers.set_cover import CitySetCoverVisualizer, SetCoverVisualizer
 from .visualizers.heap_queue import HeapQueueVisualizer
 from .visualizers.knight import KnightsTourVisualizer
 
@@ -80,6 +81,10 @@ def visualizer(name, enabled=True):
         return AStarVisualizer("A*")
     if name == "knapsack_greedy":
         return FractionalKnapsackVisualizer("Fractional Knapsack")
+    if name == "set_cover":
+        return SetCoverVisualizer("Set Cover")
+    if name == "set_cover_2d":
+        return CitySetCoverVisualizer("Set Cover: 학교 세우기")
     if name == "heap_queue":
         return HeapQueueVisualizer("heapq")
     if name == "binary_tree_array":
