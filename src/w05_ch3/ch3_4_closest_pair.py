@@ -99,7 +99,7 @@ def closest_pair_range(cities, left, right, y_order):
         split_x = (cities[mid].x + cities[mid + 1].x) / 2
         d = best[2]
         strip = [i for i in y_order
-                 if abs(cities[i].x - split_x) < d]
+                 if abs(cities[i].x - split_x) <= d]
         # y순 배열에서 후보만 골랐으므로 strip도 이미 y순입니다.
         # 각 구간에서 다시 정렬할 필요 없이 선형 시간에 후보를 모읍니다.
         # y정렬 전에도 모든 반대편 후보 쌍을 검사했으므로 정답은 같았습니다.
