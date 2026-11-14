@@ -36,6 +36,17 @@ def floyd_warshall(count, edges, directed=False, vis=None):
             if vis.stopped():
                 return None
             vis.begin_phase(k)
+
+        # 모든 출발점 i와 도착점 j에 대해 k를 거치는 경로의 비용을 구합니다.
+        for i in range(count):
+            for j in range(count):
+                if vis and vis.stopped():
+                    return None
+                via = dist[i][k] + dist[k][j]
+                if vis:
+                    vis.compare(i, j, k, via)
+
+        if vis:
             if vis.stopped():
                 return None
             vis.end_phase()
