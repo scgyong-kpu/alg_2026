@@ -369,7 +369,7 @@ class BaseVisualizer:
         elif key == pygame.K_r:
             self.requested_action = "restart"
         elif key == pygame.K_d:
-            self.requested_action = "next_data"
+            self.requested_action = "previous_data" if mod & pygame.KMOD_SHIFT else "next_data"
         elif key == pygame.K_a:
             if self.can_show_answer():
                 self.requested_action = "answer"
@@ -428,13 +428,13 @@ class BaseVisualizer:
 
     def _action_hint(self):
         if self.next_dataset_name:
-            return f"R: 다시 실행  Esc: 종료  D: 다음 데이터({self.next_dataset_name})"
-        return "R: 다시 실행  Esc: 종료  D: 다음 데이터"
+            return f"R: 다시 실행  Esc: 종료  D: 다음 데이터({self.next_dataset_name})  Shift+D: 이전 데이터"
+        return "R: 다시 실행  Esc: 종료  D: 다음 데이터  Shift+D: 이전 데이터"
 
     def _running_hint(self):
         if self.next_dataset_name:
-            return f"Space: 일시정지  .: 한 단계  Enter: 다음 구간  D: 다음 데이터({self.next_dataset_name})  1-9: 속도  +/-: 글씨  Esc: 종료"
-        return "Space: 일시정지  .: 한 단계  Enter: 다음 구간  D: 다음 데이터  1-9: 속도  +/-: 글씨  Esc: 종료"
+            return f"Space: 일시정지  .: 한 단계  Enter: 다음 구간  D: 다음 데이터({self.next_dataset_name})  Shift+D: 이전 데이터  1-9: 속도  +/-: 글씨  Esc: 종료"
+        return "Space: 일시정지  .: 한 단계  Enter: 다음 구간  D: 다음 데이터  Shift+D: 이전 데이터  1-9: 속도  +/-: 글씨  Esc: 종료"
 
     def _find_font_path(self):
         for path in FONT_CANDIDATES:

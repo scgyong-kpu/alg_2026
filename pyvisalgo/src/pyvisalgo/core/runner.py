@@ -45,9 +45,8 @@ def next_data(source_file, default_datasets=None, data_file=None):
 
     if _state["current_data"] is None:
         _state["current_data"] = _select_data()
-    elif _state["action"] == "next_data":
-        _state["data_index"] += 1
-        _state["current_data"] = _select_data()
+    else:
+        _navigate_data()
 
     _state["action"] = "restart"
     return _copy_current_data()
@@ -72,12 +71,24 @@ def resolve_data(source_file=None, inline_fields=None, data_file=None):
         }, next_name=_prepared_dataset_name(0))
     elif _state["current_data"] is None:
         _state["current_data"] = _select_data()
-    elif _state["action"] == "next_data":
-        _state["data_index"] += 1
-        _state["current_data"] = _select_data()
+    else:
+        _navigate_data()
 
     _state["action"] = "restart"
     return _copy_current_data()
+
+
+def _navigate_data():
+    action = _state["action"]
+    if action == "next_data":
+        _state["data_index"] += 1
+    elif action == "previous_data" and _state["datasets"]["mode"] == "prepared":
+        if _state["data_index"] == -1:  # -1은 코드에 내장된 초기 데이터다.
+            _state["data_index"] = len(_state["datasets"]["datasets"])
+        _state["data_index"] -= 1
+    else:
+        return
+    _state["current_data"] = _select_data()
 
 
 def run_visualizer(vis, source_file, algorithm, default_datasets=None):
@@ -132,6 +143,7 @@ def _select_data():
 
     datasets = data_config["datasets"]
     index = _state["data_index"] % len(datasets)
+    _state["data_index"] = index
     next_index = (index + 1) % len(datasets)
     return _with_dataset_metadata(datasets[index], index=index + 1, total=len(datasets), next_name=datasets[next_index]["name"])
 

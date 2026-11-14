@@ -20,7 +20,8 @@ class GraphVisualizer(BaseVisualizer):
     def setup(self, data):
         self.set_data_info(data)
         self.data = data
-        self.vertices = self._normalize_vertices(getattr(data, "vertices", []))
+        self.vertices = self._normalize_vertices(getattr(data, "vertices", []),
+                                                 getattr(data, "positions", None))
         self.edges = [tuple(edge) for edge in getattr(data, "edges", [])]
         self.edge_states = {}
         self.edge_labels = {}
@@ -51,13 +52,17 @@ class GraphVisualizer(BaseVisualizer):
         self._draw_edges()
         self._draw_vertices()
 
-    def _normalize_vertices(self, vertices):
+    def _normalize_vertices(self, vertices, positions=None):
+        if positions is not None and (
+                len(positions) != len(vertices) or any(len(point) != 2 for point in positions)):
+            raise ValueError("정점마다 화면 배치 좌표가 하나씩 필요합니다.")
         if not vertices:
             return []
 
         normalized = []
         count = len(vertices)
-        has_all_coords = all(isinstance(vertex, dict) and "x" in vertex and "y" in vertex for vertex in vertices)
+        has_all_coords = positions is not None or all(
+            isinstance(vertex, dict) and "x" in vertex and "y" in vertex for vertex in vertices)
         for index, vertex in enumerate(vertices):
             if isinstance(vertex, dict):
                 label = vertex.get("name", vertex.get("label", str(index)))
@@ -68,6 +73,8 @@ class GraphVisualizer(BaseVisualizer):
                 x = None
                 y = None
 
+            if positions is not None:
+                x, y = positions[index]
             if x is None or y is None:
                 left, top, right, bottom = self._graph_bounds()
                 center_x = (left + right) / 2

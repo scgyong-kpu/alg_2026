@@ -23,6 +23,7 @@ from .visualizers.array import (
     VerticalBubbleSortVisualizer,
 )
 from .visualizers.euler import EulerCircuitVisualizer
+from .visualizers.floyd_warshall import FloydWarshallVisualizer
 from .visualizers.closest_pair import ClosestPairVisualizer
 from .visualizers.graph_representation import GraphRepresentationVisualizer
 from .visualizers.kruskal import KruskalVisualizer
@@ -105,6 +106,8 @@ def visualizer(name, enabled=True):
         return RadixMsdWordsVisualizer("Radix Sort: MSD")
     if name == "euler":
         return EulerCircuitVisualizer("Euler Circuit")
+    if name == "floyd_warshall":
+        return FloydWarshallVisualizer("Floyd-Warshall")
     if name == "knights_tour":
         return KnightsTourVisualizer("Knight's Tour")
     return DummyVisualizer()
@@ -123,6 +126,7 @@ __all__ = [
     "CountSortVisualizer",
     "ClosestPairVisualizer",
     "EulerCircuitVisualizer",
+    "FloydWarshallVisualizer",
     "FindMaxVisualizer",
     "GraphRepresentationVisualizer",
     "HeapSortVisualizer",
