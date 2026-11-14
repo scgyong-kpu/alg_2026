@@ -68,6 +68,10 @@ if __name__ == "__main__":
     while va.running():
         data = va.next_data(__file__)
         vis.setup(data)
-        if floyd_warshall(len(data.vertices), data.edges, data.directed, vis) is not None:
+        result = floyd_warshall(len(data.vertices), data.edges, data.directed, vis)
+        if result is not None:
+            dist, _ = result
+            for name, row in zip(data.vertices, dist):
+                print(name, row)
             vis.finish()
         vis.wait()
