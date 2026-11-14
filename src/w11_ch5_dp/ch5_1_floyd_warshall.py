@@ -29,6 +29,18 @@ def floyd_warshall(count, edges, directed=False, vis=None):
 
     if vis:
         vis.initialize(dist, next_hop)
+
+    # 경유 정점 k를 0번부터 차례로 선택합니다.
+    for k in range(count):
+        if vis:
+            if vis.stopped():
+                return None
+            vis.begin_phase(k)
+            if vis.stopped():
+                return None
+            vis.end_phase()
+    if vis and vis.stopped():
+        return None
     return dist, next_hop
 
 
@@ -37,5 +49,6 @@ if __name__ == "__main__":
     while va.running():
         data = va.next_data(__file__)
         vis.setup(data)
-        floyd_warshall(len(data.vertices), data.edges, data.directed, vis)
+        if floyd_warshall(len(data.vertices), data.edges, data.directed, vis) is not None:
+            vis.finish()
         vis.wait()
