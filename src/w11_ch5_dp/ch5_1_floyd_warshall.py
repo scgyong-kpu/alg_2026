@@ -30,7 +30,7 @@ def floyd_warshall(count, edges, directed=False, vis=None):
     if vis:
         vis.initialize(dist, next_hop)
 
-    # 경유 정점 k를 0번부터 차례로 선택합니다.
+    # k번째 바퀴를 마치면 0부터 k까지의 정점을 경유하는 경로를 고려한 상태입니다.
     for k in range(count):
         if vis:
             if vis.stopped():
@@ -45,6 +45,14 @@ def floyd_warshall(count, edges, directed=False, vis=None):
                 via = dist[i][k] + dist[k][j]
                 if vis:
                     vis.compare(i, j, k, via)
+                    if vis.stopped():
+                        return None
+                if via < dist[i][j]:
+                    dist[i][j] = via
+                    # k가 바로 다음 정점이라는 보장은 없으므로 i에서 k로 가는 첫 정점을 씁니다.
+                    next_hop[i][j] = next_hop[i][k]
+                    if vis:
+                        vis.update_distance()
 
         if vis:
             if vis.stopped():
