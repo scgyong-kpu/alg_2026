@@ -1,4 +1,4 @@
-"""모든 정점 쌍의 최단 거리를 구하는 플로이드–워셜 알고리즘."""
+"""모든 정점 쌍의 최단 거리를 구한다. 음수 간선은 허용하며, 음수 사이클은 없다고 가정한다."""
 
 from math import inf
 
@@ -6,6 +6,7 @@ import pyvisalgo as va
 
 
 def floyd_warshall(count, edges, directed=False, vis=None):
+    """거리 행렬과 다음 정점 행렬을 반환한다. 시각화가 중단되면 None을 반환한다."""
     # 처음에는 자기 자신으로 가는 거리만 알고 있습니다.
     dist = [[inf] * count for _ in range(count)]
     # next_hop[i][j]는 i에서 j로 갈 때 i 바로 다음에 방문하는 정점입니다.
@@ -31,6 +32,7 @@ def floyd_warshall(count, edges, directed=False, vis=None):
         vis.initialize(dist, next_hop)
 
     # k번째 바퀴를 마치면 0부터 k까지의 정점을 경유하는 경로를 고려한 상태입니다.
+    # k를 바깥 루프에 두면 이전 단계의 모든 최단 거리를 구한 뒤 이번 단계에서 사용할 수 있습니다.
     for k in range(count):
         if vis:
             if vis.stopped():
@@ -74,4 +76,6 @@ if __name__ == "__main__":
             for name, row in zip(data.vertices, dist):
                 print(name, row)
             vis.finish()
+        # 실행 중 Enter: 현재 k가 끝날 때까지 진행. 일시정지 또는 완료 상태에서 k 클릭: 단계 조회.
+        # 행렬의 칸에 마우스를 올리면 표시 중인 단계의 경로를 확인할 수 있습니다.
         vis.wait()
