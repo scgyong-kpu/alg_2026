@@ -66,29 +66,25 @@ def floyd_warshall(count, edges, directed=False, vis=None):
 
 
 def floyd_warshall_without_vis(count, edges, directed=False):
-    """시각화 없이 최단 거리와 경로 복원에 필요한 다음 정점을 구한다."""
-    dist = [[inf] * count for _ in range(count)]
-    next_hop = [[None] * count for _ in range(count)]
+    """각 칸에 (최단 거리, 경로의 다음 정점)이 들어 있는 행렬을 반환한다."""
+    dist = [[(inf, None)] * count for _ in range(count)]
     for i in range(count):
-        dist[i][i] = 0
-        next_hop[i][i] = i
+        dist[i][i] = (0, i)
 
     for u, v, weight in edges:
-        if weight < dist[u][v]:
-            dist[u][v] = weight
-            next_hop[u][v] = v
-        if not directed and weight < dist[v][u]:
-            dist[v][u] = weight
-            next_hop[v][u] = u
+        if weight < dist[u][v][0]:
+            dist[u][v] = (weight, v)
+        if not directed and weight < dist[v][u][0]:
+            dist[v][u] = (weight, u)
 
     for k in range(count):
         for i in range(count):
+            to_k, first_hop = dist[i][k]
             for j in range(count):
-                via = dist[i][k] + dist[k][j]
-                if via < dist[i][j]:
-                    dist[i][j] = via
-                    next_hop[i][j] = next_hop[i][k]
-    return dist, next_hop
+                via = to_k + dist[k][j][0]
+                if via < dist[i][j][0]:
+                    dist[i][j] = (via, first_hop)
+    return dist
 
 
 if __name__ == "__main__":
