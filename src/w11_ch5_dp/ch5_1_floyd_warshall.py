@@ -16,6 +16,19 @@ def floyd_warshall(count, edges, directed=False, vis=None):
         # 자기 자신이 목적지라면 이동할 필요가 없으므로 i를 기록합니다.
         next_hop[i][i] = i
 
+    # 직접 갈 수 있는 간선의 비용과 첫 방문 정점을 기록합니다.
+    for u, v, weight in edges:
+        # 방향 그래프의 간선은 u에서 v로만 갈 수 있는 단방향 간선입니다.
+        if weight < dist[u][v]:
+            dist[u][v] = weight
+            next_hop[u][v] = v
+        # 무방향 그래프일 때만 반대 방향(v에서 u)도 기록합니다.
+        if not directed and weight < dist[v][u]:
+            dist[v][u] = weight
+            next_hop[v][u] = u
+
+    if vis:
+        vis.initialize(dist, next_hop)
     return dist, next_hop
 
 
