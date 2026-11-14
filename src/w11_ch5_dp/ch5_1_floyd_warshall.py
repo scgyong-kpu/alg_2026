@@ -65,6 +65,32 @@ def floyd_warshall(count, edges, directed=False, vis=None):
     return dist, next_hop
 
 
+def floyd_warshall_without_vis(count, edges, directed=False):
+    """시각화 없이 최단 거리와 경로 복원에 필요한 다음 정점을 구한다."""
+    dist = [[inf] * count for _ in range(count)]
+    next_hop = [[None] * count for _ in range(count)]
+    for i in range(count):
+        dist[i][i] = 0
+        next_hop[i][i] = i
+
+    for u, v, weight in edges:
+        if weight < dist[u][v]:
+            dist[u][v] = weight
+            next_hop[u][v] = v
+        if not directed and weight < dist[v][u]:
+            dist[v][u] = weight
+            next_hop[v][u] = u
+
+    for k in range(count):
+        for i in range(count):
+            for j in range(count):
+                via = dist[i][k] + dist[k][j]
+                if via < dist[i][j]:
+                    dist[i][j] = via
+                    next_hop[i][j] = next_hop[i][k]
+    return dist, next_hop
+
+
 if __name__ == "__main__":
     vis = va.visualizer("floyd_warshall")
     while va.running():
