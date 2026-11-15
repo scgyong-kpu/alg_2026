@@ -80,11 +80,26 @@ def chained_matrix_mult(sizes, vis=None):
     return cost, split
 
 
+def optimal_order(split, left, right):
+    """양 끝을 포함한 구간의 최적 괄호 묶음을 저장된 분할 위치로 복원한다."""
+    if left == right:
+        return f"A{left}"
+    # mid는 왼쪽 구간에 포함됩니다. 두 부분을 각각 복원한 뒤 괄호로 묶습니다.
+    mid = split[left][right]
+    return f"({optimal_order(split, left, mid)} × {optimal_order(split, mid + 1, right)})"
+
+
 if __name__ == "__main__":
     vis = va.visualizer("chained_matrix_mult")
     while va.running():
         data = va.next_data(__file__)
         vis.setup(data)
-        chained_matrix_mult(data.sizes, vis)
+        result = chained_matrix_mult(data.sizes, vis)
+        if result is not None:
+            cost, split = result
+            order = optimal_order(split, 0, len(data.sizes) - 2)
+            print("최소 곱셈 횟수:", cost[0][-1])
+            print("최적 괄호 묶음:", order)
+            vis.finish(order)
         # Enter: 현재 구간까지 계산. V: 표/역삼각형. H: 설명.
         vis.wait()
