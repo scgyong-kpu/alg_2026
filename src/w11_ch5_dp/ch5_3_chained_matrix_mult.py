@@ -38,16 +38,28 @@ def multiplication_orders(sizes, vis=None):
     return best_cost, best_order
 
 
+def chained_matrix_mult(sizes, vis=None):
+    """sizes[i], sizes[i+1]이 행렬 Ai의 행 수와 열 수다."""
+    if len(sizes) < 2 or any(type(size) is not int or size <= 0 for size in sizes):
+        raise ValueError("양의 정수로 된 행렬 차원이 두 개 이상 필요합니다.")
+    count = len(sizes) - 1
+    # cost[i][j]는 양 끝을 포함한 Ai..Aj의 최소 스칼라 곱셈 횟수입니다.
+    # 대각선 cost[i][i]는 행렬 하나뿐이므로 곱셈이 필요 없어 0입니다.
+    cost = [[0] * count for _ in range(count)]
+    # split[i][j]에는 마지막 곱셈에서 왼쪽 구간의 끝 인덱스를 기록할 예정입니다.
+    split = [[None] * count for _ in range(count)]
+    if vis:
+        vis.start(sizes, cost, split)
+        if vis.stopped():
+            return None
+    return cost, split
+
+
 if __name__ == "__main__":
     vis = va.visualizer("chained_matrix_mult")
     while va.running():
         data = va.next_data(__file__)
         vis.setup(data)
-        result = multiplication_orders(data.sizes, vis)
-        if result is not None:
-            cost, order = result
-            print("최소 곱셈 횟수:", cost)
-            print("최적 괄호 묶음:", order)
-            vis.finish_orders()
-        # Enter: 나머지 실행 순서까지 나열. 휠: 목록 스크롤. D / Shift+D: 다음 / 이전 데이터.
+        chained_matrix_mult(data.sizes, vis)
+        # Enter: 초기값 채우기 완료까지 진행. V: 표/역삼각형. H: 설명.
         vis.wait()
