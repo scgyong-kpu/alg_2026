@@ -53,8 +53,8 @@ def chained_matrix_mult(sizes, vis=None):
         if vis.stopped():
             return None
 
-    # 먼저 행렬 두 개짜리 구간만 계산합니다.
-    for length in range(2, min(2, count) + 1):
+    # 길이 2의 결과를 재사용하며 행렬 세 개짜리 구간까지 계산합니다.
+    for length in range(2, min(3, count) + 1):
         for left in range(count - length + 1):
             right = left + length - 1  # 양 끝 포함: Aleft부터 Aright까지.
             cost[left][right] = inf
