@@ -4,7 +4,18 @@ import pyvisalgo as va
 
 
 def matrix_mult(a, b, vis=None):
-    pass
+    if not a or not b or not b[0]:
+        raise ValueError("비어 있지 않은 두 행렬이 필요합니다.")
+    rows, common, cols = len(a), len(b), len(b[0])
+    if any(len(row) != cols for row in b):
+        raise ValueError("오른쪽 행렬의 모든 행은 길이가 같아야 합니다.")
+    if any(len(row) != common for row in a):
+        raise ValueError("왼쪽 행렬의 열 수와 오른쪽 행렬의 행 수가 같아야 합니다.")
+
+    result = [[0] * cols for _ in range(rows)]
+    if vis:
+        vis.start(a, b, result)
+    return result
 
 
 if __name__ == "__main__":
