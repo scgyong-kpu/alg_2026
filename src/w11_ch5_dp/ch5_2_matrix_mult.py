@@ -15,6 +15,17 @@ def matrix_mult(a, b, vis=None):
     result = [[0] * cols for _ in range(rows)]
     if vis:
         vis.start(a, b, result)
+
+    for i in range(rows):
+        for j in range(cols):
+            for k in range(common):
+                if vis and vis.stopped():
+                    return None
+                result[i][j] += a[i][k] * b[k][j]
+                if vis:
+                    vis.accumulate(i, j, k)
+    if vis and vis.stopped():
+        return None
     return result
 
 
@@ -23,6 +34,7 @@ if __name__ == "__main__":
     while va.running():
         data = va.next_data(__file__)
         vis.setup(data)
-        matrix_mult(data.a, data.b, vis)
+        if matrix_mult(data.a, data.b, vis) is not None:
+            vis.finish()
         # Enter: 현재 결과 칸까지 계산. D / Shift+D: 다음 / 이전 데이터.
         vis.wait()
