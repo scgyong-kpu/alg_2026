@@ -36,6 +36,8 @@ from .visualizers.job_sched import JobScheduleVisualizer
 from .visualizers.set_cover import CitySetCoverVisualizer, SetCoverVisualizer
 from .visualizers.heap_queue import HeapQueueVisualizer
 from .visualizers.knight import KnightsTourVisualizer
+from .visualizers.matrix import MatrixMultiplicationVisualizer
+from .visualizers.chained_matrix import ChainedMatrixVisualizer
 
 
 def visualizer(name, enabled=True):
@@ -108,6 +110,10 @@ def visualizer(name, enabled=True):
         return EulerCircuitVisualizer("Euler Circuit")
     if name == "floyd_warshall":
         return FloydWarshallVisualizer("Floyd-Warshall")
+    if name == "matrix_mult":
+        return MatrixMultiplicationVisualizer("Matrix Multiplication")
+    if name == "chained_matrix_mult":
+        return ChainedMatrixVisualizer("Chained Matrix Multiplication")
     if name == "knights_tour":
         return KnightsTourVisualizer("Knight's Tour")
     return DummyVisualizer()
@@ -134,6 +140,8 @@ __all__ = [
     "InsertionSortVisualizer",
     "KnightsTourVisualizer",
     "KruskalVisualizer",
+    "MatrixMultiplicationVisualizer",
+    "ChainedMatrixVisualizer",
     "PrimVisualizer",
     "DijkstraVisualizer",
     "AStarVisualizer",

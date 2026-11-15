@@ -269,13 +269,14 @@ class BaseVisualizer:
 
     def rect(self, x, y, width, height, fill, border=colors.BORDER, radius=8):
         screen_rect = pygame.Rect(self.view.rect(x, y, width, height))
-        pygame.draw.rect(self.screen, fill, screen_rect, border_radius=self.view.length(radius))
+        border_radius = self.view.length(radius) if radius > 0 else 0
+        pygame.draw.rect(self.screen, fill, screen_rect, border_radius=border_radius)
         pygame.draw.rect(
             self.screen,
             border,
             screen_rect,
             width=self.view.length(2),
-            border_radius=self.view.length(radius),
+            border_radius=border_radius,
         )
 
     def _draw_messages(self):
