@@ -52,6 +52,31 @@ def chained_matrix_mult(sizes, vis=None):
         vis.start(sizes, cost, split)
         if vis.stopped():
             return None
+
+    # 먼저 행렬 두 개짜리 구간만 계산합니다.
+    for length in range(2, min(2, count) + 1):
+        for left in range(count - length + 1):
+            right = left + length - 1  # 양 끝 포함: Aleft부터 Aright까지.
+            cost[left][right] = inf
+            for mid in range(left, right):
+                if vis and vis.stopped():
+                    return None
+                # mid는 왼쪽에 포함: [left..mid]와 [mid+1..right].
+                candidate = (cost[left][mid] + cost[mid + 1][right]
+                             + sizes[left] * sizes[mid + 1] * sizes[right + 1])
+                if vis:
+                    vis.compare(left, right, mid, candidate)
+                    if vis.stopped():
+                        return None
+                if candidate < cost[left][right]:
+                    cost[left][right] = candidate
+                    split[left][right] = mid
+                    if vis:
+                        vis.update_cost()
+            if vis:
+                vis.end_range()
+    if vis and vis.stopped():
+        return None
     return cost, split
 
 
@@ -61,5 +86,5 @@ if __name__ == "__main__":
         data = va.next_data(__file__)
         vis.setup(data)
         chained_matrix_mult(data.sizes, vis)
-        # Enter: 초기값 채우기 완료까지 진행. V: 표/역삼각형. H: 설명.
+        # Enter: 현재 구간까지 계산. V: 표/역삼각형. H: 설명.
         vis.wait()
