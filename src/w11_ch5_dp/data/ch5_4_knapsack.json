@@ -1,0 +1,14 @@
+{
+  "datasets": [
+    {"name": "물건 4개: 기본 예제", "data": {"weights": [5, 4, 6, 3], "values": [10, 40, 30, 50], "capacity": 10}},
+    {"name": "최대공약수로 무게 단위 줄이기", "data": {"weights": [3, 6, 15, 18], "values": [10, 18, 35, 42], "capacity": 60, "normalize_weights": true}},
+    {"name": "물건 2개: 하나가 너무 무거움", "data": {"weights": [2, 7], "values": [8, 30], "capacity": 5}},
+    {"name": "가치 밀도 순으로 담으면 실패", "data": {"weights": [2, 3, 4], "values": [12, 16, 20], "capacity": 7}},
+    {"name": "동점: 기존 선택 유지", "data": {"weights": [2, 2, 4], "values": [6, 6, 12], "capacity": 4}},
+    {"name": "같은 무게라도 가치가 다름", "data": {"weights": [3, 3, 3, 3], "values": [4, 9, 6, 8], "capacity": 6}},
+    {"name": "최적해에 남는 용량이 있음", "data": {"weights": [2, 4, 6, 8], "values": [5, 11, 15, 19], "capacity": 9}},
+    {"name": "물건 6개: 여러 조합 비교", "data": {"weights": [2, 5, 4, 6, 3, 7], "values": [6, 16, 13, 19, 10, 22], "capacity": 13}},
+    {"name": "물건 7개: 작은 물건의 조합", "data": {"weights": [1, 2, 2, 3, 3, 4, 6], "values": [2, 5, 6, 8, 9, 12, 17], "capacity": 15}},
+    {"name": "용량 0: 아무것도 담지 않음", "data": {"weights": [1, 2, 3], "values": [3, 6, 9], "capacity": 0}}
+  ]
+}
