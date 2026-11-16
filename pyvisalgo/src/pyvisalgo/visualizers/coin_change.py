@@ -163,7 +163,13 @@ class CoinChangeVisualizer(BaseVisualizer):
         if self.count is None:
             return
         for i, coin in enumerate(self.coins):
-            self._draw_coin(coin, 104 + i * 65, 131, 23, coin == self.coin)
+            x = 104 + i * 65
+            active = coin == self.coin
+            self._draw_coin(coin, x, 131, 23, active)
+            if active:
+                pygame.draw.line(self.screen, self.coin_inks[coin],
+                                 self.view.point(x - 17, 162), self.view.point(x + 17, 162),
+                                 self.view.length(3))
         self.right_text(f"목표 금액 {self.amount}", 1510, 112, 24, colors.TEXT, True)
         self._draw_summary()
         for money in range(self.amount + 1):
