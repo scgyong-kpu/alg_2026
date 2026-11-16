@@ -17,7 +17,7 @@ def coin_change(coins, amount, vis=None):
         if vis.stopped():
             return None
 
-    # 이번 단계에서는 금액 1의 후보만 살펴본다.
+    # 이번 단계에서는 금액 1에 대해서만 최솟값을 구한다.
     for money in range(1, min(amount, 1) + 1):
         for coin in coins:
             # 남은 금액을 만드는 데 필요한 동전 수에 지금 동전 하나를 더한다.
@@ -27,6 +27,18 @@ def coin_change(coins, amount, vis=None):
                 vis.compare(money, coin, candidate)
                 if vis.stopped():
                     return None
+            # 동전 수가 줄어들 때만 새 조합을 기록한다.
+            if candidate < count[money]:
+                count[money] = candidate
+                last_coin[money] = coin
+                if vis:
+                    vis.place()
+                    if vis.stopped():
+                        return None
+        if vis:
+            vis.end_amount(money)
+            if vis.stopped():
+                return None
     return count, last_coin
 
 
