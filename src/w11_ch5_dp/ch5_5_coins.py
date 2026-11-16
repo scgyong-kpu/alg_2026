@@ -17,8 +17,8 @@ def coin_change(coins, amount, vis=None):
         if vis.stopped():
             return None
 
-    # 이번 단계에서는 금액 1에 대해서만 최솟값을 구한다.
-    for money in range(1, min(amount, 1) + 1):
+    # 동전의 값은 양수이므로 남은 금액의 최솟값을 먼저 구할 수 있도록 오름차순으로 계산한다.
+    for money in range(1, amount + 1):
         for coin in coins:
             # 남은 금액을 만드는 데 필요한 동전 수에 지금 동전 하나를 더한다.
             previous = money - coin
@@ -48,5 +48,5 @@ if __name__ == "__main__":
         data = va.next_data(__file__)
         vis.setup(data)
         coin_change(data.coins, data.amount, vis)
-        # H: 설명 숨기기/표시. D / Shift+D: 다음 / 이전 데이터.
+        # Enter: 초기화 또는 현재 금액의 계산 완료까지. H: 설명. D / Shift+D: 다음 / 이전 데이터.
         vis.wait()
