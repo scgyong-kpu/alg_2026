@@ -31,6 +31,8 @@ from .visualizers.prim import PrimVisualizer
 from .visualizers.dijkstra import DijkstraVisualizer
 from .visualizers.astar import AStarVisualizer
 from .visualizers.knapsack import FractionalKnapsackVisualizer
+from .visualizers.knapsack_dp import KnapsackDpVisualizer
+from .visualizers.coin_change import CoinChangeVisualizer
 from .visualizers.huffman import HuffmanVisualizer
 from .visualizers.job_sched import JobScheduleVisualizer
 from .visualizers.set_cover import CitySetCoverVisualizer, SetCoverVisualizer
@@ -86,6 +88,10 @@ def visualizer(name, enabled=True):
         return AStarVisualizer("A*")
     if name == "knapsack_greedy":
         return FractionalKnapsackVisualizer("Fractional Knapsack")
+    if name == "knapsack_dp":
+        return KnapsackDpVisualizer("0-1 Knapsack")
+    if name == "coin_change":
+        return CoinChangeVisualizer("Coin Change")
     if name == "huffman":
         return HuffmanVisualizer("Huffman Coding")
     if name == "job_sched":
@@ -146,6 +152,8 @@ __all__ = [
     "DijkstraVisualizer",
     "AStarVisualizer",
     "FractionalKnapsackVisualizer",
+    "KnapsackDpVisualizer",
+    "CoinChangeVisualizer",
     "MergeSortVisualizer",
     "MergeBattleVisualizer",
     "MergeSortHeroWarsVisualizer",
