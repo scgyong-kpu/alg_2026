@@ -12,6 +12,24 @@ def knapsack(weights, values, capacity, vis=None):
         vis.initialize(best)
         if vis.stopped():
             return None
+
+    # 첫 번째 물건만 고려한다. 담을 수 있는 용량부터는 다음 단계에서 계산한다.
+    for i in range(1, min(count, 1) + 1):
+        weight = weights[i - 1]
+        for w in range(1, capacity + 1):
+            if weight <= w:
+                break
+            # 물건을 담을 수 없으면 이전 물건까지 고려한 최댓값을 그대로 쓴다.
+            skip_value = best[i - 1][w]
+            if vis:
+                vis.compare(i, w, skip_value, None)
+                if vis.stopped():
+                    return None
+            best[i][w] = skip_value
+            if vis:
+                vis.place(False)
+                if vis.stopped():
+                    return None
     return best
 
 
