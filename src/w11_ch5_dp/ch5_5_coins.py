@@ -6,6 +6,10 @@ import pyvisalgo as va
 
 
 def coin_change(coins, amount, vis=None):
+    if (type(amount) is not int or amount < 0
+            or any(type(coin) is not int or coin <= 0 for coin in coins)):
+        raise ValueError("동전은 양의 정수, 목표 금액은 음이 아닌 정수여야 합니다.")
+
     # count[money]: 금액 money를 정확히 만드는 데 필요한 최소 동전 수.
     # 0은 동전 없이 만들 수 있고, 나머지는 아직 방법을 모르므로 inf로 둔다.
     count = [inf] * (amount + 1)
