@@ -1,5 +1,7 @@
 """물건을 쪼개지 않고, 각 물건을 최대 한 번 담아 가치를 최대화한다."""
 
+from math import gcd
+
 import pyvisalgo as va
 
 
@@ -60,6 +62,12 @@ if __name__ == "__main__":
     vis = va.visualizer("knapsack_dp")
     while va.running():
         data = va.next_data(__file__)
+        if getattr(data, "normalize_weights", False):
+            # 모든 조합의 총무게는 공약수의 배수이므로 용량을 나눈 나머지는 버려도 된다.
+            data.weight_unit = gcd(*data.weights) or 1
+            data.original_capacity = data.capacity
+            data.weights = [weight // data.weight_unit for weight in data.weights]
+            data.capacity //= data.weight_unit
         vis.setup(data)
         result = knapsack(data.weights, data.values, data.capacity, vis)
         if result is not None:
