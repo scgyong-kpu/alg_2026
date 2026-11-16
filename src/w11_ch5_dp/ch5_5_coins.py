@@ -39,7 +39,21 @@ def coin_change(coins, amount, vis=None):
             vis.end_amount(money)
             if vis.stopped():
                 return None
-    return count, last_coin
+
+    selected = []
+    if count[amount] != inf:
+        money = amount
+        while money > 0:
+            # 기록된 동전을 빼면 이 동전을 추가하기 전의 금액으로 돌아간다.
+            coin = last_coin[money]
+            selected.append(coin)
+            if vis:
+                vis.trace(money, coin)
+                if vis.stopped():
+                    return None
+            money -= coin
+        selected.reverse()  # 역추적에서 찾은 순서를 실제로 더한 순서로 뒤집는다.
+    return count[amount], selected
 
 
 if __name__ == "__main__":
@@ -47,6 +61,14 @@ if __name__ == "__main__":
     while va.running():
         data = va.next_data(__file__)
         vis.setup(data)
-        coin_change(data.coins, data.amount, vis)
-        # Enter: 초기화 또는 현재 금액의 계산 완료까지. H: 설명. D / Shift+D: 다음 / 이전 데이터.
+        result = coin_change(data.coins, data.amount, vis)
+        if result is not None:
+            minimum, selected = result
+            if minimum == inf:
+                print("목표 금액을 만들 수 없습니다:", data.amount)
+            else:
+                print("최소 동전 수:", minimum, "선택 동전:", selected)
+            vis.finish(minimum, selected)
+        # Enter: 초기화, 현재 금액의 계산 또는 역추적이 끝날 때까지.
+        # H: 설명. D / Shift+D: 다음 / 이전 데이터.
         vis.wait()
