@@ -13,14 +13,14 @@ def knapsack(weights, values, capacity, vis=None):
         if vis.stopped():
             return None
 
-    # 이번 단계에서는 첫 번째 물건을 고려하는 행만 계산한다.
-    for i in range(1, min(count, 1) + 1):
+    # 이전 행을 모두 채운 뒤 다음 물건을 고려한다.
+    for i in range(1, count + 1):
         weight, value = weights[i - 1], values[i - 1]
         for w in range(1, capacity + 1):
             skip_value = best[i - 1][w]
             take_value = None
             if weight <= w:
-                # 물건을 담고 남은 용량도 이전 행에서 조회한다.
+                # 이전 행을 조회해야 물건 i를 두 번 담지 않는다.
                 take_value = best[i - 1][w - weight] + value
             if vis:
                 vis.compare(i, w, skip_value, take_value)
@@ -43,5 +43,5 @@ if __name__ == "__main__":
         data = va.next_data(__file__)
         vis.setup(data)
         knapsack(data.weights, data.values, data.capacity, vis)
-        # Enter: 초기값 채우기 완료까지. H: 설명. D / Shift+D: 다음 / 이전 데이터.
+        # Enter: 초기화 또는 현재 행 완료까지. H: 설명. D / Shift+D: 다음 / 이전 데이터.
         vis.wait()
