@@ -20,17 +20,25 @@ def build_distances(positions, edges=None):
     return distances
 
 
+def build_graph_with_weight(count, edges):
+    """무방향 간선 목록을 가중치가 있는 인접 리스트로 바꾼다."""
+    # graph[u]는 이웃 v를 key로, 연결 비용을 value로 갖는 딕셔너리이다.
+    graph = {u: {} for u in range(count)}
+    for u, v, weight in edges:
+        graph[u][v] = weight
+        graph[v][u] = weight
+    return graph
+
+
 def prim(distances, start=0, edges=None):
     """(MST 간선 목록, 비용 합)을 반환한다."""
     # MST는 입력 간선만 사용한다. 없는 간선의 추정값을 후보에 추가하지 않는다.
     # 간선 목록이 없는 도시 배치 예제만 모든 쌍의 직선거리로 연결한다.
-    graph = {u: {} for u in range(len(distances))}
+    count = len(distances)
     if edges is None:
-        for u, row in enumerate(distances):
-            graph[u] = {v: weight for v, weight in enumerate(row) if u != v}
-    else:
-        for u, v, weight in edges:
-            graph[u][v] = graph[v][u] = weight
+        edges = [(u, v, distances[u][v])
+                 for u in range(count) for v in range(u + 1, count)]
+    graph = build_graph_with_weight(count, edges)
 
     # Prim에서 배운 것처럼 weights[정점] = [최소 연결 비용, 출발 정점]이다.
     completed = set()
