@@ -90,9 +90,40 @@ def prim(distances, start=0, edges=None):
     return mst, total_cost
 
 
-def make_walk(tree, distances, start=0):
+def make_walk(mst, distances, start=0):
     """MST의 각 간선을 양방향으로 한 번씩 지나는 왕복 방문 순서를 반환한다."""
-    pass
+    # 원본 mst는 보존하고, 순회에 사용할 가중치 없는 인접 목록을 여기서 만든다.
+    tree = build_graph_without_weight(len(distances), mst)
+    print("MST 인접 목록:", tree)
+    vis.begin_walk(tree, start)
+    # 이 인접 목록은 다시 쓰지 않으므로 복사하지 않고 tree에서 직접 지운다.
+    # 정상적으로 순회를 마치면 tree의 모든 이웃 집합이 비어 있게 된다.
+    visited = {start}
+    walk = [start]
+    current = start
+    cost = 0
+    while tree[current]:
+        if vis.stopped():
+            break
+        # 남은 이웃 중 아직 방문하지 않은 도시가 있으면 그쪽으로 먼저 간다.
+        # 없다면 트리에서는 되돌아갈 부모 방향 하나만 남아 있다.
+        unvisited = tree[current] - visited
+        # current -> neighbor만 지운다. 반대 방향은 돌아올 때 지운다.
+        if unvisited:
+            neighbor = unvisited.pop()
+            # unvisited는 별도 집합이므로 원래 이웃 집합에서도 지운다.
+            tree[current].remove(neighbor)
+        else:
+            neighbor = tree[current].pop()
+        returning = neighbor in visited
+        visited.add(neighbor)
+        walk.append(neighbor)
+        cost += distances[current][neighbor]
+        vis.travel(current, neighbor, walk, tree, cost, returning=returning)
+        current = neighbor
+    # 시작점으로 돌아와 남은 방향이 없으면 끝난다. 이동은 2(n-1)번이다.
+    # set 삭제는 평균 O(1)이지만 매번 차집합을 만들므로 전체는 최악 O(n^2)이다.
+    return walk
 
 
 def shortcut(walk):
@@ -117,10 +148,11 @@ def mst_tsp(positions, start=0, edges=None):
             vis.msg_action("입력 그래프가 연결되지 않아 전체 MST를 만들 수 없다.")
             return
     if not vis.stopped():
-        # 같은 간선 목록 형식이지만 이번에는 MST 간선만 넣고 가중치는 제외한다.
-        tree = build_graph_without_weight(len(positions), mst)
-        print("MST 인접 목록:", tree)
-        vis.begin_walk(tree, start)
+        walk = make_walk(mst, distances, start)
+        if not vis.stopped():
+            print("왕복 방문 순서:", walk)
+            print(f"왕복 거리: {2 * mst_cost:,.2f}")
+            vis.finish_walk(walk, 2 * mst_cost)
 
 
 if __name__ == "__main__":
