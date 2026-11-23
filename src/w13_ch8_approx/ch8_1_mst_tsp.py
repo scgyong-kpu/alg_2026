@@ -1,16 +1,73 @@
 """MST를 왕복한 뒤 중복 방문을 제거하여 TSP 근사 순회를 만든다."""
 
+import math
+
+from heapdict import heapdict
+
 import pyvisalgo as va
 
 
 def build_distances(positions, edges=None):
     """입력 간선은 원래 가중치로, 없는 간선은 좌표 기반 추정값으로 채운다."""
-    pass
+    # distances[u][v]는 도시 u에서 v로 이동할 비용이다. 자기 자신까지는 0이다.
+    # 없는 간선은 나중에 중복 방문을 건너뛸 때 사용할 수 있도록 직선거리로 추정한다.
+    # 계산값은 반올림하지 않고, 화면과 출력에서만 소수 자릿수를 줄인다.
+    distances = [[math.dist(a, b) for b in positions] for a in positions]
+    if edges is not None:
+        for u, v, weight in edges:
+            # 무방향 입력 간선은 원래 가중치를 양방향에 그대로 기록한다.
+            distances[u][v] = distances[v][u] = weight
+    return distances
 
 
 def prim(distances, start=0, edges=None):
     """(MST 간선 목록, 비용 합)을 반환한다."""
-    pass
+    # MST는 입력 간선만 사용한다. 없는 간선의 추정값을 후보에 추가하지 않는다.
+    # 간선 목록이 없는 도시 배치 예제만 모든 쌍의 직선거리로 연결한다.
+    graph = {u: {} for u in range(len(distances))}
+    if edges is None:
+        for u, row in enumerate(distances):
+            graph[u] = {v: weight for v, weight in enumerate(row) if u != v}
+    else:
+        for u, v, weight in edges:
+            graph[u][v] = graph[v][u] = weight
+
+    # Prim에서 배운 것처럼 weights[정점] = [최소 연결 비용, 출발 정점]이다.
+    completed = set()
+    weights = heapdict()
+    weights[start] = [0, start]
+    mst = []
+    total_cost = 0
+    vis.add_candidate(start, 0, start, weights, starting=True)
+    while weights:
+        if vis.stopped():
+            break
+        vertex, (cost, origin) = weights.popitem()
+        completed.add(vertex)
+        if vertex != origin:
+            mst.append((origin, vertex, cost))
+            total_cost += cost
+        vis.take_candidate(vertex, cost, origin, weights, total_cost)
+        neighbors = graph[vertex]
+        vis.show_neighbors(vertex, neighbors)
+        for neighbor, edge_cost in neighbors.items():
+            if vis.stopped():
+                break
+            vis.inspect_edge(vertex, neighbor, edge_cost)
+            if neighbor in completed:
+                vis.ignore_inland(vertex, neighbor)
+                continue
+            # 시작점부터의 누적 거리가 아니라 연결할 간선 하나의 비용을 비교한다.
+            old_candidate = weights.get(neighbor)
+            if old_candidate is None or edge_cost < old_candidate[0]:
+                weights[neighbor] = [edge_cost, vertex]
+                if old_candidate is None:
+                    vis.add_candidate(neighbor, edge_cost, vertex, weights)
+                else:
+                    vis.update_candidate(neighbor, *old_candidate, edge_cost, vertex, weights)
+            else:
+                vis.keep_candidate(neighbor, *old_candidate, edge_cost, vertex)
+    return mst, total_cost
 
 
 def build_tree(count, mst):
@@ -35,7 +92,14 @@ def tour_length(distances, route):
 
 def mst_tsp(positions, start=0, edges=None):
     """MST 구성, 왕복 순회, 중복 제거를 차례로 실행한다."""
-    pass
+    distances = build_distances(positions, edges)
+    mst, mst_cost = prim(distances, start, edges)
+    if not vis.stopped():
+        print("MST 간선:", mst)
+        print(f"MST 비용: {mst_cost:,.2f}")
+        vis.finish_mst(len(positions), mst, mst_cost)
+        if len(mst) != len(positions) - 1:
+            vis.msg_action("입력 그래프가 연결되지 않아 전체 MST를 만들 수 없다.")
 
 
 if __name__ == "__main__":
