@@ -28,6 +28,7 @@ from .visualizers.closest_pair import ClosestPairVisualizer
 from .visualizers.graph_representation import GraphRepresentationVisualizer
 from .visualizers.kruskal import KruskalVisualizer
 from .visualizers.prim import PrimVisualizer
+from .visualizers.mst_tsp import MstTspVisualizer
 from .visualizers.dijkstra import DijkstraVisualizer
 from .visualizers.astar import AStarVisualizer
 from .visualizers.knapsack import FractionalKnapsackVisualizer
@@ -82,6 +83,8 @@ def visualizer(name, enabled=True):
         return KruskalVisualizer("Kruskal")
     if name == "prim":
         return PrimVisualizer("Prim")
+    if name == "mst_tsp":
+        return MstTspVisualizer("TSP using MST")
     if name == "dijkstra":
         return DijkstraVisualizer("Dijkstra")
     if name == "astar":
@@ -149,6 +152,7 @@ __all__ = [
     "MatrixMultiplicationVisualizer",
     "ChainedMatrixVisualizer",
     "PrimVisualizer",
+    "MstTspVisualizer",
     "DijkstraVisualizer",
     "AStarVisualizer",
     "FractionalKnapsackVisualizer",
