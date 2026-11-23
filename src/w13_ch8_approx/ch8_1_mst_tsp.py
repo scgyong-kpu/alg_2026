@@ -157,7 +157,8 @@ def shortcut(walk):
 
 def tour_length(distances, route):
     """방문 순서에서 이웃한 도시 사이의 거리를 합산한다."""
-    pass
+    # 마지막에 시작점이 들어 있으면 그곳으로 돌아오는 거리도 합산된다.
+    return sum(distances[u][v] for u, v in zip(route, route[1:]))
 
 
 def mst_tsp(positions, start=0, edges=None):
@@ -174,13 +175,23 @@ def mst_tsp(positions, start=0, edges=None):
     if not vis.stopped():
         walk = make_walk(mst, distances, start)
         if not vis.stopped():
+            walk_cost = tour_length(distances, walk)
             print("왕복 방문 순서:", walk)
-            print(f"왕복 거리: {2 * mst_cost:,.2f}")
-            vis.finish_walk(walk, 2 * mst_cost)
+            print(f"왕복 거리: {walk_cost:,.2f}")
+            vis.finish_walk(walk, walk_cost)
     if not vis.stopped():
         route = shortcut(walk)
         if not vis.stopped():
             print("처음 방문한 도시 순서:", route)
+            # 도시를 한 번씩 방문한 뒤 시작점으로 돌아와 닫힌 순회를 만든다.
+            route.append(start)
+            vis.close_tour(route)
+            if not vis.stopped():
+                total_cost = tour_length(distances, route)
+                print("TSP 근사 순회:", route)
+                print(f"왕복 거리: {walk_cost:,.2f}")
+                print(f"지름길 적용 후 거리: {total_cost:,.2f}")
+                vis.finish_tour(route, total_cost)
 
 
 if __name__ == "__main__":
