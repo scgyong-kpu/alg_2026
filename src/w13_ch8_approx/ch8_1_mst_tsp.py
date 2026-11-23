@@ -128,7 +128,31 @@ def make_walk(mst, distances, start=0):
 
 def shortcut(walk):
     """왕복 방문 순서에서 중복 도시를 제외한다."""
-    pass
+    # 원래 왕복 순서는 보존하고 복사한 목록에서 중복 항목을 지운다.
+    remaining = list(walk)
+    visited = set()
+    route = []
+    index = 0
+    vis.begin_shortcut(remaining)
+    if len(walk) == 1:
+        vis.shortcut_step(0, walk)
+        return list(walk)
+    # 마지막 시작점은 순회를 닫기 위한 것이므로 여기서는 검사하지 않는다.
+    while index < len(remaining) - 1:
+        if vis.stopped():
+            break
+        vertex = remaining[index]
+        if vertex in visited:
+            remaining.pop(index)
+            vis.show_shortcut(vis.walk, index, remaining, route)
+            # 다음 항목이 삭제한 자리로 당겨졌으므로 index를 증가시키지 않는다.
+        else:
+            visited.add(vertex)
+            route.append(vertex)
+            vis.shortcut_step(index, route)
+            index += 1
+    # 집합 조회는 평균 O(1)이지만 리스트 중간 삭제 때문에 전체는 최악 O(n^2)이다.
+    return route
 
 
 def tour_length(distances, route):
@@ -153,6 +177,10 @@ def mst_tsp(positions, start=0, edges=None):
             print("왕복 방문 순서:", walk)
             print(f"왕복 거리: {2 * mst_cost:,.2f}")
             vis.finish_walk(walk, 2 * mst_cost)
+    if not vis.stopped():
+        route = shortcut(walk)
+        if not vis.stopped():
+            print("처음 방문한 도시 순서:", route)
 
 
 if __name__ == "__main__":
