@@ -30,6 +30,18 @@ def build_graph_with_weight(count, edges):
     return graph
 
 
+def build_graph_without_weight(count, edges):
+    """무방향 간선 목록을 가중치가 없는 이웃 집합으로 바꾼다."""
+    # Prim은 연결 비용이 필요했지만 MST를 순회할 때는 이웃 번호만 있으면 된다.
+    # graph[u]는 u와 연결된 정점 번호의 set이다. 가중치는 저장하지 않는다.
+    graph = {u: set() for u in range(count)}
+    for u, v, _ in edges:
+        graph[u].add(v)
+        graph[v].add(u)
+    # set은 순서를 보장하지 않으므로 이후의 방문 순서는 달라질 수 있다.
+    return graph
+
+
 def prim(distances, start=0, edges=None):
     """(MST 간선 목록, 비용 합)을 반환한다."""
     # MST는 입력 간선만 사용한다. 없는 간선의 추정값을 후보에 추가하지 않는다.
@@ -78,11 +90,6 @@ def prim(distances, start=0, edges=None):
     return mst, total_cost
 
 
-def build_tree(count, mst):
-    """MST 간선 목록을 양방향 인접 리스트로 바꾼다."""
-    pass
-
-
 def make_walk(tree, distances, start=0):
     """MST의 각 간선을 양방향으로 한 번씩 지나는 왕복 방문 순서를 반환한다."""
     pass
@@ -108,6 +115,12 @@ def mst_tsp(positions, start=0, edges=None):
         vis.finish_mst(len(positions), mst, mst_cost)
         if len(mst) != len(positions) - 1:
             vis.msg_action("입력 그래프가 연결되지 않아 전체 MST를 만들 수 없다.")
+            return
+    if not vis.stopped():
+        # 같은 간선 목록 형식이지만 이번에는 MST 간선만 넣고 가중치는 제외한다.
+        tree = build_graph_without_weight(len(positions), mst)
+        print("MST 인접 목록:", tree)
+        vis.begin_walk(tree, start)
 
 
 if __name__ == "__main__":
