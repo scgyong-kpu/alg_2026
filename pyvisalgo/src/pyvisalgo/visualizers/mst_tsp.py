@@ -98,13 +98,16 @@ class MstTspVisualizer(PrimVisualizer):
         self.reset_plane()
 
     def _draw_messages(self):
+        speed_label = "속도: max" if self.is_max_speed() else f"속도: {self.speed:g}x"
         if self.hidden:
             self.text("H: 설명 표시   Shift+Enter: MST 완성까지   E: 전체 간선   휠: 확대/축소·목록   드래그: 이동",
                       45, 866, 18, colors.TEXT_MUTED)
+            self.text(speed_label, 1380, 866, 18, colors.YELLOW)
         else:
             self.rect(45, 730, 1510, 125, colors.PANEL_DARK, colors.BORDER, radius=6)
             self.text(self.messages["phase"], 65, 744, 21, colors.BLUE, True)
-            self._fit_text(self.messages["dataset"], 430, 746, 1100, 18)
+            self._fit_text(self.messages["dataset"], 430, 746, 920, 18)
+            self.text(speed_label, 1380, 746, 18, colors.YELLOW)
             self._fit_text(self.messages["action"], 65, 777, 1460, 24)
             self._fit_text(self.messages["detail"], 65, 817, 1460, 20)
             self._fit_text(self.messages["hint"], 45, 868, 1510, 17)
@@ -396,7 +399,7 @@ class MstTspVisualizer(PrimVisualizer):
         trim = min(22, delta.length() / 4)
         return a + direction * trim + offset, b - direction * trim + offset
 
-    def _line(self, u, v, color, width=3, arrow=False, alpha=255, lane=0):
+    def _line(self, u, v, color, width=3, arrow=False, alpha=255, lane=0, layer=None):
         segment = self._line_segment(u, v, lane)
         if segment is None:
             return
@@ -404,7 +407,9 @@ class MstTspVisualizer(PrimVisualizer):
             color = self.estimated_color
         a, b = segment
         direction = (b - a).normalize()
-        layer = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA) if alpha < 255 else self.screen
+        composite = layer is None and alpha < 255
+        if layer is None:
+            layer = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA) if composite else self.screen
         ink = (*color, alpha) if alpha < 255 else color
         pygame.draw.line(layer, ink, self.view.point(*a), self.view.point(*b), self.view.length(width))
         if arrow:
@@ -413,7 +418,7 @@ class MstTspVisualizer(PrimVisualizer):
             pygame.draw.polygon(layer, ink, [self.view.point(*middle),
                                 self.view.point(*(middle - direction * 13 + normal * 6)),
                                 self.view.point(*(middle - direction * 13 - normal * 6))])
-        if alpha < 255:
+        if composite:
             self.screen.blit(layer, (0, 0))
 
     def _walk_segments(self):
@@ -536,20 +541,30 @@ class MstTspVisualizer(PrimVisualizer):
     def _draw_graph(self):
         previous = self.screen.get_clip()
         self.screen.set_clip(self.plane_screen_rect())
+        # 반투명 배경 간선을 재사용하는 레이어 하나에 모아 한 번만 합성한다.
+        layer = getattr(self, "edge_layer", None)
+        if layer is None or layer.get_size() != self.screen.get_size():
+            layer = self.edge_layer = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA)
+        layer.set_clip(None)
+        layer.fill((0, 0, 0, 0))
+        layer.set_clip(self.screen.get_clip())
         # 원래 입력 간선은 항상 배경에 남기고 추정 간선과 구별한다.
         for u, v, _ in self.edges:
-            self._line(u, v, colors.BORDER, 1, alpha=130 if self.has_input_edges or self.show_complete else 45)
+            self._line(u, v, colors.BORDER, 1, alpha=130 if self.has_input_edges or self.show_complete else 45,
+                       layer=layer)
         if self.show_complete:
             for u in range(len(self.names)):
                 for v in range(u + 1, len(self.names)):
                     if self._is_estimated(u, v):
-                        self._line(u, v, self.estimated_color, 1, alpha=70)
+                        self._line(u, v, self.estimated_color, 1, alpha=70, layer=layer)
         faded_mst = self.walk_finished or self.phase in ("shortcut", "done")
         for u, v in self.selected_edges:
             if faded_mst:
                 self._line(u, v, self.mst_dim_color, 1,
-                           alpha=130 if self.has_input_edges or self.show_complete else 45)
-            else:
+                           alpha=130 if self.has_input_edges or self.show_complete else 45, layer=layer)
+        self.screen.blit(layer, (0, 0))
+        if not faded_mst:
+            for u, v in self.selected_edges:
                 self._line(u, v, colors.GREEN, 3)
         if self.phase == "mst":
             for _, vertex, origin in self.heap:
