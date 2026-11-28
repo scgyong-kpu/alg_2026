@@ -1,4 +1,4 @@
-"""각 지점에 학교를 세우면 자기 자신과 바로 연결된 지점을 덮는다."""
+"""같은 그래프에서 정점으로 정점 또는 간선을 덮는다."""
 
 import pyvisalgo as va
 
@@ -50,14 +50,32 @@ def make_subsets(universe, edges):
     return [neighbors[city] for city in universe]
 
 
+def make_edge_subsets(vertices, edges):
+    incident = {vertex: set() for vertex in vertices}
+    for u, v in edges:
+        edge = (u, v)
+        incident[u].add(edge)
+        incident[v].add(edge)
+    return [incident[vertex] for vertex in vertices]
+
+
 if __name__ == "__main__":
-    vis = va.visualizer("set_cover_2d")
+    vis = va.visualizer("cover_comparison")
     while va.running():
         data = va.next_data(__file__)
-        data.subsets = make_subsets(data.universe, data.edges)
+        data.vertices = data.universe
+        if vis.cover_edges:
+            data.universe = [tuple(edge) for edge in data.edges]
+            data.subsets = make_edge_subsets(data.vertices, data.edges)
+            # 기존 최적해는 정점을 덮는 경우에 해당한다.
+            data.optimal_cover = None
+        else:
+            data.subsets = make_subsets(data.vertices, data.edges)
         vis.setup(data)
         chosen, uncovered = set_cover(data.universe, data.subsets, vis)
         if not vis.stopped():
-            print("학교를 세울 지점:", [data.universe[i] for i in chosen])
+            install_label = "CCTV를 설치할 교차로" if vis.cover_edges else "학교를 세울 지점"
+            print(f"{install_label}:", [data.vertices[i] for i in chosen])
             vis.finish(uncovered)
-        vis.wait()
+        if vis.wait() == "toggle_cover":
+            vis.mode = "vertices" if vis.cover_edges else "edges"

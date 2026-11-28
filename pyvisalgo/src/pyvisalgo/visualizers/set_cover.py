@@ -24,8 +24,11 @@ class SetCoverVisualizer(BaseVisualizer):
         self.current_element = None
         self.tallies = {}
         self.msg_phase("집합 커버")
-        self.msg_action("전체 집합을 덮을 부분집합을 고른다.")
+        self.msg_action(self._setup_action())
         self.wait(900)
+
+    def _setup_action(self):
+        return "전체 집합을 덮을 부분집합을 고른다."
 
     def compare(self, gains, best=None):
         self.gains = gains
@@ -176,8 +179,11 @@ class CitySetCoverVisualizer(SetCoverVisualizer):
     def _city_covered(self, city):
         return city not in self.uncovered
 
+    def _graph_label(self):
+        return "학교를 세울 지점"
+
     def _draw_universe(self):
-        self.text("학교를 세울 지점", 80, 128, 24, colors.BLUE, True)
+        self.text(self._graph_label(), 80, 128, 24, colors.BLUE, True)
         self.text(f"아직 덮지 못한 {self._target_label()}: {len(self.uncovered)}개", 80, 175, 22)
         height = 226 + self.graph_extra_height
         self.rect(80, 210, self.graph_width, height, colors.PANEL_DARK, colors.BORDER, radius=5)
@@ -279,6 +285,14 @@ class CoverComparisonVisualizer(CitySetCoverVisualizer):
         if self.cover_edges:
             return [edge for edge in subset if edge in self.uncovered]
         return super()._visible_elements(subset)
+
+    def _setup_action(self):
+        if self.cover_edges:
+            return "교차로에 CCTV를 설치해 연결된 골목길을 모두 비춘다."
+        return "학교를 세워 해당 지점과 이웃 지점을 덮는다."
+
+    def _graph_label(self):
+        return "CCTV를 설치할 교차로" if self.cover_edges else super()._graph_label()
 
     def _target_label(self):
         return "간선" if self.cover_edges else "정점"
