@@ -3,6 +3,14 @@
 import pyvisalgo as va
 
 
+# 탐욕 집합 커버의 근사비율은 H(d) 이하이며, H(d) <= 1 + ln(d)이다.
+# d는 가장 큰 후보 집합의 크기이고, H(d) = 1 + 1/2 + ... + 1/d이다.
+# 전체 원소가 n개라면 d <= n이므로 1 + ln(n)으로도 상한을 쓸 수 있다.
+# 정점 → 정점에서는 후보가 자기 자신과 이웃을 덮으므로 d = 최대 차수 + 1이다.
+# 정점 → 간선에서 d는 한 정점에 닿는 간선 수의 최댓값이며, m은 전체 간선 수이다.
+# d <= m이므로 1 + ln(m)도 이 모드의 상한이다.
+# 20정점 예제에서는 m = 33, d = 6이므로 H(d) = 2.45이다.
+# 탐욕법은 14개, 최적해는 6개를 골라 실제 근사비율은 14/6 ≈ 2.33이다.
 def set_cover(universe, subsets, vis=None):
     # uncovered: 아직 어느 후보도 덮지 않은 원소들의 집합입니다. 처음에는 전체 원소를 담습니다.
     uncovered = set(universe)
@@ -59,6 +67,10 @@ def make_edge_subsets(vertices, edges):
     return [incident[vertex] for vertex in vertices]
 
 
+# 극대 매칭의 양 끝점으로 만든 정점 커버는 최적해 크기의 최대 2배이다.
+# 매칭 간선이 k개이면 서로 끝점이 겹치지 않아 최적해도 최소 k개를 골라야 한다.
+# 이 방법은 매칭의 양 끝점을 모두 골라 2k개를 사용한다.
+# 간선 선택 순서에 따라 k는 달라질 수 있지만 2배 보장은 유지된다.
 def maximal_matching(edges, vis=None):
     """입력 순서대로 끝점이 겹치지 않는 간선을 고른다."""
     matching = []
