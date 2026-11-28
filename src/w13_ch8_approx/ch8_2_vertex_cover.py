@@ -59,6 +59,23 @@ def make_edge_subsets(vertices, edges):
     return [incident[vertex] for vertex in vertices]
 
 
+def maximal_matching(edges, vis=None):
+    """입력 순서대로 끝점이 겹치지 않는 간선을 고른다."""
+    matching = []
+    matched_vertices = set()
+    for u, v in edges:
+        if vis and vis.stopped():
+            break
+        if u in matched_vertices or v in matched_vertices:
+            continue
+        edge = (u, v)
+        matching.append(edge)
+        matched_vertices.update(edge)
+        if vis:
+            vis.match_edge(edge)
+    return matching
+
+
 if __name__ == "__main__":
     vis = va.visualizer("cover_comparison")
     while va.running():
@@ -72,10 +89,20 @@ if __name__ == "__main__":
         else:
             data.subsets = make_subsets(data.vertices, data.edges)
         vis.setup(data)
-        chosen, uncovered = set_cover(data.universe, data.subsets, vis)
-        if not vis.stopped():
-            install_label = "CCTV를 설치할 교차로" if vis.cover_edges else "학교를 세울 지점"
-            print(f"{install_label}:", [data.vertices[i] for i in chosen])
-            vis.finish(uncovered)
-        if vis.wait() == "toggle_cover":
+        if vis.mode == "matching":
+            matching = maximal_matching(data.universe, vis)
+            if not vis.stopped():
+                print("매칭 간선:", matching)
+                print("CCTV를 설치할 교차로:", [vertex for edge in matching for vertex in edge])
+                vis.finish_matching()
+        else:
+            chosen, uncovered = set_cover(data.universe, data.subsets, vis)
+            if not vis.stopped():
+                install_label = "CCTV를 설치할 교차로" if vis.cover_edges else "학교를 세울 지점"
+                print(f"{install_label}:", [data.vertices[i] for i in chosen])
+                vis.finish(uncovered)
+        action = vis.wait()
+        if action == "toggle_cover":
             vis.mode = "vertices" if vis.cover_edges else "edges"
+        elif action == "toggle_matching":
+            vis.mode = "edges" if vis.mode == "matching" else "matching"
