@@ -36,7 +36,7 @@ from .visualizers.knapsack_dp import KnapsackDpVisualizer
 from .visualizers.coin_change import CoinChangeVisualizer
 from .visualizers.huffman import HuffmanVisualizer
 from .visualizers.job_sched import JobScheduleVisualizer
-from .visualizers.set_cover import CitySetCoverVisualizer, SetCoverVisualizer
+from .visualizers.set_cover import CitySetCoverVisualizer, CoverComparisonVisualizer, SetCoverVisualizer
 from .visualizers.heap_queue import HeapQueueVisualizer
 from .visualizers.knight import KnightsTourVisualizer
 from .visualizers.matrix import MatrixMultiplicationVisualizer
@@ -101,6 +101,8 @@ def visualizer(name, enabled=True):
         return JobScheduleVisualizer("Job Scheduling")
     if name == "set_cover":
         return SetCoverVisualizer("Set Cover")
+    if name == "cover_comparison":
+        return CoverComparisonVisualizer("Set Cover")
     if name == "set_cover_2d":
         return CitySetCoverVisualizer("Set Cover: 학교 세우기")
     if name == "heap_queue":
