@@ -2,6 +2,8 @@
 
 from dataclasses import dataclass, field
 
+import pyvisalgo as va
+
 @dataclass
 class Bin:
     free: int
@@ -12,18 +14,32 @@ class Bin:
         self.free -= size
 
 
-def pack(items, capacity):
-    pass
+def pack(items, capacity, vis=None):
+    bins = []
+    if vis:
+        vis.start(bins)
+    for index, size in enumerate(items):
+        if vis:
+            vis.start_item(index)
+            if vis.stopped():
+                break
+        new_bin = Bin(capacity)
+        new_bin.add(size)
+        bins.append(new_bin)
+        if vis:
+            vis.place_item(index, opened=True)
+            if vis.stopped():
+                break
+    return bins
 
 
 if __name__ == "__main__":
-    sample = Bin(100)
-    sample.add(30)
-    assert sample.items == [30]
-    assert sample.free == 70
-    print(sample)
-
-    sample.add(45)
-    assert sample.items == [30, 45]
-    assert sample.free == 25
-    print(sample)
+    vis = va.visualizer("bin_packing")
+    while va.running():
+        data = va.next_data(__file__)
+        vis.setup(data, "Bin Packing")
+        bins = pack(data.array, data.capacity, vis)
+        if not vis.stopped():
+            print(f"통 {len(bins)}개")
+            vis.finish({"물건마다 새 통": len(bins)})
+        vis.wait()
