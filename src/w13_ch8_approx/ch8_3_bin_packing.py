@@ -1,6 +1,7 @@
 """주어진 순서대로 물건을 통에 담는 빈 패킹 실습."""
 
 from dataclasses import dataclass, field
+from random import randint
 
 import pyvisalgo as va
 
@@ -147,8 +148,9 @@ def compare_strategies(items, capacity, vis):
 if __name__ == "__main__":
     vis = va.visualizer("bin_packing")
     strategy_index = STRATEGY_FIRST_FIT
+    data = va.next_data(__file__)
+    results = {}
     while va.running():
-        data = va.next_data(__file__)
         if strategy_index == STRATEGY_COMPARE:
             vis.setup(data, "동시 비교")
             counts = compare_strategies(data.array, data.capacity, vis)
@@ -158,8 +160,18 @@ if __name__ == "__main__":
             bins = pack(data.array, data.capacity, strategy_index, vis)
             counts = {strategy: len(bins)}
         if not vis.stopped():
+            results.update(counts)
             for name, count in counts.items():
                 print(f"{name}: 통 {count}개")
-            vis.finish(counts)
-        if vis.wait() == "next_strategy":
+            vis.finish(results)
+        action = vis.wait()
+        if action == "next_strategy":
             strategy_index = (strategy_index + 1) % (len(STRATEGIES) + 1)
+        elif action in ("next_data", "previous_data"):
+            data = va.next_data(__file__)
+            results.clear()
+        elif action == "random_items":
+            count = randint(300, 500)
+            data = va.Data(array=[randint(1, 75) for _ in range(count)], capacity=100,
+                           _dataset_name=f"무작위 물건 {count}개")
+            results.clear()
