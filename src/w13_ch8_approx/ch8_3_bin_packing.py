@@ -86,6 +86,20 @@ STRATEGIES = [
     ("Best Fit", best_fit),
     ("Worst Fit", worst_fit),
 ]
+STRATEGY_COMPARE = len(STRATEGIES)
+
+
+def place_in_bin(size, bins, capacity, select_bin, vis=None):
+    target = select_bin(size, bins, vis)  # 기존 통의 인덱스 또는 None
+    if vis and vis.stopped():
+        return None
+    if target is None:
+        bin_index = len(bins)
+        bins.append(Bin(capacity))
+    else:
+        bin_index = target
+    bins[bin_index].add(size)
+    return bin_index, target is None
 
 
 def pack(items, capacity, strategy_index, vis=None):
@@ -98,20 +112,33 @@ def pack(items, capacity, strategy_index, vis=None):
             vis.start_item(index)
             if vis.stopped():
                 break
-        target = select_bin(size, bins, vis)  # 기존 통의 인덱스 또는 None
-        if vis and vis.stopped():
+        placement = place_in_bin(size, bins, capacity, select_bin, vis)
+        if placement is None:
             break
-        if target is None:
-            bin_index = len(bins)
-            bins.append(Bin(capacity))
-        else:
-            bin_index = target
-        bins[bin_index].add(size)
+        bin_index, is_new_bin = placement
         if vis:
-            vis.place_item(bin_index, target is None)
+            vis.place_item(bin_index, is_new_bin)
             if vis.stopped():
                 break
     return bins
+
+
+def compare_strategies(items, capacity, vis):
+    bins_by_strategy = {name: [] for name, _ in STRATEGIES}
+    vis.start_comparison(bins_by_strategy)
+    for index, size in enumerate(items):
+        vis.start_item(index)
+        if vis.stopped():
+            break
+
+        # 같은 물건을 네 전략에 한 번씩 넣은 뒤 다음 물건으로 넘어간다.
+        placements = {}
+        for name, select_bin in STRATEGIES:
+            placements[name] = place_in_bin(size, bins_by_strategy[name], capacity, select_bin)
+        vis.place_comparison(placements)
+        if vis.stopped():
+            break
+    return {name: len(bins) for name, bins in bins_by_strategy.items()}
 
 
 if __name__ == "__main__":
@@ -119,11 +146,17 @@ if __name__ == "__main__":
     strategy_index = STRATEGY_FIRST_FIT
     while va.running():
         data = va.next_data(__file__)
-        strategy, _ = STRATEGIES[strategy_index]
-        vis.setup(data, strategy)
-        bins = pack(data.array, data.capacity, strategy_index, vis)
+        if strategy_index == STRATEGY_COMPARE:
+            vis.setup(data, "동시 비교")
+            counts = compare_strategies(data.array, data.capacity, vis)
+        else:
+            strategy, _ = STRATEGIES[strategy_index]
+            vis.setup(data, strategy)
+            bins = pack(data.array, data.capacity, strategy_index, vis)
+            counts = {strategy: len(bins)}
         if not vis.stopped():
-            print(f"{strategy}: 통 {len(bins)}개")
-            vis.finish({strategy: len(bins)})
+            for name, count in counts.items():
+                print(f"{name}: 통 {count}개")
+            vis.finish(counts)
         if vis.wait() == "next_strategy":
-            strategy_index = (strategy_index + 1) % len(STRATEGIES)
+            strategy_index = (strategy_index + 1) % (len(STRATEGIES) + 1)
