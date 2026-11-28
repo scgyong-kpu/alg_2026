@@ -67,15 +67,18 @@ def best_fit(size, bins, vis=None):
 
 def worst_fit(size, bins, vis=None):
     """물건이 들어가는 통 중 남은 공간이 가장 큰 통의 인덱스를 반환한다."""
-    candidates = fitting_bins(size, bins, vis)
-    if not candidates:
-        return None
-
-    # 남은 공간이 더 큰 통을 만나면 선택을 바꾼다.
-    worst_index = candidates[0]
-    for index in candidates[1:]:
-        if bins[index].free > bins[worst_index].free:
+    worst_index = None
+    for index, current_bin in enumerate(bins):
+        if vis:
+            vis.inspect_bin(index, current_bin.free)
+            if vis.stopped():
+                return None
+        if worst_index is None or current_bin.free > bins[worst_index].free:
             worst_index = index
+
+    # 가장 여유 있는 통에도 들어가지 않으면 어느 통에도 들어가지 않는다.
+    if worst_index is None or bins[worst_index].free < size:
+        return None
     return worst_index
 
 
