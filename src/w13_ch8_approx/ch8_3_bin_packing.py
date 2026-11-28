@@ -16,8 +16,14 @@ class Bin:
 
 def first_fit(size, bins, vis=None):
     """물건이 들어가는 첫 번째 통의 인덱스를 반환한다. 없으면 None을 반환한다."""
-    candidates = filter(lambda index: bins[index].free >= size, range(len(bins)))
-    return next(candidates, None)
+    for index, current_bin in enumerate(bins):
+        if vis:
+            vis.inspect_bin(index, current_bin.free)
+            if vis.stopped():
+                break
+        if current_bin.free >= size:
+            return index
+    return None
 
 
 def next_fit(size, bins, vis=None):
@@ -33,16 +39,44 @@ def next_fit(size, bins, vis=None):
     return None
 
 
+def fitting_bins(size, bins, vis=None):
+    candidates = []
+    for index, current_bin in enumerate(bins):
+        if vis:
+            vis.inspect_bin(index, current_bin.free)
+            if vis.stopped():
+                break
+        if current_bin.free >= size:
+            candidates.append(index)
+    return candidates
+
+
 def best_fit(size, bins, vis=None):
     """물건이 들어가는 통 중 남은 공간이 가장 작은 통의 인덱스를 반환한다."""
-    candidates = filter(lambda index: bins[index].free >= size, range(len(bins)))
-    return min(candidates, key=lambda index: bins[index].free, default=None)
+    candidates = fitting_bins(size, bins, vis)
+    if not candidates:
+        return None
+
+    # 첫 후보를 기준으로 나머지 후보의 남은 공간을 비교한다.
+    best_index = candidates[0]
+    for index in candidates[1:]:
+        if bins[index].free < bins[best_index].free:
+            best_index = index
+    return best_index
 
 
 def worst_fit(size, bins, vis=None):
     """물건이 들어가는 통 중 남은 공간이 가장 큰 통의 인덱스를 반환한다."""
-    candidates = filter(lambda index: bins[index].free >= size, range(len(bins)))
-    return max(candidates, key=lambda index: bins[index].free, default=None)
+    candidates = fitting_bins(size, bins, vis)
+    if not candidates:
+        return None
+
+    # 남은 공간이 더 큰 통을 만나면 선택을 바꾼다.
+    worst_index = candidates[0]
+    for index in candidates[1:]:
+        if bins[index].free > bins[worst_index].free:
+            worst_index = index
+    return worst_index
 
 
 STRATEGY_FIRST_FIT, STRATEGY_NEXT_FIT, STRATEGY_BEST_FIT, STRATEGY_WORST_FIT = range(4)
