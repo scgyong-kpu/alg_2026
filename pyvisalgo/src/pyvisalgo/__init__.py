@@ -36,6 +36,7 @@ from .visualizers.knapsack_dp import KnapsackDpVisualizer
 from .visualizers.coin_change import CoinChangeVisualizer
 from .visualizers.huffman import HuffmanVisualizer
 from .visualizers.job_sched import JobScheduleVisualizer
+from .visualizers.bin_packing import BinPackingVisualizer
 from .visualizers.set_cover import CitySetCoverVisualizer, CoverComparisonVisualizer, SetCoverVisualizer
 from .visualizers.heap_queue import HeapQueueVisualizer
 from .visualizers.knight import KnightsTourVisualizer
@@ -47,6 +48,8 @@ def visualizer(name, enabled=True):
     reset()
     if not enabled:
         return DummyVisualizer()
+    if name == "bin_packing":
+        return BinPackingVisualizer("Bin Packing")
     if name == "find_max":
         return FindMaxVisualizer("Find Max")
     if name == "search_seq":
